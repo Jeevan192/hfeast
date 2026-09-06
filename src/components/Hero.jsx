@@ -1,0 +1,203 @@
+import React, { useState, useEffect } from 'react';
+
+export default function Hero({ onOpenRegister }) {
+  // Target: October 17, 2026 17:00:00 IST
+  const targetDate = new Date('2026-10-17T17:00:00+05:30').getTime();
+
+  const [timeLeft, setTimeLeft] = useState({
+    days: '00',
+    hours: '00',
+    minutes: '00',
+    seconds: '00'
+  });
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference <= 0) {
+        setTimeLeft({ days: '00', hours: '00', minutes: '00', seconds: '00' });
+        return;
+      }
+
+      const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+      setTimeLeft({
+        days: String(d).padStart(2, '0'),
+        hours: String(h).padStart(2, '0'),
+        minutes: String(m).padStart(2, '0'),
+        seconds: String(s).padStart(2, '0')
+      });
+    };
+
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, [targetDate]);
+
+  return (
+    <section className="hero" id="hero">
+      <div className="section-wrapper">
+        <div className="hero-layout">
+
+          {/* Official Hacktoberfest 2026 Bauhaus Graphic Emblem */}
+          <div className="bauhaus-emblem" aria-label="Official Hacktoberfest 2026 Motif">
+            <div className="bauhaus-grid">
+              {/* Top Row: '20' */}
+              <div className="bauhaus-row">
+                <div className="geo-block-number" title="2">
+                  <div className="geo-shape-cell cell-diag-burgundy-blue"></div>
+                  <div className="geo-shape-cell cell-blue"></div>
+                  <div className="geo-shape-cell cell-burgundy"></div>
+                </div>
+                <div className="geo-block-number" title="0">
+                  <div className="geo-shape-cell cell-red"></div>
+                  <div className="geo-shape-cell cell-diag-split"></div>
+                  <div className="geo-shape-cell cell-blue"></div>
+                </div>
+                <div className="geo-shape-cell cell-pink" style={{ height: '36px', width: '12px' }}></div>
+              </div>
+
+              {/* Center Typographic Banner */}
+              <div className="hacktoberfest-banner-text">
+                HACKTOBERFEST
+              </div>
+
+              {/* Bottom Row: '26' */}
+              <div className="bauhaus-row">
+                <div className="geo-shape-cell cell-pink" style={{ height: '36px', width: '12px' }}></div>
+                <div className="geo-block-number" title="2">
+                  <div className="geo-shape-cell cell-blue"></div>
+                  <div className="geo-shape-cell cell-yellow"></div>
+                  <div className="geo-shape-cell cell-burgundy"></div>
+                </div>
+                <div className="geo-block-number" title="6">
+                  <div className="geo-shape-cell cell-blue"></div>
+                  <div className="geo-shape-cell cell-pink"></div>
+                  <div className="geo-shape-cell cell-red"></div>
+                </div>
+                <div className="geo-shape-cell cell-yellow" style={{ width: '14px', height: '14px' }}></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Title */}
+          <h1 className="hero-main-title">
+            CBIT HACKTOBERFEST <br />
+            <span className="gradient-text">HACKATHON'26</span>
+          </h1>
+
+          {/* Concise Lead Text Without Serial Commas */}
+          <p className="hero-lead-text">
+            The flagship 24-hour celebration of open source is now in-person on campus.
+            Join hundreds of student builders for a weekend of collaborative coding, mentorship and community innovation.
+          </p>
+
+          {/* Event Quick Metadata Grid */}
+          <div className="meta-chips-grid">
+            <div className="meta-chip">
+              <div className="chip-icon red">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <div className="chip-info">
+                <span className="chip-label">Dates</span>
+                <span className="chip-value">17–18 Oct 2026</span>
+              </div>
+            </div>
+
+            <div className="meta-chip">
+              <div className="chip-icon blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+              <div className="chip-info">
+                <span className="chip-label">Venue</span>
+                <span className="chip-value">CBIT Hyderabad (In-Person)</span>
+              </div>
+            </div>
+
+            <div className="meta-chip">
+              <div className="chip-icon yellow">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div className="chip-info">
+                <span className="chip-label">Duration</span>
+                <span className="chip-value">24-Hour Sprint</span>
+              </div>
+            </div>
+
+            <div className="meta-chip">
+              <div className="chip-icon pink">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div className="chip-info">
+                <span className="chip-label">Registration</span>
+                <span className="chip-value">100% Free Entry</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Real-time Countdown Timer */}
+          <div className="countdown-box">
+            <span className="countdown-label">Hackathon Kickoff Countdown</span>
+            <div className="timer-units">
+              <div className="unit-card">
+                <span className="unit-number">{timeLeft.days}</span>
+                <span className="unit-text">DAYS</span>
+              </div>
+              <span className="timer-separator">:</span>
+              <div className="unit-card">
+                <span className="unit-number">{timeLeft.hours}</span>
+                <span className="unit-text">HOURS</span>
+              </div>
+              <span className="timer-separator">:</span>
+              <div className="unit-card">
+                <span className="unit-number">{timeLeft.minutes}</span>
+                <span className="unit-text">MINS</span>
+              </div>
+              <span className="timer-separator">:</span>
+              <div className="unit-card">
+                <span className="unit-number">{timeLeft.seconds}</span>
+                <span className="unit-text">SECS</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero Actions: Exactly Register Now and View Timeline */}
+          <div className="hero-cta-row">
+            <button onClick={onOpenRegister} className="btn btn-primary btn-lg">
+              <span>Register Now</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <a href="#timeline" className="btn btn-secondary btn-lg">
+              <span>View Timeline</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
