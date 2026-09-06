@@ -44,54 +44,13 @@ export default function Hero({ onOpenRegister }) {
       <div className="section-wrapper">
         <div className="hero-layout">
 
-          {/* Official Hacktoberfest 2026 Bauhaus Graphic Emblem */}
-          <div className="bauhaus-emblem" aria-label="Official Hacktoberfest 2026 Motif">
-            <div className="bauhaus-grid">
-              {/* Top Row: '20' */}
-              <div className="bauhaus-row">
-                <div className="geo-block-number" title="2">
-                  <div className="geo-shape-cell cell-diag-burgundy-blue"></div>
-                  <div className="geo-shape-cell cell-blue"></div>
-                  <div className="geo-shape-cell cell-burgundy"></div>
-                </div>
-                <div className="geo-block-number" title="0">
-                  <div className="geo-shape-cell cell-red"></div>
-                  <div className="geo-shape-cell cell-diag-split"></div>
-                  <div className="geo-shape-cell cell-blue"></div>
-                </div>
-                <div className="geo-shape-cell cell-pink" style={{ height: '36px', width: '12px' }}></div>
-              </div>
-
-              {/* Center Typographic Banner */}
-              <div className="hacktoberfest-banner-text">
-                HACKTOBERFEST
-              </div>
-
-              {/* Bottom Row: '26' */}
-              <div className="bauhaus-row">
-                <div className="geo-shape-cell cell-pink" style={{ height: '36px', width: '12px' }}></div>
-                <div className="geo-block-number" title="2">
-                  <div className="geo-shape-cell cell-blue"></div>
-                  <div className="geo-shape-cell cell-yellow"></div>
-                  <div className="geo-shape-cell cell-burgundy"></div>
-                </div>
-                <div className="geo-block-number" title="6">
-                  <div className="geo-shape-cell cell-blue"></div>
-                  <div className="geo-shape-cell cell-pink"></div>
-                  <div className="geo-shape-cell cell-red"></div>
-                </div>
-                <div className="geo-shape-cell cell-yellow" style={{ width: '14px', height: '14px' }}></div>
-              </div>
-            </div>
-          </div>
-
           {/* Main Title */}
           <h1 className="hero-main-title">
             CBIT HACKTOBERFEST <br />
             <span className="gradient-text">HACKATHON'26</span>
           </h1>
 
-          {/* Concise Lead Text Without Serial Commas */}
+          {/* Concise Lead Text */}
           <p className="hero-lead-text">
             The flagship 24-hour celebration of open source is now in-person on campus.
             Join hundreds of student builders for a weekend of collaborative coding, mentorship and community innovation.
@@ -179,7 +138,7 @@ export default function Hero({ onOpenRegister }) {
             </div>
           </div>
 
-          {/* Hero Actions: Exactly Register Now and View Timeline */}
+          {/* Hero Actions: Register Now and View Timeline */}
           <div className="hero-cta-row">
             <button onClick={onOpenRegister} className="btn btn-primary btn-lg">
               <span>Register Now</span>
