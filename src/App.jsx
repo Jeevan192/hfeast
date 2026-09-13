@@ -5,6 +5,7 @@ import Marquee from './components/Marquee';
 import About from './components/About';
 import Preptember from './components/Preptember';
 import PreptemberPage from './components/PreptemberPage';
+import Mentors from './components/Mentors.jsx';
 import Timeline from './components/Timeline';
 import Sponsors from './components/Sponsors';
 import FAQ from './components/FAQ';
@@ -13,6 +14,8 @@ import Footer from './components/Footer';
 import RegisterModal from './components/RegisterModal';
 import FeedbackModal from './components/FeedbackModal';
 import Toast from './components/Toast';
+
+import AtmosphericBackground from './components/AtmosphericBackground.jsx';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' or 'preptember'
@@ -29,8 +32,8 @@ export default function App() {
 
   return (
     <div className="app-root">
-      {/* Beautiful atmospheric background with visible grid and subtle glows */}
-      <div className="app-background" aria-hidden="true"></div>
+      {/* Rich atmospheric background with auroras, grid, and Hacktoberfest 2026 pixel art */}
+      <AtmosphericBackground />
 
       {/* Navigation Header */}
       <Navbar
@@ -55,6 +58,9 @@ export default function App() {
 
             {/* Preptember Section */}
             <Preptember onOpenPreptemberPage={() => setCurrentView('preptember')} />
+
+            {/* Mentors Section */}
+            <Mentors />
 
             {/* 2025-Style Proper Timeline */}
             <Timeline />

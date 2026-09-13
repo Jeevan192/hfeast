@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SpecularButton from './SpecularButton.jsx';
 
 export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,7 +25,7 @@ export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome 
           onClick={(e) => { e.preventDefault(); handleLinkClick('#hero'); }}
         >
           <img 
-            src="/cosc-logo.svg" 
+            src="/cosc-logo.png" 
             alt="COSC Logo" 
             className="brand-logo-img" 
           />
@@ -49,6 +50,13 @@ export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome 
             onClick={(e) => { e.preventDefault(); handleLinkClick('#preptember'); }}
           >
             Preptember
+          </a>
+          <a 
+            href="#mentors" 
+            className="nav-item-link"
+            onClick={(e) => { e.preventDefault(); handleLinkClick('#mentors'); }}
+          >
+            Mentors
           </a>
           <a 
             href="#timeline" 
@@ -88,13 +96,22 @@ export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome 
             </svg>
             <span>Feedback</span>
           </button>
-          <button onClick={onOpenRegister} className="btn btn-primary btn-sm" aria-label="Register">
+          <SpecularButton 
+            size="sm" 
+            radius={10} 
+            baseColor="var(--hf-red)" 
+            lineColor="#FFFFFF" 
+            intensity={1} 
+            followMouse={true} 
+            onClick={onOpenRegister} 
+            aria-label="Register"
+          >
             <span>Register Now</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
-          </button>
+          </SpecularButton>
 
           <button 
             className="mobile-menu-btn" 
@@ -118,6 +135,7 @@ export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome 
         <div className="mobile-nav-drawer">
           <a href="#about" className="mobile-nav-link" onClick={() => handleLinkClick('#about')}>About</a>
           <a href="#preptember" className="mobile-nav-link" onClick={() => handleLinkClick('#preptember')}>Preptember</a>
+          <a href="#mentors" className="mobile-nav-link" onClick={() => handleLinkClick('#mentors')}>Mentors</a>
           <a href="#timeline" className="mobile-nav-link" onClick={() => handleLinkClick('#timeline')}>Timeline</a>
           <a href="#sponsors" className="mobile-nav-link" onClick={() => handleLinkClick('#sponsors')}>Sponsors</a>
           <a href="#faq" className="mobile-nav-link" onClick={() => handleLinkClick('#faq')}>FAQ</a>

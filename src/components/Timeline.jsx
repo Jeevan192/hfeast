@@ -1,4 +1,5 @@
 import React from 'react';
+import GlareHover from './GlareHover.jsx';
 
 export default function Timeline() {
   const events = [
@@ -178,11 +179,13 @@ export default function Timeline() {
       <div className="timeline-tree">
         {events.map((evt, idx) => (
           <div key={idx} className={`timeline-row ${evt.side} ${evt.colorClass}`}>
-            {/* Card */}
-            <div className="timeline-card-box">
-              <h3 className="t-event-title">{evt.title}</h3>
-              <p className="t-event-desc">{evt.desc}</p>
-            </div>
+            {/* Card with GlareHover */}
+            <GlareHover borderRadius={14} glareOpacity={0.22} glareSize={220} className="timeline-card-wrap">
+              <div className="timeline-card-box">
+                <h3 className="t-event-title">{evt.title}</h3>
+                <p className="t-event-desc">{evt.desc}</p>
+              </div>
+            </GlareHover>
 
             {/* Center Circular Icon Node */}
             <div className="timeline-icon-node" title={evt.title}>

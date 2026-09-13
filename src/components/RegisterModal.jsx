@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SpecularButton from './SpecularButton.jsx';
 
 export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
   const [formData, setFormData] = useState({
@@ -148,12 +149,12 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
               <button type="button" className="btn btn-ghost" onClick={onClose}>
                 Cancel
               </button>
-              <button type="submit" className="btn btn-primary">
+              <SpecularButton type="submit" size="md" radius={12} baseColor="var(--hf-red)" lineColor="#FFFFFF" intensity={1} followMouse={true}>
                 <span>Confirm Registration</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
-              </button>
+              </SpecularButton>
             </div>
           </form>
         </div>

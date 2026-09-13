@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 100" width="240" height="92" fill="none">
+  <!-- Dr. Cita Stethoscope & Leaves Emblem -->
+  <g transform="translate(10, 8)">
+    <!-- Outer green circle -->
+    <circle cx="42" cy="42" r="38" stroke="#22A050" stroke-width="4.5" fill="none"/>
+    
+    <!-- Left Lime Leaf -->
+    <path d="M22 36 C22 24 35 20 42 22 C42 32 34 40 22 36 Z" fill="#88C542"/>
+    
+    <!-- Right Dark Green Leaf -->
+    <path d="M42 22 C49 20 62 24 62 36 C50 40 42 32 42 22 Z" fill="#1B9448"/>
+    
+    <!-- Stethoscope tube and head -->
+    <path d="M30 46 C30 58 54 58 54 46 L54 38" stroke="#1B9448" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <circle cx="54" cy="36" r="5" fill="#0B2F64"/>
+    <circle cx="54" cy="36" r="2.5" fill="#FFFFFF"/>
+    <path d="M42 58 L42 66 C42 70 34 72 34 72" stroke="#1B9448" stroke-width="3" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- Typography: "Dr Cita" -->
+  <g transform="translate(104, 18)">
+    <!-- "Dr" in vibrant Lime Green -->
+    <text x="0" y="38" font-family="'Outfit', -apple-system, sans-serif" font-size="40" font-weight="900" fill="#88C542" letter-spacing="-0.02em">Dr</text>
+    
+    <!-- "Cita" in rich Emerald Green -->
+    <text x="50" y="38" font-family="'Outfit', -apple-system, sans-serif" font-size="40" font-weight="900" fill="#22A050" letter-spacing="-0.02em">Cita</text>
+    
+    <!-- Medical Cross above 'i' -->
+    <rect x="73" y="10" width="3" height="9" fill="#0B2F64" rx="0.5"/>
+    <rect x="70" y="13" width="9" height="3" fill="#0B2F64" rx="0.5"/>
+    
+    <!-- Navy Blue pupil inside 'a' -->
+    <circle cx="123" cy="27" r="4.5" fill="#0B2F64"/>
+    <circle cx="123" cy="27" r="2" fill="#FFFFFF"/>
+  </g>
+
+  <!-- 3-Segment Tagline Banner: "Click · Consult · Cure" -->
+  <g transform="translate(104, 65)">
+    <!-- Click (Navy) -->
+    <rect x="0" y="0" width="46" height="18" rx="3" fill="#0B2F64"/>
+    <text x="23" y="12.5" font-family="'Outfit', sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">Click</text>
+
+    <!-- Consult (Lime) -->
+    <rect x="48" y="0" width="54" height="18" rx="3" fill="#88C542"/>
+    <text x="75" y="12.5" font-family="'Outfit', sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">Consult</text>
+
+    <!-- Cure (Dark Green) -->
+    <rect x="104" y="0" width="46" height="18" rx="3" fill="#1B9448"/>
+    <text x="127" y="12.5" font-family="'Outfit', sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">Cure</text>
+  </g>
+</svg>
