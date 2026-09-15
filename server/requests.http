@@ -1,0 +1,289 @@
+### Variables
+@baseUrl = http://localhost:8080
+# Replace with a valid Firebase Auth ID Token for an authorized admin:
+@adminToken = eyJhbGciOiJSUzI1NiIsImtpZCI6IjEyMzQ1NiJ9...
+# Replace with target IDs created during testing:
+@trackId = replace-with-problem-statement-id
+@registrationId = replace-with-registration-id
+@adminUid = replace-with-admin-uid
+
+###############################################################################
+### 1. HEALTH & LIVELINESS PROBE
+###############################################################################
+
+### Health check (Used by Cloud Run / Render)
+GET {{baseUrl}}/healthz
+
+###############################################################################
+### 2. PUBLIC API (No Authentication Required)
+###############################################################################
+
+### 2.1 Get all active problem statements (sorted by domain, with isFull flag)
+GET {{baseUrl}}/api/tracks
+
+### 2.2 Register a full team (4 members: leader + 3 members)
+POST {{baseUrl}}/api/register
+Content-Type: application/json
+
+{
+  "teamName": "CyberKnights",
+  "teamSize": 4,
+  "leader": {
+    "name": "Aarav Sharma",
+    "email": "aarav.sharma@cbit.ac.in",
+    "phone": "+91 9876543210",
+    "college": "Chaitanya Bharathi Institute of Technology"
+  },
+  "members": [
+    {
+      "name": "Diya Patel",
+      "email": "diya.patel@cbit.ac.in",
+      "phone": "+91 9876543211",
+      "college": "Chaitanya Bharathi Institute of Technology"
+    },
+    {
+      "name": "Rohan Verma",
+      "email": "rohan.verma@cbit.ac.in",
+      "phone": "9876543212",
+      "college": "Chaitanya Bharathi Institute of Technology"
+    },
+    {
+      "name": "Ananya Reddy",
+      "email": "ananya.reddy@cbit.ac.in",
+      "phone": "09876543213",
+      "college": "Vasavi College of Engineering"
+    }
+  ],
+  "trackId": "{{trackId}}",
+  "githubUrl": "https://github.com/cyberknights-hackathon"
+}
+
+### 2.3 Register a solo entrant (1 member: leader only, members array empty)
+POST {{baseUrl}}/api/register
+Content-Type: application/json
+
+{
+  "teamName": "SoloBuilder",
+  "teamSize": 1,
+  "leader": {
+    "name": "Vikram Sethi",
+    "email": "vikram.sethi@gmail.com",
+    "phone": "+91 9123456789",
+    "college": "Osmania University"
+  },
+  "members": [],
+  "trackId": "{{trackId}}",
+  "githubUrl": null
+}
+
+### 2.4 Validation Error (400 Bad Request: Mismatched members count)
+POST {{baseUrl}}/api/register
+Content-Type: application/json
+
+{
+  "teamName": "FaultyTeam",
+  "teamSize": 3,
+  "leader": {
+    "name": "Kiran Kumar",
+    "email": "kiran@example.com",
+    "phone": "+91 9876543210",
+    "college": "CBIT"
+  },
+  "members": [],
+  "trackId": "{{trackId}}"
+}
+
+### 2.5 Validation Error (400 Bad Request: Invalid Indian phone number)
+POST {{baseUrl}}/api/register
+Content-Type: application/json
+
+{
+  "teamName": "BadPhoneTeam",
+  "teamSize": 1,
+  "leader": {
+    "name": "Test User",
+    "email": "test@example.com",
+    "phone": "12345",
+    "college": "CBIT"
+  },
+  "members": [],
+  "trackId": "{{trackId}}"
+}
+
+### 2.6 Conflict (409: Duplicate Registration Attempt by Same Leader Email)
+# Demonstrates that a second registration with the same leader email is rejected
+# with an error naming the PS they are already locked into.
+POST {{baseUrl}}/api/register
+Content-Type: application/json
+
+{
+  "teamName": "CyberKnights Re-attempt",
+  "teamSize": 1,
+  "leader": {
+    "name": "Aarav Sharma",
+    "email": "aarav.sharma@cbit.ac.in",
+    "phone": "+91 9876543210",
+    "college": "CBIT"
+  },
+  "members": [],
+  "trackId": "{{trackId}}"
+}
+
+### 2.7 Conflict (409: Problem Statement Cap Full)
+# When currentTeamCount reaches maxTeams, subsequent registrations fail with 409
+POST {{baseUrl}}/api/register
+Content-Type: application/json
+
+{
+  "teamName": "OverflowTeam",
+  "teamSize": 1,
+  "leader": {
+    "name": "Late Registrant",
+    "email": "late.registrant@example.com",
+    "phone": "+91 9876500000",
+    "college": "CBIT"
+  },
+  "members": [],
+  "trackId": "{{trackId}}"
+}
+
+### 2.8 Public Registration Status Lookup (PII-free)
+# Returns strictly: { teamName, status, checkedIn, psTitle, psDomain }
+GET {{baseUrl}}/api/registration-status?email=aarav.sharma@cbit.ac.in
+
+###############################################################################
+### 3. ADMIN API - AUTHENTICATION & ACCESS CONTROL
+###############################################################################
+
+### 3.1 Unauthenticated Access (401 UNAUTHENTICATED)
+GET {{baseUrl}}/api/admin/registrations
+
+### 3.2 Malformed Bearer Token (401 UNAUTHENTICATED)
+GET {{baseUrl}}/api/admin/registrations
+Authorization: Bearer invalid-token-string
+
+### 3.3 Valid Firebase Token but Not in Admins Collection (403 FORBIDDEN)
+# (Requires a valid Firebase ID token from a non-admin account)
+GET {{baseUrl}}/api/admin/registrations
+Authorization: Bearer {{adminToken}}
+
+###############################################################################
+### 4. ADMIN API - REGISTRATIONS MANAGEMENT
+###############################################################################
+
+### 4.1 List registrations (with pagination)
+GET {{baseUrl}}/api/admin/registrations?limit=10
+Authorization: Bearer {{adminToken}}
+
+### 4.2 Filter registrations by status, track, and checkedIn
+GET {{baseUrl}}/api/admin/registrations?status=pending&checkedIn=false
+Authorization: Bearer {{adminToken}}
+
+### 4.3 Search registrations by team name or leader email
+GET {{baseUrl}}/api/admin/registrations?search=CyberKnights
+Authorization: Bearer {{adminToken}}
+
+### 4.4 Update registration (confirm status and check in)
+PATCH {{baseUrl}}/api/admin/registrations/{{registrationId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "confirmed",
+  "checkedIn": true,
+  "adminNote": "Verified student ID cards at registration desk."
+}
+
+### 4.5 Reject registration (Frees up the slot and leader email)
+PATCH {{baseUrl}}/api/admin/registrations/{{registrationId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "rejected",
+  "adminNote": "Team requested cancellation due to schedule conflict."
+}
+
+### 4.6 Reinstate rejected registration (Atomically checks capacity)
+PATCH {{baseUrl}}/api/admin/registrations/{{registrationId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "confirmed",
+  "adminNote": "Reinstated after sponsor granted additional slot."
+}
+
+### 4.7 Export registrations to hardened CSV (Superadmin ONLY)
+GET {{baseUrl}}/api/admin/registrations/export
+Authorization: Bearer {{adminToken}}
+
+### 4.8 Delete registration (Superadmin ONLY: decrements PS team count)
+DELETE {{baseUrl}}/api/admin/registrations/{{registrationId}}
+Authorization: Bearer {{adminToken}}
+
+###############################################################################
+### 5. ADMIN API - PROBLEM STATEMENTS MANAGEMENT
+###############################################################################
+
+### 5.1 List all problem statements (including inactive ones)
+GET {{baseUrl}}/api/admin/problem-statements
+Authorization: Bearer {{adminToken}}
+
+### 5.2 Create new problem statement (maxTeams required)
+POST {{baseUrl}}/api/admin/problem-statements
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Quantum Algorithm Simulator for Renewable Energy Microgrids",
+  "domain": "Open Innovation (Wildcard)",
+  "description": "Design an open-source visual simulator and benchmarking toolkit to evaluate variational quantum algorithms (VQE/QAOA) for grid balancing in distributed solar microgrids.",
+  "difficulty": "advanced",
+  "maxTeams": 2,
+  "isActive": true
+}
+
+### 5.3 Update problem statement (currentTeamCount cannot be changed manually)
+PATCH {{baseUrl}}/api/admin/problem-statements/{{trackId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "maxTeams": 3,
+  "isActive": true
+}
+
+### 5.4 Delete problem statement (Superadmin ONLY: refuses 409 if currentTeamCount > 0)
+DELETE {{baseUrl}}/api/admin/problem-statements/{{trackId}}
+Authorization: Bearer {{adminToken}}
+
+###############################################################################
+### 6. ADMIN API - DASHBOARD ANALYTICS & STATS
+###############################################################################
+
+### 6.1 Get dashboard metrics summary
+GET {{baseUrl}}/api/admin/stats
+Authorization: Bearer {{adminToken}}
+
+###############################################################################
+### 7. ADMIN API - ADMIN USER MANAGEMENT (Superadmin ONLY)
+###############################################################################
+
+### 7.1 List all administrator accounts
+GET {{baseUrl}}/api/admin/admins
+Authorization: Bearer {{adminToken}}
+
+### 7.2 Create or authorize a new organizer
+POST {{baseUrl}}/api/admin/admins
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "organizer.lead@cbithacktoberfest.in",
+  "role": "organizer"
+}
+
+### 7.3 Revoke administrator access
+DELETE {{baseUrl}}/api/admin/admins/{{adminUid}}
+Authorization: Bearer {{adminToken}}

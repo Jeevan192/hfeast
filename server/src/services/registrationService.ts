@@ -1,0 +1,456 @@
+import { db, FieldValue } from '../config/firebase.js';
+import { ProblemStatementDoc } from '../models/problemStatement.js';
+import {
+  RegisterRequestInput,
+  RegistrationDoc,
+  RegistrationWithTrackDoc,
+  UpdateRegistrationInput,
+} from '../models/registration.js';
+import { BadRequestError, ConflictError, NotFoundError } from '../utils/errors.js';
+
+const REGISTRATIONS_COLLECTION = 'registrations';
+const TRACKS_COLLECTION = 'problemStatements';
+
+export class RegistrationService {
+  /**
+   * Registers a team atomically using a Firestore transaction.
+   * Enforces:
+   * 1. members.length === teamSize - 1
+   * 2. Fast pre-check: leader email uniqueness (excluding rejected)
+   * 3. Target PS exists and isActive == true
+   * 4. In-transaction re-checks of PS capacity and leader email uniqueness
+   * 5. Atomic registration creation and PS currentTeamCount increment
+   */
+  static async registerTeam(
+    input: RegisterRequestInput
+  ): Promise<{ success: boolean; registrationId: string }> {
+    const { teamSize, members, leader, trackId } = input;
+
+    // Step 2: Validate members count against teamSize
+    if (members.length !== teamSize - 1) {
+      throw new BadRequestError(
+        `Invalid members count: for teamSize ${teamSize}, exactly ${teamSize - 1} additional member(s) must be provided. Received ${members.length}.`
+      );
+    }
+
+    const normalizedLeaderEmail = leader.email.trim().toLowerCase();
+
+    // Step 3: Fast pre-check: Does an active registration for this leader email already exist?
+    // Exclude 'rejected' registrations so rejected teams can register again
+    const activeRegSnapshot = await db
+      .collection(REGISTRATIONS_COLLECTION)
+      .where('leader.email', '==', normalizedLeaderEmail)
+      .where('status', 'in', ['pending', 'confirmed', 'waitlisted'])
+      .limit(1)
+      .get();
+
+    if (!activeRegSnapshot.empty) {
+      const existingDoc = activeRegSnapshot.docs[0].data() as RegistrationDoc;
+      let existingTrackTitle = 'an existing problem statement';
+      try {
+        const trackDoc = await db.collection(TRACKS_COLLECTION).doc(existingDoc.trackId).get();
+        if (trackDoc.exists) {
+          existingTrackTitle = (trackDoc.data() as ProblemStatementDoc).title;
+        }
+      } catch {
+        // Fallback title
+      }
+
+      throw new ConflictError(
+        `Leader email '${normalizedLeaderEmail}' is already registered for '${existingTrackTitle}'. Each team leader can only register once.`
+      );
+    }
+
+    // Step 4: Verify trackId exists and is active
+    const psRef = db.collection(TRACKS_COLLECTION).doc(trackId);
+    const psInitialSnap = await psRef.get();
+
+    if (!psInitialSnap.exists || !psInitialSnap.data()?.isActive) {
+      throw new NotFoundError(
+        `Problem statement with ID '${trackId}' not found or is currently inactive.`
+      );
+    }
+
+    // Step 5: Run Firestore Transaction
+    const newRegRef = db.collection(REGISTRATIONS_COLLECTION).doc();
+
+    await db.runTransaction(async (transaction) => {
+      // 5.1 Re-read Problem Statement inside transaction
+      const psDoc = await transaction.get(psRef);
+      if (!psDoc.exists || !psDoc.data()?.isActive) {
+        throw new NotFoundError(
+          `Problem statement with ID '${trackId}' not found or has been deactivated.`
+        );
+      }
+
+      const psData = psDoc.data() as ProblemStatementDoc;
+
+      // 5.2 Capacity check
+      if ((psData.currentTeamCount || 0) >= psData.maxTeams) {
+        throw new ConflictError(
+          `Problem statement '${psData.title}' is full (maximum capacity of ${psData.maxTeams} teams reached). Please select another problem statement.`
+        );
+      }
+
+      // 5.3 In-transaction re-confirmation of leader email uniqueness (closing race window)
+      const txLeaderQuery = db
+        .collection(REGISTRATIONS_COLLECTION)
+        .where('leader.email', '==', normalizedLeaderEmail)
+        .where('status', 'in', ['pending', 'confirmed', 'waitlisted']);
+
+      const txLeaderSnap = await transaction.get(txLeaderQuery);
+      if (!txLeaderSnap.empty) {
+        throw new ConflictError(
+          `Leader email '${normalizedLeaderEmail}' was just registered in a concurrent request. Each team leader can only register once.`
+        );
+      }
+
+      const now = FieldValue.serverTimestamp();
+
+      // 5.4 Write registration document
+      transaction.set(newRegRef, {
+        teamName: input.teamName,
+        teamSize: input.teamSize,
+        leader: {
+          name: input.leader.name,
+          email: normalizedLeaderEmail,
+          phone: input.leader.phone,
+          college: input.leader.college,
+        },
+        members: input.members.map((m) => ({
+          name: m.name,
+          email: m.email.trim().toLowerCase(),
+          phone: m.phone,
+          college: m.college,
+        })),
+        trackId: input.trackId,
+        githubUrl: input.githubUrl || null,
+        status: 'pending',
+        checkedIn: false,
+        adminNote: null,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      // 5.5 Atomically increment PS currentTeamCount
+      transaction.update(psRef, {
+        currentTeamCount: (psData.currentTeamCount || 0) + 1,
+        updatedAt: now,
+      });
+    });
+
+    return {
+      success: true,
+      registrationId: newRegRef.id,
+    };
+  }
+
+  /**
+   * Public registration status lookup (PII-free).
+   * Returns strictly: teamName, status, checkedIn, psTitle, psDomain.
+   */
+  static async getRegistrationStatus(email: string): Promise<{
+    teamName: string;
+    status: string;
+    checkedIn: boolean;
+    psTitle: string;
+    psDomain: string;
+  }> {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Find registrations for this leader email (no composite index required)
+    const snapshot = await db
+      .collection(REGISTRATIONS_COLLECTION)
+      .where('leader.email', '==', normalizedEmail)
+      .get();
+
+    if (snapshot.empty) {
+      throw new NotFoundError(`No registration found for leader email '${normalizedEmail}'.`);
+    }
+
+    const docs = snapshot.docs.map((d) => d.data() as RegistrationDoc);
+    // Sort descending by createdAt in memory
+    docs.sort((a, b) => {
+      const getMillis = (d: unknown) => {
+        if (!d) return 0;
+        if (typeof (d as { toMillis?: () => number }).toMillis === 'function') {
+          return (d as { toMillis: () => number }).toMillis();
+        }
+        if (typeof (d as { seconds?: number }).seconds === 'number') {
+          return (d as { seconds: number }).seconds * 1000;
+        }
+        return 0;
+      };
+      return getMillis(b.createdAt) - getMillis(a.createdAt);
+    });
+
+    const regDoc = docs[0];
+
+    let psTitle = 'Assigned Track';
+    let psDomain = 'General';
+
+    try {
+      const trackSnap = await db.collection(TRACKS_COLLECTION).doc(regDoc.trackId).get();
+      if (trackSnap.exists) {
+        const trackData = trackSnap.data() as ProblemStatementDoc;
+        psTitle = trackData.title;
+        psDomain = trackData.domain;
+      }
+    } catch {
+      // Fallback
+    }
+
+    return {
+      teamName: regDoc.teamName,
+      status: regDoc.status,
+      checkedIn: Boolean(regDoc.checkedIn),
+      psTitle,
+      psDomain,
+    };
+  }
+
+  /**
+   * Admin listing with cursor pagination, filtering, and search.
+   */
+  static async getRegistrationsForAdmin(query: {
+    limit?: number;
+    cursor?: string;
+    status?: string;
+    trackId?: string;
+    college?: string;
+    checkedIn?: string;
+    search?: string;
+  }): Promise<{
+    registrations: RegistrationWithTrackDoc[];
+    pagination: {
+      nextCursor: string | null;
+      hasMore: boolean;
+      count: number;
+    };
+  }> {
+    const limit = Math.min(Math.max(Number(query.limit) || 20, 1), 100);
+
+    let queryRef: FirebaseFirestore.Query = db.collection(REGISTRATIONS_COLLECTION);
+
+    if (query.status) {
+      queryRef = queryRef.where('status', '==', query.status);
+    }
+    if (query.trackId) {
+      queryRef = queryRef.where('trackId', '==', query.trackId);
+    }
+    if (query.college) {
+      queryRef = queryRef.where('leader.college', '==', query.college);
+    }
+    if (query.checkedIn !== undefined) {
+      const isCheckedIn = query.checkedIn === 'true';
+      queryRef = queryRef.where('checkedIn', '==', isCheckedIn);
+    }
+
+    // Order by createdAt descending for deterministic pagination
+    queryRef = queryRef.orderBy('createdAt', 'desc');
+
+    if (query.cursor) {
+      const cursorDoc = await db.collection(REGISTRATIONS_COLLECTION).doc(query.cursor).get();
+      if (cursorDoc.exists) {
+        queryRef = queryRef.startAfter(cursorDoc);
+      }
+    }
+
+    // Fetch tracks map for enriching trackTitle and trackDomain
+    const allTracks = await db.collection(TRACKS_COLLECTION).get();
+    const tracksMap = new Map<string, { title: string; domain: string }>();
+    allTracks.forEach((t) => {
+      const data = t.data() as ProblemStatementDoc;
+      tracksMap.set(t.id, { title: data.title, domain: data.domain });
+    });
+
+    const snapshot = await queryRef.limit(limit + 1).get();
+
+    let docs = snapshot.docs.map((doc) => {
+      const data = doc.data() as Omit<RegistrationDoc, 'id'>;
+      const track = tracksMap.get(data.trackId);
+      return {
+        ...data,
+        id: doc.id,
+        trackTitle: track?.title || 'Unknown Track',
+        trackDomain: track?.domain || 'Unknown Domain',
+      } as RegistrationWithTrackDoc;
+    });
+
+    // In-memory search fallback for teamName and leader.email
+    if (query.search) {
+      const searchLower = query.search.trim().toLowerCase();
+      docs = docs.filter(
+        (reg) =>
+          reg.teamName.toLowerCase().includes(searchLower) ||
+          reg.leader.email.toLowerCase().includes(searchLower)
+      );
+    }
+
+    const hasMore = docs.length > limit;
+    const resultDocs = hasMore ? docs.slice(0, limit) : docs;
+    const nextCursor = hasMore && resultDocs.length > 0 ? resultDocs[resultDocs.length - 1].id : null;
+
+    return {
+      registrations: resultDocs,
+      pagination: {
+        nextCursor,
+        hasMore,
+        count: resultDocs.length,
+      },
+    };
+  }
+
+  /**
+   * Updates registration fields (status, checkedIn, adminNote).
+   * Inside a transaction:
+   * - If status transitions from 'rejected' -> anything else (reinstatement):
+   *   re-checks capacity on linked PS; increments PS counter if capacity allows (409 if full).
+   * - If status transitions from non-rejected -> 'rejected':
+   *   decrements PS counter.
+   */
+  static async updateRegistration(
+    id: string,
+    input: UpdateRegistrationInput
+  ): Promise<RegistrationDoc> {
+    const regRef = db.collection(REGISTRATIONS_COLLECTION).doc(id);
+
+    return await db.runTransaction(async (transaction) => {
+      const regDoc = await transaction.get(regRef);
+      if (!regDoc.exists) {
+        throw new NotFoundError(`Registration with ID '${id}' not found.`);
+      }
+
+      const currentReg = regDoc.data() as RegistrationDoc;
+      const psRef = db.collection(TRACKS_COLLECTION).doc(currentReg.trackId);
+      const psDoc = await transaction.get(psRef);
+
+      const now = FieldValue.serverTimestamp();
+      const updates: Record<string, unknown> = {
+        updatedAt: now,
+      };
+
+      if (input.checkedIn !== undefined) updates.checkedIn = input.checkedIn;
+      if (input.adminNote !== undefined) updates.adminNote = input.adminNote;
+
+      if (input.status !== undefined && input.status !== currentReg.status) {
+        updates.status = input.status;
+
+        if (psDoc.exists) {
+          const psData = psDoc.data() as ProblemStatementDoc;
+          const currentCount = psData.currentTeamCount || 0;
+
+          // Case A: Reinstating a rejected team -> Must verify capacity
+          if (currentReg.status === 'rejected' && input.status !== 'rejected') {
+            if (currentCount >= psData.maxTeams) {
+              throw new ConflictError(
+                `Cannot reinstate registration: problem statement '${psData.title}' is currently at full capacity (${psData.maxTeams}/${psData.maxTeams} teams).`
+              );
+            }
+            transaction.update(psRef, {
+              currentTeamCount: currentCount + 1,
+              updatedAt: now,
+            });
+          }
+
+          // Case B: Rejecting an active team -> Frees up the slot
+          if (currentReg.status !== 'rejected' && input.status === 'rejected') {
+            transaction.update(psRef, {
+              currentTeamCount: Math.max(0, currentCount - 1),
+              updatedAt: now,
+            });
+          }
+        }
+      }
+
+      transaction.update(regRef, updates);
+
+      return {
+        ...currentReg,
+        ...(updates as Partial<RegistrationDoc>),
+        id,
+      };
+    });
+  }
+
+  /**
+   * Superadmin only: Deletes a registration doc and decrements the linked PS team count.
+   */
+  static async deleteRegistration(id: string): Promise<void> {
+    const regRef = db.collection(REGISTRATIONS_COLLECTION).doc(id);
+
+    await db.runTransaction(async (transaction) => {
+      const regDoc = await transaction.get(regRef);
+      if (!regDoc.exists) {
+        throw new NotFoundError(`Registration with ID '${id}' not found.`);
+      }
+
+      const regData = regDoc.data() as RegistrationDoc;
+
+      // If registration was not rejected, decrement PS count
+      if (regData.status !== 'rejected') {
+        const psRef = db.collection(TRACKS_COLLECTION).doc(regData.trackId);
+        const psDoc = await transaction.get(psRef);
+        if (psDoc.exists) {
+          const psData = psDoc.data() as ProblemStatementDoc;
+          const currentCount = psData.currentTeamCount || 0;
+          transaction.update(psRef, {
+            currentTeamCount: Math.max(0, currentCount - 1),
+            updatedAt: FieldValue.serverTimestamp(),
+          });
+        }
+      }
+
+      transaction.delete(regRef);
+    });
+  }
+
+  /**
+   * Fetches all registrations matching filters for CSV export.
+   */
+  static async getAllRegistrationsForExport(query: {
+    status?: string;
+    trackId?: string;
+    college?: string;
+    checkedIn?: string;
+  }): Promise<RegistrationWithTrackDoc[]> {
+    let queryRef: FirebaseFirestore.Query = db.collection(REGISTRATIONS_COLLECTION);
+
+    if (query.status) {
+      queryRef = queryRef.where('status', '==', query.status);
+    }
+    if (query.trackId) {
+      queryRef = queryRef.where('trackId', '==', query.trackId);
+    }
+    if (query.college) {
+      queryRef = queryRef.where('leader.college', '==', query.college);
+    }
+    if (query.checkedIn !== undefined) {
+      queryRef = queryRef.where('checkedIn', '==', query.checkedIn === 'true');
+    }
+
+    queryRef = queryRef.orderBy('createdAt', 'desc');
+
+    const [regsSnap, tracksSnap] = await Promise.all([
+      queryRef.get(),
+      db.collection(TRACKS_COLLECTION).get(),
+    ]);
+
+    const tracksMap = new Map<string, { title: string; domain: string }>();
+    tracksSnap.forEach((t) => {
+      const data = t.data() as ProblemStatementDoc;
+      tracksMap.set(t.id, { title: data.title, domain: data.domain });
+    });
+
+    return regsSnap.docs.map((doc) => {
+      const data = doc.data() as Omit<RegistrationDoc, 'id'>;
+      const track = tracksMap.get(data.trackId);
+      return {
+        ...data,
+        id: doc.id,
+        trackTitle: track?.title || 'Unknown Track',
+        trackDomain: track?.domain || 'Unknown Domain',
+      };
+    });
+  }
+}

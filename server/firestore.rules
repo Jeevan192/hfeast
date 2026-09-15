@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny: Block all direct client reads and writes across all collections.
+    // All reads and writes must strictly go through the standalone Express backend 
+    // using the Firebase Admin SDK with privileged service account credentials.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Registrations: Zero client access (Backend API exclusive)
+    match /registrations/{registrationId} {
+      allow read, write: if false;
+    }
+
+    // Problem Statements: Zero client access (Backend API exclusive)
+    match /problemStatements/{statementId} {
+      allow read, write: if false;
+    }
+
+    // Admins Collection: Zero client access (Backend API exclusive)
+    match /admins/{adminUid} {
+      allow read, write: if false;
+    }
+  }
+}
