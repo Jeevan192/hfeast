@@ -23,5 +23,10 @@ service cloud.firestore {
     match /admins/{adminUid} {
       allow read, write: if false;
     }
+
+    // Atomic Locks Collection: Zero client access (Backend API exclusive)
+    match /registration_locks/{lockId} {
+      allow read, write: if false;
+    }
   }
 }

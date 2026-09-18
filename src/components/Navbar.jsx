@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import SpecularButton from './SpecularButton.jsx';
 
+// Change to true post-event to re-enable feedback modal
+const SHOW_FEEDBACK = false;
+
 export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -35,7 +38,7 @@ export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome 
           </div>
         </a>
 
-        {/* Desktop Links: Just about, preptember, timeline, sponsors, faq, contact */}
+        {/* Desktop Links */}
         <nav className="nav-links">
           <a 
             href="#about" 
@@ -90,12 +93,14 @@ export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome 
 
         {/* Actions */}
         <div className="nav-actions">
-          <button onClick={onOpenFeedback} className="btn btn-ghost btn-sm" aria-label="Feedback">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <span>Feedback</span>
-          </button>
+          {SHOW_FEEDBACK && (
+            <button onClick={onOpenFeedback} className="btn btn-ghost btn-sm" aria-label="Feedback">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>Feedback</span>
+            </button>
+          )}
           <SpecularButton 
             size="sm" 
             radius={10} 
@@ -141,13 +146,15 @@ export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome 
           <a href="#faq" className="mobile-nav-link" onClick={() => handleLinkClick('#faq')}>FAQ</a>
           <a href="#contact" className="mobile-nav-link" onClick={() => handleLinkClick('#contact')}>Contact</a>
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
-            <button 
-              onClick={() => { closeMobileMenu(); onOpenFeedback(); }} 
-              className="btn btn-secondary"
-              style={{ flex: 1 }}
-            >
-              Feedback
-            </button>
+            {SHOW_FEEDBACK && (
+              <button 
+                onClick={() => { closeMobileMenu(); onOpenFeedback(); }} 
+                className="btn btn-secondary"
+                style={{ flex: 1 }}
+              >
+                Feedback
+              </button>
+            )}
             <button 
               onClick={() => { closeMobileMenu(); onOpenRegister(); }} 
               className="btn btn-primary"

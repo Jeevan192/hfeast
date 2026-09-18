@@ -6,27 +6,23 @@ export default function FAQ() {
   const faqs = [
     {
       q: 'What is CBIT Hacktoberfest Hackathon?',
-      a: 'CBIT Hacktoberfest Hackathon is an intense 24-hour hackathon celebrating open-source software, collaboration and community innovation. Organised annually by COSC at Chaitanya Bharathi Institute of Technology (CBIT) in Hyderabad, this edition marks our very first in-person gathering on campus.',
+      a: 'CBIT Hacktoberfest Hackathon is a 24-hour, in-person event where students collaborate, learn, and build practical open-source projects at CBIT Campus.',
     },
     {
-      q: 'Who is eligible to participate?',
-      a: 'Any currently enrolled college or university student across any branch, department or degree program. Whether you are a first-year beginner just getting started with Git or an experienced final-year engineer, all curious builders are welcome.',
+      q: 'Who can participate?',
+      a: 'Any currently enrolled undergraduate, postgraduate, or diploma student from any college or university across India can participate. Beginners and experienced builders are both welcome.',
     },
     {
-      q: 'Is there any registration fee?',
-      a: 'No. Registration and participation in CBIT Hacktoberfest Hackathon are 100% free. We believe learning and open-source opportunities must be accessible without financial barriers.',
+      q: 'Is there a registration fee?',
+      a: 'Yes. The registration fee is ₹200 per participant. It includes campus access, meals, mentorship, Wi-Fi, event essentials, and certificates.',
     },
     {
-      q: 'I am a complete beginner to hackathons and open source. Can I still join?',
-      a: 'Yes. We host our dedicated Preptember sessions before the hackathon specifically to train beginners in Git, GitHub collaboration, tech stack selection and project pitching. Additionally, experienced mentors will be available on the campus floor 24/7 during the hackathon.',
+      q: 'Is this event open to beginners?',
+      a: 'Absolutely. Pre-event workshops and on-site mentors will help participants get started with Git, GitHub, open source, and hackathon project development.',
     },
     {
-      q: 'Where will the event be hosted and what should I bring?',
-      a: 'The event will be hosted physically at the CBIT Campus, Gandipet, Hyderabad. Participants should bring their personal laptop, chargers, valid student ID card, extension cords (recommended) and an eagerness to build. High-speed Wi-Fi, workspace and refreshments will be provided on campus.',
-    },
-    {
-      q: 'What is Open Source and why should I care?',
-      a: 'Open Source refers to software whose underlying source code is made publicly available for anyone to inspect, modify and enhance. In 2025 alone, India added over 5 million developers to GitHub. Contributing to open source builds your real-world portfolio, teamwork skills and global developer network.',
+      q: 'What is Open Source?',
+      a: 'Open source is software whose source code is available for people to view, use, improve, and share. Hacktoberfest celebrates this collaborative way of building technology.',
     },
   ];
 
@@ -39,7 +35,7 @@ export default function FAQ() {
       <div className="section-header">
         <h2 className="section-title">FAQ</h2>
         <p className="section-subtitle">
-          Everything you need to know about eligibility, team size, venue logistics and hackathon guidelines.
+          Everything you need to know before you join us for the hackathon.
         </p>
       </div>
 

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Marquee from './components/Marquee';
 import About from './components/About';
 import Preptember from './components/Preptember';
 import PreptemberPage from './components/PreptemberPage';
@@ -17,11 +16,33 @@ import Toast from './components/Toast';
 
 import AtmosphericBackground from './components/AtmosphericBackground.jsx';
 
+// Toggle to true post-event to enable feedback modal
+const SHOW_FEEDBACK = false;
+
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' or 'preptember'
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+
+  useEffect(() => {
+    const revealItems = document.querySelectorAll('.section-wrapper:not(.hero) > *');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px' });
+
+    revealItems.forEach((item) => {
+      item.classList.add('scroll-reveal');
+      observer.observe(item);
+    });
+
+    return () => observer.disconnect();
+  }, [currentView]);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -49,9 +70,6 @@ export default function App() {
           <>
             {/* Hero Section */}
             <Hero onOpenRegister={() => setRegisterModalOpen(true)} />
-
-            {/* Dynamic Infinite Marquee */}
-            <Marquee />
 
             {/* About Section */}
             <About />
@@ -87,11 +105,13 @@ export default function App() {
         onSubmitSuccess={(msg) => showToast(msg)}
       />
 
-      <FeedbackModal
-        isOpen={feedbackModalOpen}
-        onClose={() => setFeedbackModalOpen(false)}
-        onSubmitSuccess={(msg) => showToast(msg)}
-      />
+      {SHOW_FEEDBACK && (
+        <FeedbackModal
+          isOpen={feedbackModalOpen}
+          onClose={() => setFeedbackModalOpen(false)}
+          onSubmitSuccess={(msg) => showToast(msg)}
+        />
+      )}
 
       {/* Real-time Toast Alerts */}
       <Toast message={toastMessage} onDismiss={() => setToastMessage(null)} />

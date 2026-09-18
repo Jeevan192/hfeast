@@ -55,8 +55,8 @@ export default function Hero({ onOpenRegister }) {
 
           {/* Concise Lead Text */}
           <p className="hero-lead-text">
-            The flagship 24-hour celebration of open source is now in-person on campus.
-            Join hundreds of student builders for a weekend of collaborative coding, mentorship and community innovation.
+            The premier 24-hour celebration of open source is now live in-person on campus.
+            500+ student builders, 1-on-1 industry mentors, all-inclusive catering & swag, and an electrifying weekend of community innovation.
           </p>
 
           {/* Event Quick Metadata Grid */}
@@ -116,8 +116,8 @@ export default function Hero({ onOpenRegister }) {
                   </svg>
                 </div>
                 <div className="chip-info">
-                  <span className="chip-label">Registration</span>
-                  <span className="chip-value">100% Free Entry</span>
+                  <span className="chip-label">Registration Fee</span>
+                  <span className="chip-value" style={{ color: 'var(--hf-yellow)', fontWeight: 700 }}>₹200 / Head</span>
                 </div>
               </div>
             </GlareHover>

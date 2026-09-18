@@ -5,25 +5,26 @@
 
 :root {
   /* ── Official Hacktoberfest 2026 Brand Colors ── */
-  --hf-pine:      #3D5F58;   /* Pine Teal – primary brand background */
+  --hf-pine:      #3D5F58;   /* Pine Teal – primary brand accent */
   --hf-blue:      #8BB2DE;   /* Cornflower Blue */
   --hf-yellow:    #F5B726;   /* Marigold Yellow */
   --hf-red:       #E53927;   /* Coral Red */
   --hf-burgundy:  #671912;   /* Burgundy / Dark Maroon */
-  --hf-offwhite:  #FFFFFF;   /* Off-White */
+  --hf-offwhite:  #FFFFFF;   /* Pure Crisp White */
   --hf-pink:      #E97B77;   /* Rose Pink (accent) */
 
-  /* ── Dark-mode backgrounds (derived from Pine Teal) ── */
-  --bg-deep:            #1A2C28;
-  --bg-main:            #213832;
-  --bg-surface:         #28433C;
-  --bg-surface-elevated:#315049;
-  --bg-glass:           rgba(33, 56, 50, 0.85);
+  /* ── Deep Cyber-Obsidian & High-Contrast Backgrounds ── */
+  --bg-deep:            #08120F;   /* Deep rich obsidian base */
+  --bg-main:            #0C1915;   /* Contrast dark canvas */
+  --bg-surface:         #132520;   /* Solid high-contrast card background */
+  --bg-surface-elevated:#1A332C;   /* Elevated interactive surface */
+  --bg-glass:           rgba(12, 25, 21, 0.92);
 
-  /* ── Borders ── */
-  --border-subtle: rgba(139, 178, 222, 0.28);
-  --border-medium: rgba(139, 178, 222, 0.45);
+  /* ── High-Contrast Borders ── */
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --border-medium: rgba(255, 255, 255, 0.25);
   --border-hover:  rgba(139, 178, 222, 0.75);
+  --border-glow:   rgba(245, 183, 38, 0.45);
 
   /* ── Semantic aliases ── */
   --color-red:      var(--hf-red);
@@ -31,14 +32,15 @@
   --color-yellow:   var(--hf-yellow);
   --color-pink:     var(--hf-pink);
   --color-burgundy: var(--hf-burgundy);
-  --color-mint:     #8BB2DE;   /* derived from pine for subtle accents */
+  --color-mint:     #8BB2DE;
   --color-white:    var(--hf-offwhite);
   --color-pine:     var(--hf-pine);
 
-  /* ── Typography colors ── */
-  --text-primary:   #FFFFFF;  /* warm off-white */
-  --text-secondary: #8BB2DE;  /* muted teal-gray */
-  --text-muted:     rgba(139, 178, 222, 0.75);  /* dimmed */
+  /* ── High-Contrast Typography colors ── */
+  --text-primary:   #FFFFFF;                     /* Pure white for headings & primary text */
+  --text-secondary: #E2E8F0;                     /* Crisp platinum silver (exceeds WCAG AAA) */
+  --text-muted:     #94A3B8;                     /* Clean, readable slate for secondary labels */
+  --text-bright:    #F8FAFC;
 
   /* ── Fonts ── */
   --font-main:    'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -80,8 +82,7 @@ body {
 }
 
 /* =========================================================
-   MAGNIFICENT ATMOSPHERIC BACKGROUND — HACKTOBERFEST 2026 THEME
-   Pine Teal base · Ambient Auroras · Cybernetic Dot Grid Mesh · Pixel Art Motifs
+   THREE.JS PRISM ATMOSPHERE
    ========================================================= */
 .app-background {
   position: fixed;
@@ -89,138 +90,29 @@ body {
   z-index: -1;
   pointer-events: none;
   overflow: hidden;
-  background: linear-gradient(160deg, #12221E 0%, #1A312B 45%, #203A33 65%, #12221E 100%);
+  background:
+    radial-gradient(circle at 50% 44%, rgba(68, 151, 118, 0.24) 0%, transparent 45%),
+    linear-gradient(145deg, #153537 0%, rgba(21, 53, 55, 0.92) 52%, #153537 100%);
 }
 
-/* Ambient color auroras floating in depth */
-.bg-aurora {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  opacity: 0.85;
-}
-
-.aurora-blue {
-  width: 580px;
-  height: 580px;
-  top: -120px;
-  left: -100px;
-  background: radial-gradient(circle, rgba(139, 178, 222, 0.26) 0%, transparent 70%);
-  animation: auroraDrift 18s ease-in-out infinite alternate;
-}
-
-.aurora-red {
-  width: 540px;
-  height: 540px;
-  top: -80px;
-  right: -80px;
-  background: radial-gradient(circle, rgba(229, 57, 39, 0.22) 0%, transparent 70%);
-  animation: auroraDrift 22s ease-in-out infinite alternate-reverse;
-}
-
-.aurora-yellow {
-  width: 480px;
-  height: 480px;
-  top: 45%;
-  left: -80px;
-  background: radial-gradient(circle, rgba(245, 183, 38, 0.14) 0%, transparent 70%);
-  animation: auroraDrift 20s ease-in-out infinite alternate;
-}
-
-.aurora-coral {
-  width: 520px;
-  height: 520px;
-  bottom: -100px;
-  right: -60px;
-  background: radial-gradient(circle, rgba(233, 123, 119, 0.18) 0%, transparent 70%);
-  animation: auroraDrift 25s ease-in-out infinite alternate-reverse;
-}
-
-@keyframes auroraDrift {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(30px, 40px) scale(1.08); }
-  100% { transform: translate(-20px, 25px) scale(0.95); }
-}
-
-/* Cybernetic High-Tech Dot Matrix & Blueprint Mesh */
-.bg-grid-mesh {
+.app-background::after {
+  content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(rgba(139, 178, 222, 0.16) 1.5px, transparent 1.5px),
-    linear-gradient(to right, rgba(139, 178, 222, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(139, 178, 222, 0.035) 1px, transparent 1px);
-  background-size: 32px 32px, 64px 64px, 64px 64px;
-  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.4) 95%);
-  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.4) 95%);
-}
-
-/* Official Hacktoberfest 2026 Pixel Motifs floating in margins */
-.bg-pixel-decorations {
-  position: absolute;
-  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(21, 53, 55, 0.72) 100%);
   pointer-events: none;
-  overflow: hidden;
 }
 
-.bg-motif {
-  position: absolute;
-  pointer-events: none;
-  filter: drop-shadow(0 0 12px rgba(139, 178, 222, 0.15));
+.app-background canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-.motif-top-left {
-  top: 8%;
-  left: 2%;
-  animation: floatMotif 14s ease-in-out infinite alternate;
-}
-
-.motif-top-right {
-  top: 10%;
-  right: 2%;
-  animation: floatMotif 16s ease-in-out infinite alternate-reverse;
-}
-
-.motif-mid-left {
-  top: 45%;
-  left: 1%;
-  animation: floatMotif 18s ease-in-out infinite alternate;
-}
-
-.motif-mid-right {
-  top: 52%;
-  right: 1.5%;
-  animation: floatMotif 15s ease-in-out infinite alternate-reverse;
-}
-
-.motif-bottom-left {
-  bottom: 8%;
-  left: 2%;
-  animation: floatMotif 17s ease-in-out infinite alternate;
-}
-
-.motif-bottom-right {
-  bottom: 6%;
-  right: 2%;
-  animation: floatMotif 19s ease-in-out infinite alternate-reverse;
-}
-
-@keyframes floatMotif {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-12px) rotate(1deg); }
-  100% { transform: translateY(6px) rotate(-1deg); }
-}
-
-@media (max-width: 1024px) {
-  .bg-motif { display: none; }
-}
-
-/* Atmospheric Vignette Overlay */
-.bg-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, transparent 35%, rgba(18, 34, 30, 0.75) 90%);
+@media (prefers-reduced-motion: reduce) {
+  .app-background canvas {
+    opacity: 0.72;
+  }
 }
 
 /* Layout Container */
@@ -499,7 +391,12 @@ body {
    HERO SECTION
    ========================================================= */
 .hero {
-  padding: 3.5rem 0 4rem 0;
+  padding: 1.25rem 0 2.25rem 0;
+}
+
+.hero .section-wrapper {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .hero-layout {
@@ -509,6 +406,20 @@ body {
   text-align: center;
   max-width: 900px;
   margin: 0 auto;
+}
+
+.hero-layout > * {
+  animation: heroRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-layout > *:nth-child(2) { animation-delay: 0.08s; }
+.hero-layout > *:nth-child(3) { animation-delay: 0.16s; }
+.hero-layout > *:nth-child(4) { animation-delay: 0.24s; }
+.hero-layout > *:nth-child(5) { animation-delay: 0.32s; }
+
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Bauhaus Emblem */
@@ -581,7 +492,7 @@ body {
   letter-spacing: -0.04em;
   line-height: 1.08;
   color: var(--text-primary);
-  margin-bottom: 1.35rem;
+  margin-bottom: 1rem;
   text-shadow: 0 0 80px rgba(139, 178, 222, 0.08);
 }
 
@@ -606,7 +517,7 @@ body {
   font-size: 1.15rem;
   color: var(--text-secondary);
   max-width: 720px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.65;
 }
 
@@ -621,7 +532,7 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   width: 100%;
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .meta-chips-grid .glare-hover-container {
@@ -847,59 +758,20 @@ body {
   gap: 1.25rem;
 }
 
-/* =========================================================
-   MARQUEE
-   ========================================================= */
-.marquee-container {
-  width: 100%;
-  overflow: hidden;
-  background: rgba(33, 56, 50, 0.85);
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 0.95rem 0;
-  user-select: none;
-  position: relative;
-  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.marquee-content {
-  display: flex;
-  gap: 2.5rem;
-  width: max-content;
-  animation: marqueeScroll 30s linear infinite;
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.marquee-content:hover {
-  animation-play-state: paused;
-}
-
-@keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.marquee-phrase {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--text-secondary);
-}
-
-.marquee-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-}
-
-.marquee-dot.red { background: var(--color-red); box-shadow: 0 0 8px rgba(229, 57, 39, 0.6); }
-.marquee-dot.blue { background: var(--color-blue); box-shadow: 0 0 8px rgba(139, 178, 222, 0.6); }
-.marquee-dot.yellow { background: var(--color-yellow); box-shadow: 0 0 8px rgba(245, 183, 38, 0.6); }
-.marquee-dot.pink { background: var(--color-pink); box-shadow: 0 0 8px rgba(233, 123, 119, 0.6); }
+.section-wrapper > .section-header.scroll-reveal { transition-delay: 0.04s; }
+.section-wrapper > :nth-child(2).scroll-reveal { transition-delay: 0.12s; }
+.section-wrapper > :nth-child(3).scroll-reveal { transition-delay: 0.2s; }
 
 /* =========================================================
    ABOUT SECTION
@@ -2033,3 +1905,371 @@ body {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* =========================================================
+   PERKS & HIGHLIGHTS BENTO GRID (STREAMLINED ABOUT)
+   ========================================================= */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 840px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bento-card {
+  background: var(--bg-glass);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.bento-card:hover {
+  border-color: rgba(245, 183, 38, 0.55);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+}
+
+.bento-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+  align-self: flex-start;
+}
+
+.bento-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.bento-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.bento-features-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.bento-feature-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.bento-feature-val {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.bento-feature-lbl {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   DYNAMIC REGISTRATION FORM & QR PAYMENT STYLES
+   ========================================================= */
+.team-size-selector-row {
+  margin-bottom: 1.5rem;
+}
+
+.team-size-selector-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.team-size-pills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.size-pill-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all var(--transition-fast);
+}
+
+.size-pill-btn:hover {
+  border-color: var(--hf-blue);
+  background: rgba(139, 178, 222, 0.1);
+  color: #FFFFFF;
+}
+
+.size-pill-btn.active {
+  background: rgba(229, 57, 39, 0.18);
+  border-color: var(--hf-red);
+  color: #FFFFFF;
+  box-shadow: 0 0 16px rgba(229, 57, 39, 0.35);
+}
+
+.size-pill-badge {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--hf-yellow);
+}
+
+/* Dynamic Fee Banner */
+.dynamic-fee-banner {
+  background: linear-gradient(135deg, rgba(245, 183, 38, 0.16) 0%, rgba(229, 57, 39, 0.14) 100%);
+  border: 1.5px solid rgba(245, 183, 38, 0.45);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.fee-banner-text h4 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 0.2rem;
+}
+
+.fee-banner-text p {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+.fee-banner-price {
+  text-align: right;
+}
+
+.fee-banner-amount {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--hf-yellow);
+  line-height: 1;
+}
+
+.fee-banner-rate {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* Member Section Cards */
+.member-section-card {
+  background: rgba(10, 20, 18, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+  margin-bottom: 1.25rem;
+  transition: border-color var(--transition-fast);
+}
+
+.member-section-card:hover {
+  border-color: rgba(139, 178, 222, 0.4);
+}
+
+.member-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.member-section-title {
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.member-tag-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.member-tag-badge.leader {
+  background: rgba(229, 57, 39, 0.2);
+  color: #FF7B72;
+  border: 1px solid rgba(229, 57, 39, 0.45);
+}
+
+.member-tag-badge.member {
+  background: rgba(139, 178, 222, 0.2);
+  color: #8BB2DE;
+  border: 1px solid rgba(139, 178, 222, 0.4);
+}
+
+/* QR Code Payment Panel */
+.qr-payment-panel {
+  background: rgba(8, 16, 14, 0.9);
+  border: 1.5px solid rgba(139, 178, 222, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.qr-panel-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qr-panel-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.qr-box-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.qr-visual-frame {
+  width: 190px;
+  height: 190px;
+  background: #FFFFFF;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+}
+
+.qr-visual-frame img,
+.qr-visual-frame svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.upi-chip-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--hf-yellow);
+}
+
+.copy-upi-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  transition: color var(--transition-fast);
+}
+
+.copy-upi-btn:hover {
+  color: #FFFFFF;
+}
+
+/* Error Banner in Form */
+.form-error-banner {
+  background: rgba(229, 57, 39, 0.15);
+  border: 1.5px solid rgba(229, 57, 39, 0.5);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #FFA59E;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Form input contrast upgrades */
+.form-field-group input,
+.form-field-group select {
+  background: #081411 !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.form-field-group input::placeholder {
+  color: #94A3B8 !important;
+}
+
+.form-field-group input:focus,
+.form-field-group select:focus {
+  border-color: var(--hf-yellow) !important;
+  box-shadow: 0 0 0 3px rgba(245, 183, 38, 0.3) !important;
+}
+

@@ -10,106 +10,149 @@ import { BadRequestError, ConflictError, NotFoundError } from '../utils/errors.j
 
 const REGISTRATIONS_COLLECTION = 'registrations';
 const TRACKS_COLLECTION = 'problemStatements';
+const LOCKS_COLLECTION = 'registration_locks';
 
 export class RegistrationService {
   /**
    * Registers a team atomically using a Firestore transaction.
    * Enforces:
    * 1. members.length === teamSize - 1
-   * 2. Fast pre-check: leader email uniqueness (excluding rejected)
-   * 3. Target PS exists and isActive == true
-   * 4. In-transaction re-checks of PS capacity and leader email uniqueness
-   * 5. Atomic registration creation and PS currentTeamCount increment
+   * 2. Intra-request uniqueness: no duplicate emails or phones across members
+   * 3. Pre-checks and In-transaction ACID locks for teamName, all participant emails, and all phones
+   * 4. Optional problem statement capacity check if trackId is provided
+   * 5. Atomic registration creation with payment verification details
    */
   static async registerTeam(
     input: RegisterRequestInput
   ): Promise<{ success: boolean; registrationId: string }> {
-    const { teamSize, members, leader, trackId } = input;
+    const { teamSize, members, leader, trackId = 'general' } = input;
 
-    // Step 2: Validate members count against teamSize
+    // Step 1: Validate members count against teamSize
     if (members.length !== teamSize - 1) {
       throw new BadRequestError(
         `Invalid members count: for teamSize ${teamSize}, exactly ${teamSize - 1} additional member(s) must be provided. Received ${members.length}.`
       );
     }
 
-    const normalizedLeaderEmail = leader.email.trim().toLowerCase();
+    const normalizedTeamName = input.teamName.trim();
+    const teamLockKey = `team_${normalizedTeamName.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
 
-    // Step 3: Fast pre-check: Does an active registration for this leader email already exist?
-    // Exclude 'rejected' registrations so rejected teams can register again
-    const activeRegSnapshot = await db
+    const normalizedLeaderEmail = leader.email.trim().toLowerCase();
+    const normalizedMemberEmails = members.map((m) => m.email.trim().toLowerCase());
+    const allEmails = [normalizedLeaderEmail, ...normalizedMemberEmails];
+
+    // Check duplicate emails within the form
+    const uniqueEmails = new Set(allEmails);
+    if (uniqueEmails.size !== allEmails.length) {
+      throw new BadRequestError('Each team member and leader must have a distinct, unique email address.');
+    }
+
+    const cleanPhone = (p: string) => p.replace(/\D/g, '').slice(-10);
+    const normalizedLeaderPhone = cleanPhone(leader.phone);
+    const normalizedMemberPhones = members.map((m) => cleanPhone(m.phone));
+    const allPhones = [normalizedLeaderPhone, ...normalizedMemberPhones];
+
+    // Check duplicate phones within the form
+    const uniquePhones = new Set(allPhones);
+    if (uniquePhones.size !== allPhones.length) {
+      throw new BadRequestError('Each team member and leader must have a distinct, unique phone number.');
+    }
+
+    // Step 2: Query active registrations for existing team name
+    const teamQuerySnap = await db
       .collection(REGISTRATIONS_COLLECTION)
-      .where('leader.email', '==', normalizedLeaderEmail)
       .where('status', 'in', ['pending', 'confirmed', 'waitlisted'])
-      .limit(1)
       .get();
 
-    if (!activeRegSnapshot.empty) {
-      const existingDoc = activeRegSnapshot.docs[0].data() as RegistrationDoc;
-      let existingTrackTitle = 'an existing problem statement';
-      try {
-        const trackDoc = await db.collection(TRACKS_COLLECTION).doc(existingDoc.trackId).get();
-        if (trackDoc.exists) {
-          existingTrackTitle = (trackDoc.data() as ProblemStatementDoc).title;
-        }
-      } catch {
-        // Fallback title
+    for (const doc of teamQuerySnap.docs) {
+      const data = doc.data() as RegistrationDoc;
+      if (data.teamName.trim().toLowerCase() === normalizedTeamName.toLowerCase()) {
+        throw new ConflictError(`Team name '${normalizedTeamName}' is already taken. Please select a unique team name.`);
       }
-
-      throw new ConflictError(
-        `Leader email '${normalizedLeaderEmail}' is already registered for '${existingTrackTitle}'. Each team leader can only register once.`
-      );
+      // Check leader or member email collision
+      const existingEmails = [data.leader.email.toLowerCase(), ...(data.members || []).map((m) => m.email.toLowerCase())];
+      for (const email of allEmails) {
+        if (existingEmails.includes(email)) {
+          throw new ConflictError(
+            `Participant email '${email}' is already registered with team '${data.teamName}'. Each participant can only register with one team.`
+          );
+        }
+      }
+      // Check phone collision
+      const existingPhones = [cleanPhone(data.leader.phone), ...(data.members || []).map((m) => cleanPhone(m.phone))];
+      for (const phone of allPhones) {
+        if (phone && existingPhones.includes(phone)) {
+          throw new ConflictError(
+            `Participant phone number is already registered with team '${data.teamName}'. Each participant can only register once.`
+          );
+        }
+      }
     }
 
-    // Step 4: Verify trackId exists and is active
-    const psRef = db.collection(TRACKS_COLLECTION).doc(trackId);
-    const psInitialSnap = await psRef.get();
-
-    if (!psInitialSnap.exists || !psInitialSnap.data()?.isActive) {
-      throw new NotFoundError(
-        `Problem statement with ID '${trackId}' not found or is currently inactive.`
-      );
+    // Step 3: Verify optional trackId if valid problem statement
+    let psRef: FirebaseFirestore.DocumentReference | null = null;
+    if (trackId && trackId !== 'general') {
+      psRef = db.collection(TRACKS_COLLECTION).doc(trackId);
+      const psInitialSnap = await psRef.get();
+      if (psInitialSnap.exists && !psInitialSnap.data()?.isActive) {
+        throw new NotFoundError(`Selected problem statement is currently inactive.`);
+      }
     }
 
-    // Step 5: Run Firestore Transaction
+    // Step 4: Run Atomic Firestore Transaction with Locks
     const newRegRef = db.collection(REGISTRATIONS_COLLECTION).doc();
+    const teamLockRef = db.collection(LOCKS_COLLECTION).doc(teamLockKey);
+    const emailLockRefs = allEmails.map((em) => db.collection(LOCKS_COLLECTION).doc(`email_${em}`));
+    const phoneLockRefs = allPhones.map((ph) => db.collection(LOCKS_COLLECTION).doc(`phone_${ph}`));
 
     await db.runTransaction(async (transaction) => {
-      // 5.1 Re-read Problem Statement inside transaction
-      const psDoc = await transaction.get(psRef);
-      if (!psDoc.exists || !psDoc.data()?.isActive) {
-        throw new NotFoundError(
-          `Problem statement with ID '${trackId}' not found or has been deactivated.`
-        );
+      // 4.1 Read all locks
+      const [teamLockSnap, ...otherLockSnaps] = await Promise.all([
+        transaction.get(teamLockRef),
+        ...emailLockRefs.map((ref) => transaction.get(ref)),
+        ...phoneLockRefs.map((ref) => transaction.get(ref)),
+      ]);
+
+      if (teamLockSnap.exists) {
+        throw new ConflictError(`Team name '${normalizedTeamName}' was just registered by another user.`);
       }
 
-      const psData = psDoc.data() as ProblemStatementDoc;
-
-      // 5.2 Capacity check
-      if ((psData.currentTeamCount || 0) >= psData.maxTeams) {
-        throw new ConflictError(
-          `Problem statement '${psData.title}' is full (maximum capacity of ${psData.maxTeams} teams reached). Please select another problem statement.`
-        );
+      const emailSnaps = otherLockSnaps.slice(0, emailLockRefs.length);
+      for (let i = 0; i < emailSnaps.length; i++) {
+        if (emailSnaps[i].exists) {
+          throw new ConflictError(`Email '${allEmails[i]}' is already registered with an active team.`);
+        }
       }
 
-      // 5.3 In-transaction re-confirmation of leader email uniqueness (closing race window)
-      const txLeaderQuery = db
-        .collection(REGISTRATIONS_COLLECTION)
-        .where('leader.email', '==', normalizedLeaderEmail)
-        .where('status', 'in', ['pending', 'confirmed', 'waitlisted']);
+      const phoneSnaps = otherLockSnaps.slice(emailLockRefs.length);
+      for (let i = 0; i < phoneSnaps.length; i++) {
+        if (phoneSnaps[i].exists) {
+          throw new ConflictError(`Phone number '${allPhones[i]}' is already registered with an active team.`);
+        }
+      }
 
-      const txLeaderSnap = await transaction.get(txLeaderQuery);
-      if (!txLeaderSnap.empty) {
-        throw new ConflictError(
-          `Leader email '${normalizedLeaderEmail}' was just registered in a concurrent request. Each team leader can only register once.`
-        );
+      // 4.2 Track capacity check if track selected
+      if (psRef) {
+        const psDoc = await transaction.get(psRef);
+        if (psDoc.exists) {
+          const psData = psDoc.data() as ProblemStatementDoc;
+          if (psData.isActive && (psData.currentTeamCount || 0) >= psData.maxTeams) {
+            throw new ConflictError(
+              `Problem statement '${psData.title}' has reached maximum capacity (${psData.maxTeams} teams).`
+            );
+          }
+          transaction.update(psRef, {
+            currentTeamCount: (psData.currentTeamCount || 0) + 1,
+            updatedAt: FieldValue.serverTimestamp(),
+          });
+        }
       }
 
       const now = FieldValue.serverTimestamp();
 
-      // 5.4 Write registration document
+      // 4.3 Write registration document
       transaction.set(newRegRef, {
-        teamName: input.teamName,
+        teamName: normalizedTeamName,
         teamSize: input.teamSize,
         leader: {
           name: input.leader.name,
@@ -123,8 +166,14 @@ export class RegistrationService {
           phone: m.phone,
           college: m.college,
         })),
-        trackId: input.trackId,
+        trackId: trackId || 'general',
         githubUrl: input.githubUrl || null,
+        payment: {
+          utrNumber: input.payment?.utrNumber || '',
+          amount: input.teamSize * 200,
+          paymentStatus: 'pending_verification',
+          paidAt: now,
+        },
         status: 'pending',
         checkedIn: false,
         adminNote: null,
@@ -132,11 +181,33 @@ export class RegistrationService {
         updatedAt: now,
       });
 
-      // 5.5 Atomically increment PS currentTeamCount
-      transaction.update(psRef, {
-        currentTeamCount: (psData.currentTeamCount || 0) + 1,
-        updatedAt: now,
+      // 4.4 Set atomic lock documents
+      transaction.set(teamLockRef, {
+        type: 'team',
+        teamName: normalizedTeamName,
+        registrationId: newRegRef.id,
+        createdAt: now,
       });
+
+      for (let i = 0; i < emailLockRefs.length; i++) {
+        transaction.set(emailLockRefs[i], {
+          type: 'email',
+          email: allEmails[i],
+          teamName: normalizedTeamName,
+          registrationId: newRegRef.id,
+          createdAt: now,
+        });
+      }
+
+      for (let i = 0; i < phoneLockRefs.length; i++) {
+        transaction.set(phoneLockRefs[i], {
+          type: 'phone',
+          phone: allPhones[i],
+          teamName: normalizedTeamName,
+          registrationId: newRegRef.id,
+          createdAt: now,
+        });
+      }
     });
 
     return {

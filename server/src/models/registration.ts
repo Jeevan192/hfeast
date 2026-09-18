@@ -13,6 +13,13 @@ export interface TeamMember {
 
 export interface TeamLeader extends TeamMember {}
 
+export interface RegistrationPayment {
+  utrNumber: string;
+  amount: number;
+  paymentStatus: 'pending_verification' | 'verified' | 'failed';
+  paidAt?: Timestamp;
+}
+
 export interface RegistrationDoc {
   id: string;
   teamName: string;
@@ -21,6 +28,7 @@ export interface RegistrationDoc {
   members: TeamMember[];
   trackId: string;
   githubUrl: string | null;
+  payment?: RegistrationPayment;
   status: RegistrationStatus;
   checkedIn: boolean;
   adminNote: string | null;
@@ -57,6 +65,18 @@ const teamMemberSchema = z.object({
     .transform((v) => v.trim()),
 });
 
+export const paymentSchema = z.object({
+  utrNumber: z
+    .string({ required_error: 'UPI Reference / UTR Number is required' })
+    .min(6, 'UTR / Reference Number must be at least 6 characters')
+    .max(40, 'UTR / Reference Number cannot exceed 40 characters')
+    .transform((v) => v.trim()),
+  amount: z
+    .number()
+    .optional()
+    .default(0),
+});
+
 export const registerRequestSchema = z.object({
   teamName: z
     .string({ required_error: 'Team name is required' })
@@ -70,15 +90,16 @@ export const registerRequestSchema = z.object({
       z
         .number({ required_error: 'Team size is required' })
         .int('Team size must be an integer')
-        .min(1, 'Team size must be between 1 and 4')
-        .max(4, 'Team size must be between 1 and 4')
+        .min(3, 'Team size must be 3, 4, or 5')
+        .max(5, 'Team size must be 3, 4, or 5')
     ),
   leader: teamMemberSchema,
   members: z.array(teamMemberSchema).default([]),
   trackId: z
-    .string({ required_error: 'Track ID (problem statement ID) is required' })
-    .min(1, 'Track ID is required')
-    .transform((v) => v.trim()),
+    .string()
+    .trim()
+    .optional()
+    .default('general'),
   githubUrl: z
     .string()
     .transform((v) => v.trim())
@@ -88,6 +109,7 @@ export const registerRequestSchema = z.object({
     .nullable()
     .optional()
     .transform((v) => (!v ? null : v)),
+  payment: paymentSchema.optional(),
 });
 
 export const updateRegistrationSchema = z

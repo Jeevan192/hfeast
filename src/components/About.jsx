@@ -5,94 +5,110 @@ export default function About() {
   return (
     <section className="section-wrapper" id="about">
       <div className="section-header">
-        <h2 className="section-title">ABOUT CBIT HACKTOBERFEST HACKATHON</h2>
+        <div className="pill-badge yellow" style={{ marginBottom: '1rem' }}>
+          <span className="badge-dot"></span>
+          <span>Why Participate</span>
+        </div>
+        <h2 className="section-title">BUILT FOR BUILDERS</h2>
         <p className="section-subtitle">
-          Empowering the next generation of engineers through open source culture, collective problem-solving and hands-on community building.
+          An intensive 24-hour celebration of open-source innovation, mentorship, and community at CBIT Hyderabad.
         </p>
       </div>
 
-      {/* 4 Clean Cards Grid with Interactive Border Glow */}
-      <div className="cards-grid-2x2">
-        {/* Card 1 - Global Movement (Blue & White) */}
-        <BorderGlow borderRadius={20} colors={['#8BB2DE', '#FFFFFF']} edgeSensitivity={35} glowRadius={60}>
-          <div className="clean-card">
-            <div className="card-top">
-              <span className="card-step-tag">01 / GLOBAL MOVEMENT</span>
-              <div className="geo-shape-cell cell-blue" style={{ width: '16px', height: '16px' }}></div>
-            </div>
-            <h3 className="card-title">What is Hacktoberfest?</h3>
-            <p className="card-desc">
-              Hacktoberfest is DigitalOcean's annual month-long celebration that inspires developers worldwide to contribute
-              to open-source software. Modern technologies rely deeply on projects maintained by passionate contributors.
-              Hacktoberfest is about giving back, honing real-world coding skills and honoring the collective spirit of open development.
+      {/* High-Impact Bento Grid with High Contrast & Streamlined Copy */}
+      <div className="bento-grid">
+        {/* Card 1: All-Inclusive Fee & Pass (Featured Card) */}
+        <BorderGlow borderRadius={22} colors={['#F5B726', '#E53927']} edgeSensitivity={35} glowRadius={75}>
+          <div className="bento-card">
+            <span className="bento-badge-tag" style={{ background: 'rgba(245, 183, 38, 0.2)', color: '#F5B726', border: '1px solid rgba(245, 183, 38, 0.45)' }}>
+              ⚡ ₹200 / Head • Complete Access
+            </span>
+            <h3 className="bento-title">All-Inclusive Hackathon Experience</h3>
+            <p className="bento-desc">
+              Your registration of ₹200 per participant covers everything you need for 24 hours of non-stop creation: full catering, midnight energy snacks, official Hacktoberfest swag kit, Wi-Fi, workspace, and live mentor support.
             </p>
-            <div className="card-tags">
-              <span className="mini-tag">DigitalOcean</span>
-              <span className="mini-tag">Global FOSS Celebration</span>
-              <span className="mini-tag">GitHub Contributions</span>
+            <div className="bento-features-row">
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#F5B726' }}>Meals & Snacks</span>
+                <span className="bento-feature-lbl">All food included</span>
+              </div>
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#E53927' }}>Swag & Badges</span>
+                <span className="bento-feature-lbl">Exclusive kit</span>
+              </div>
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#8BB2DE' }}>24/7 Floor</span>
+                <span className="bento-feature-lbl">CBIT Campus</span>
+              </div>
             </div>
           </div>
         </BorderGlow>
 
-        {/* Card 2 - Host Community (Red & Yellow) */}
-        <BorderGlow borderRadius={20} colors={['#E53927', '#F5B726']} edgeSensitivity={35} glowRadius={60}>
-          <div className="clean-card">
-            <div className="card-top">
-              <span className="card-step-tag">02 / HOST COMMUNITY</span>
-              <div className="geo-shape-cell cell-red" style={{ width: '16px', height: '16px' }}></div>
-            </div>
-            <h3 className="card-title">Who is COSC?</h3>
-            <p className="card-desc">
-              We are <strong>COSC (CBIT Open Source Community)</strong>, a prestigious student-led technical community based at
-              Chaitanya Bharathi Institute of Technology in Hyderabad. We actively champion open collaboration and cultivate
-              a space where students learn to build software whose source code is open, transparent and accessible to everyone.
+        {/* Card 2: 24-Hour Non-stop Sprint */}
+        <BorderGlow borderRadius={22} colors={['#8BB2DE', '#FFFFFF']} edgeSensitivity={35} glowRadius={75}>
+          <div className="bento-card">
+            <span className="bento-badge-tag" style={{ background: 'rgba(139, 178, 222, 0.2)', color: '#8BB2DE', border: '1px solid rgba(139, 178, 222, 0.4)' }}>
+              🚀 In-Person Sprint • 17–18 Oct
+            </span>
+            <h3 className="bento-title">First Time In-Person on Campus</h3>
+            <p className="bento-desc">
+              Experience the unmatched electricity of 500+ student developers coding together. Teams of 3 to 5 builders collaborate overnight in a high-octane atmosphere packed with ice-breakers, music, and lightning demos.
             </p>
-            <div className="card-tags">
-              <span className="mini-tag">CBIT Hyderabad</span>
-              <span className="mini-tag">2,500+ Community</span>
-              <span className="mini-tag">Student-Led</span>
+            <div className="bento-features-row">
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#8BB2DE' }}>3–5</span>
+                <span className="bento-feature-lbl">Members / Team</span>
+              </div>
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#FFFFFF' }}>24 Hrs</span>
+                <span className="bento-feature-lbl">Non-Stop Sprint</span>
+              </div>
             </div>
           </div>
         </BorderGlow>
 
-        {/* Card 3 - Purpose (Yellow & Coral) */}
-        <BorderGlow borderRadius={20} colors={['#F5B726', '#E97B77']} edgeSensitivity={35} glowRadius={60}>
-          <div className="clean-card">
-            <div className="card-top">
-              <span className="card-step-tag">03 / OUR PURPOSE</span>
-              <div className="geo-shape-cell cell-yellow" style={{ width: '16px', height: '16px' }}></div>
-            </div>
-            <h3 className="card-title">COSC's Intent & Vision</h3>
-            <p className="card-desc">
-              We believe in the power of collective progress. Our mission is to bring open source directly to your fingertips
-              through year-round hackathons, boot camps, hands-on workshops and tech awareness sessions. We strive to help
-              every student transition from just using software to actively authoring and maintaining it.
+        {/* Card 3: 1-on-1 Mentorship */}
+        <BorderGlow borderRadius={22} colors={['#3D5F58', '#8BB2DE']} edgeSensitivity={35} glowRadius={75}>
+          <div className="bento-card">
+            <span className="bento-badge-tag" style={{ background: 'rgba(61, 95, 88, 0.35)', color: '#81C7B7', border: '1px solid rgba(88, 166, 148, 0.45)' }}>
+              🧠 Expert Guidance
+            </span>
+            <h3 className="bento-title">Mentorship Throughout the Night</h3>
+            <p className="bento-desc">
+              Get unblocked fast. Domain mentors, alumni architects, and open-source contributors will be with you on the floor to review technical design, optimize code, and refine project pitches.
             </p>
-            <div className="card-tags">
-              <span className="mini-tag">Hands-on Workshops</span>
-              <span className="mini-tag">Mentorship</span>
-              <span className="mini-tag">Collective Progress</span>
+            <div className="bento-features-row">
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#81C7B7' }}>1-on-1</span>
+                <span className="bento-feature-lbl">Code Reviews</span>
+              </div>
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#F5B726' }}>Checkpoints</span>
+                <span className="bento-feature-lbl">Stage guidance</span>
+              </div>
             </div>
           </div>
         </BorderGlow>
 
-        {/* Card 4 - In-Person Milestone (Pink & Blue) */}
-        <BorderGlow borderRadius={20} colors={['#E97B77', '#8BB2DE']} edgeSensitivity={35} glowRadius={60}>
-          <div className="clean-card" style={{ borderColor: 'rgba(233, 123, 119, 0.3)' }}>
-            <div className="card-top">
-              <span className="card-step-tag" style={{ color: 'var(--color-pink)' }}>04 / IN-PERSON MILESTONE</span>
-              <div className="geo-shape-cell cell-pink" style={{ width: '16px', height: '16px' }}></div>
-            </div>
-            <h3 className="card-title">First Time In-Person on Campus</h3>
-            <p className="card-desc">
-              Since 2018, the CBIT Hacktoberfest Hackathon has united hundreds of developers virtually. This year, we are taking
-              that energy off the screen and directly onto our vibrant campus in Hyderabad. Builders will collaborate under
-              one roof for an electrifying 24-hour sprint packed with live mentoring, lightning talks and midnight coding energy.
+        {/* Card 4: Prizes & Recognition */}
+        <BorderGlow borderRadius={22} colors={['#E97B77', '#E53927']} edgeSensitivity={35} glowRadius={75}>
+          <div className="bento-card">
+            <span className="bento-badge-tag" style={{ background: 'rgba(233, 123, 119, 0.2)', color: '#E97B77', border: '1px solid rgba(233, 123, 119, 0.45)' }}>
+              🏆 Prizes & Certificates
+            </span>
+            <h3 className="bento-title">Win Prizes & Launch Your Career</h3>
+            <p className="bento-desc">
+              Compete for generous track prize pools, special partner awards, and verified certificates of participation. Build a standout open-source project for your GitHub portfolio.
             </p>
-            <div className="card-tags">
-              <span className="mini-tag">Offline at CBIT Campus</span>
-              <span className="mini-tag">24-Hour Non-stop</span>
-              <span className="mini-tag">Direct Mentoring</span>
+            <div className="bento-features-row">
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#E97B77' }}>Cash & Swag</span>
+                <span className="bento-feature-lbl">Podium prizes</span>
+              </div>
+              <div className="bento-feature-item">
+                <span className="bento-feature-val" style={{ color: '#FFFFFF' }}>Certificates</span>
+                <span className="bento-feature-lbl">All participants</span>
+              </div>
             </div>
           </div>
         </BorderGlow>
@@ -100,3 +116,4 @@ export default function About() {
     </section>
   );
 }
+
