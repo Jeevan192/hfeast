@@ -16,9 +16,9 @@
   /* ── Deep Cyber-Obsidian & High-Contrast Backgrounds ── */
   --bg-deep:            #08120F;   /* Deep rich obsidian base */
   --bg-main:            #0C1915;   /* Contrast dark canvas */
-  --bg-surface:         #132520;   /* Solid high-contrast card background */
-  --bg-surface-elevated:#1A332C;   /* Elevated interactive surface */
-  --bg-glass:           rgba(12, 25, 21, 0.92);
+  --bg-surface:         rgba(19, 37, 32, 0.58);   /* Translucent card surface */
+  --bg-surface-elevated:rgba(26, 51, 44, 0.68);  /* Translucent elevated surface */
+  --bg-glass:           rgba(12, 25, 21, 0.42);
 
   /* ── High-Contrast Borders ── */
   --border-subtle: rgba(255, 255, 255, 0.14);
@@ -91,15 +91,18 @@ body {
   pointer-events: none;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 44%, rgba(68, 151, 118, 0.24) 0%, transparent 45%),
-    linear-gradient(145deg, #153537 0%, rgba(21, 53, 55, 0.92) 52%, #153537 100%);
+    radial-gradient(ellipse at 62% 42%, rgba(86, 154, 224, 0.16) 0%, transparent 34%),
+    radial-gradient(ellipse at 34% 68%, rgba(68, 151, 118, 0.2) 0%, transparent 42%),
+    linear-gradient(132deg, #10292b 0%, #153537 47%, #112d30 100%);
 }
 
 .app-background::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 30%, rgba(21, 53, 55, 0.72) 100%);
+  background:
+    linear-gradient(132deg, rgba(11, 28, 30, 0.08), rgba(86, 154, 224, 0.05) 48%, rgba(11, 28, 30, 0.2)),
+    radial-gradient(ellipse at center, transparent 25%, rgba(12, 32, 34, 0.62) 100%);
   pointer-events: none;
 }
 
