@@ -25,6 +25,10 @@
   --border-medium: rgba(255, 255, 255, 0.25);
   --border-hover:  rgba(139, 178, 222, 0.75);
   --border-glow:   rgba(245, 183, 38, 0.45);
+  --card-border:   rgba(139, 178, 222, 0.3);
+  --card-border-hover: rgba(139, 178, 222, 0.72);
+  --card-highlight: rgba(255, 255, 255, 0.06);
+  --card-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
 
   /* ── Semantic aliases ── */
   --color-red:      var(--hf-red);
@@ -557,7 +561,7 @@ body {
   align-items: center;
   gap: 0.85rem;
   background: var(--bg-glass);
-  border: 1.5px solid rgba(139, 178, 222, 0.35);
+  border: 1px solid var(--card-border);
   border-radius: 14px;
   padding: 0.85rem 1.1rem;
   text-align: left;
@@ -566,18 +570,15 @@ body {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: var(--card-shadow);
   transition: all var(--transition-fast);
   overflow: hidden;
 }
 
 .meta-chip:hover {
-  border-color: rgba(139, 178, 222, 0.85);
+  border-color: var(--card-border-hover);
   background: rgba(40, 67, 60, 0.85);
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.5), 
-    0 0 16px rgba(139, 178, 222, 0.35), 
-    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), 0 0 18px rgba(139, 178, 222, 0.24);
   transform: translateY(-2px);
 }
 
@@ -762,8 +763,8 @@ body {
 }
 
 .scroll-reveal {
-  opacity: 0;
-  transform: translateY(26px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -954,7 +955,7 @@ body {
 
 .mentor-profile-card {
   background: var(--bg-glass);
-  border: 1.5px solid rgba(139, 178, 222, 0.32);
+  border: 1px solid var(--card-border);
   border-radius: 18px;
   padding: 2rem 1.5rem;
   display: flex;
@@ -963,17 +964,14 @@ body {
   text-align: center;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow: var(--card-shadow);
   transition: all var(--transition-fast);
 }
 
 .mentor-profile-card:hover {
-  border-color: rgba(139, 178, 222, 0.85);
+  border-color: var(--card-border-hover);
   transform: translateY(-4px);
-  box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.5), 
-    0 0 16px rgba(139, 178, 222, 0.3), 
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), 0 0 18px rgba(139, 178, 222, 0.24);
 }
 
 .mentor-avatar {
@@ -1156,20 +1154,20 @@ body {
   height: 100%;
   margin: 0;
   background: var(--bg-glass);
-  border: 1.5px solid rgba(139, 178, 222, 0.35);
+  border: 1px solid var(--card-border);
   border-radius: 14px;
   padding: 1.5rem 1.75rem;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   transition: all var(--transition-fast);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: var(--card-shadow);
   box-sizing: border-box;
   overflow: hidden;
 }
 
 .timeline-card-wrap:hover .timeline-card-box {
-  border-color: rgba(139, 178, 222, 0.85);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(139, 178, 222, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  border-color: var(--card-border-hover);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), 0 0 18px rgba(139, 178, 222, 0.24);
 }
 
 .timeline-time-display {
@@ -1302,7 +1300,7 @@ body {
   margin: 0;
   border-radius: 20px;
   background: rgba(33, 56, 50, 0.75);
-  border: 1.5px solid rgba(139, 178, 222, 0.35);
+  border: 1px solid var(--card-border);
   padding: 3.5rem 2.5rem;
   display: flex;
   flex-direction: column;
@@ -1318,7 +1316,7 @@ body {
   overflow: hidden;
   min-height: 220px;
   box-sizing: border-box;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.08);
+  box-shadow: var(--card-shadow);
 }
 
 
@@ -1397,16 +1395,16 @@ body {
 
 .faq-row {
   background: var(--bg-glass);
-  border: 1.5px solid rgba(139, 178, 222, 0.35);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: var(--card-shadow);
   transition: all var(--transition-fast);
 }
 
 .faq-row.open {
-  border-color: rgba(139, 178, 222, 0.85);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(139, 178, 222, 0.3);
+  border-color: var(--card-border-hover);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), 0 0 18px rgba(139, 178, 222, 0.24);
 }
 
 .faq-trigger {
@@ -1470,7 +1468,7 @@ body {
 
 .contact-card {
   background: var(--bg-glass);
-  border: 1.5px solid rgba(139, 178, 222, 0.35);
+  border: 1px solid var(--card-border);
   border-radius: 20px;
   padding: 2rem;
   display: flex;
@@ -1480,14 +1478,14 @@ body {
   box-sizing: border-box;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: var(--card-shadow);
   transition: all var(--transition-fast);
   overflow: hidden;
 }
 
 .contact-grid .glare-hover-container:hover .contact-card {
-  border-color: rgba(139, 178, 222, 0.85);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(139, 178, 222, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  border-color: var(--card-border-hover);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), 0 0 18px rgba(139, 178, 222, 0.24);
 }
 
 .contact-icon-box {
@@ -1926,11 +1924,14 @@ body {
 
 .bento-card {
   background: var(--bg-glass);
-  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border: none;
   border-radius: var(--radius-lg);
   padding: 2rem;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   transition: all var(--transition-fast);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);

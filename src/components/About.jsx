@@ -9,7 +9,7 @@ export default function About() {
           <span className="badge-dot"></span>
           <span>Why Participate</span>
         </div>
-        <h2 className="section-title">BUILT FOR BUILDERS</h2>
+        <h2 className="section-title">ABOUT</h2>
         <p className="section-subtitle">
           An intensive 24-hour celebration of open-source innovation, mentorship, and community at CBIT Hyderabad.
         </p>
@@ -21,7 +21,7 @@ export default function About() {
         <BorderGlow borderRadius={22} colors={['#F5B726', '#E53927']} edgeSensitivity={35} glowRadius={75}>
           <div className="bento-card">
             <span className="bento-badge-tag" style={{ background: 'rgba(245, 183, 38, 0.2)', color: '#F5B726', border: '1px solid rgba(245, 183, 38, 0.45)' }}>
-              ⚡ ₹200 / Head • Complete Access
+              ₹200 / Head • Complete Access
             </span>
             <h3 className="bento-title">All-Inclusive Hackathon Experience</h3>
             <p className="bento-desc">
@@ -48,7 +48,7 @@ export default function About() {
         <BorderGlow borderRadius={22} colors={['#8BB2DE', '#FFFFFF']} edgeSensitivity={35} glowRadius={75}>
           <div className="bento-card">
             <span className="bento-badge-tag" style={{ background: 'rgba(139, 178, 222, 0.2)', color: '#8BB2DE', border: '1px solid rgba(139, 178, 222, 0.4)' }}>
-              🚀 In-Person Sprint • 17–18 Oct
+              In-Person Sprint • 17–18 Oct
             </span>
             <h3 className="bento-title">First Time In-Person on Campus</h3>
             <p className="bento-desc">
@@ -71,7 +71,7 @@ export default function About() {
         <BorderGlow borderRadius={22} colors={['#3D5F58', '#8BB2DE']} edgeSensitivity={35} glowRadius={75}>
           <div className="bento-card">
             <span className="bento-badge-tag" style={{ background: 'rgba(61, 95, 88, 0.35)', color: '#81C7B7', border: '1px solid rgba(88, 166, 148, 0.45)' }}>
-              🧠 Expert Guidance
+              Expert Guidance
             </span>
             <h3 className="bento-title">Mentorship Throughout the Night</h3>
             <p className="bento-desc">
@@ -94,7 +94,7 @@ export default function About() {
         <BorderGlow borderRadius={22} colors={['#E97B77', '#E53927']} edgeSensitivity={35} glowRadius={75}>
           <div className="bento-card">
             <span className="bento-badge-tag" style={{ background: 'rgba(233, 123, 119, 0.2)', color: '#E97B77', border: '1px solid rgba(233, 123, 119, 0.45)' }}>
-              🏆 Prizes & Certificates
+              Prizes & Certificates
             </span>
             <h3 className="bento-title">Win Prizes & Launch Your Career</h3>
             <p className="bento-desc">

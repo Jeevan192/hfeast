@@ -54,9 +54,7 @@ export default function BorderGlow({
     setEdgeFactor(0);
   };
 
-  const gradientColors = Array.isArray(colors) && colors.length > 0
-    ? colors.join(', ')
-    : '#8BB2DE, #F5B726, #E53927';
+  const gradientColors = '#8BB2DE, #F5B726, #E53927';
 
   const glowOpacity = isHovered ? Math.min(1, (0.4 + edgeFactor * 0.6) * glowIntensity) : 0;
   const rad = typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius;
@@ -71,8 +69,8 @@ export default function BorderGlow({
       style={{
         position: 'relative',
         borderRadius: rad,
-        border: '1.5px solid rgba(139, 178, 222, 0.32)',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.35)',
+        border: '1px solid rgba(139, 178, 222, 0.3)',
+        boxShadow: '0 8px 28px rgba(0, 0, 0, 0.32)',
         boxSizing: 'border-box',
         overflow: 'hidden',
         height: style?.height || undefined,
