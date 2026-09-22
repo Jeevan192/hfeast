@@ -2435,3 +2435,15 @@ body {
   box-shadow: 0 0 0 3px rgba(245, 183, 38, 0.3) !important;
 }
 
+.form-field-group input[aria-invalid="true"] {
+  border-color: #ff8d84 !important;
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.25rem;
+  color: #ffb4ad;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+

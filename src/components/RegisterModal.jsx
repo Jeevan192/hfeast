@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SpecularButton from './SpecularButton.jsx';
 
 export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
@@ -27,8 +27,10 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [successData, setSuccessData] = useState(null);
+  const fieldRefs = useRef({});
 
   const UPI_ID = 'cosc@cbit.ac.in';
   const totalAmount = teamSize * 200;
@@ -72,82 +74,82 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
   };
 
   const validateForm = () => {
-    // 1. Team Name
-    if (!teamName.trim() || teamName.trim().length < 2) {
-      return 'Please enter a valid team name (at least 2 characters).';
-    }
-
-    // 2. Leader details
-    if (!leader.name.trim() || leader.name.trim().length < 2) {
-      return 'Please enter a valid name for the Team Leader.';
-    }
+    const errors = {};
+    const trimmedTeamName = teamName.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(leader.email.trim())) {
-      return 'Please enter a valid email address for the Team Leader.';
-    }
-    const cleanPhone = (p) => p.replace(/\D/g, '').slice(-10);
-    if (cleanPhone(leader.phone).length !== 10) {
-      return 'Please enter a valid 10-digit phone number for the Team Leader.';
-    }
-    if (!leader.college.trim()) {
-      return 'Please enter the College / Institute for the Team Leader.';
+    const indianPhoneRegex = /^(?:\+91|91|0)?[6-9]\d{9}$/;
+    const cleanPhone = (phone) => phone.trim().replace(/[\s\-()]/g, '');
+    const isValidPhone = (phone) => indianPhoneRegex.test(cleanPhone(phone));
+    const normalizePhone = (phone) => {
+      const cleaned = cleanPhone(phone);
+      const localNumber = cleaned.startsWith('+91') ? cleaned.slice(3)
+        : cleaned.startsWith('91') ? cleaned.slice(2)
+          : cleaned.startsWith('0') ? cleaned.slice(1) : cleaned;
+      return `+91${localNumber}`;
+    };
+
+    if (trimmedTeamName.length < 2 || trimmedTeamName.length > 50) {
+      errors.teamName = 'Team name must be 2 to 50 characters.';
     }
 
-    // 3. Active members details (teamSize - 1)
+    const validateParticipant = (participant, prefix, label) => {
+      const name = participant.name.trim();
+      const college = participant.college.trim();
+      const email = participant.email.trim();
+      if (name.length < 2 || name.length > 80) errors[`${prefix}.name`] = `${label} name must be 2 to 80 characters.`;
+      if (!emailRegex.test(email)) errors[`${prefix}.email`] = `Enter a valid email address for ${label}.`;
+      if (!isValidPhone(participant.phone)) errors[`${prefix}.phone`] = `Enter a valid Indian phone number for ${label}.`;
+      if (college.length < 2 || college.length > 120) errors[`${prefix}.college`] = `${label} college must be 2 to 120 characters.`;
+    };
+
+    validateParticipant(leader, 'leader', 'the Team Leader');
+
     const activeMembers = members.slice(0, teamSize - 1);
     for (let i = 0; i < activeMembers.length; i++) {
-      const m = activeMembers[i];
-      const memberNum = i + 2;
-      if (!m.name.trim() || m.name.trim().length < 2) {
-        return `Please enter a valid name for Member ${memberNum}.`;
-      }
-      if (!emailRegex.test(m.email.trim())) {
-        return `Please enter a valid email address for Member ${memberNum}.`;
-      }
-      if (cleanPhone(m.phone).length !== 10) {
-        return `Please enter a valid 10-digit phone number for Member ${memberNum}.`;
-      }
-      if (!m.college.trim()) {
-        return `Please enter the college name for Member ${memberNum}.`;
-      }
+      validateParticipant(activeMembers[i], `member${i}`, `Member ${i + 2}`);
     }
 
-    // 4. Intra-form duplicate check (Emails)
     const allEmails = [leader.email.trim().toLowerCase(), ...activeMembers.map((m) => m.email.trim().toLowerCase())];
-    const uniqueEmails = new Set(allEmails);
-    if (uniqueEmails.size !== allEmails.length) {
-      return 'Duplicate email detected! Each participant in the team must have a unique email address.';
-    }
+    allEmails.forEach((email, index) => {
+      if (email && allEmails.indexOf(email) !== index) {
+        errors[index === 0 ? 'leader.email' : `member${index - 1}.email`] = 'Each participant must use a unique email address.';
+      }
+    });
 
-    // 5. Intra-form duplicate check (Phones)
-    const allPhones = [cleanPhone(leader.phone), ...activeMembers.map((m) => cleanPhone(m.phone))];
-    const uniquePhones = new Set(allPhones);
-    if (uniquePhones.size !== allPhones.length) {
-      return 'Duplicate phone number detected! Each participant in the team must have a unique phone number.';
-    }
+    const allPhones = [normalizePhone(leader.phone), ...activeMembers.map((m) => normalizePhone(m.phone))];
+    allPhones.forEach((phone, index) => {
+      if (phone && allPhones.indexOf(phone) !== index) {
+        errors[index === 0 ? 'leader.phone' : `member${index - 1}.phone`] = 'Each participant must use a unique phone number.';
+      }
+    });
 
-    // 6. Payment validation
-    if (!utrNumber.trim() || utrNumber.trim().length < 6) {
-      return 'Please enter a valid UPI Reference / UTR Number (minimum 6-12 digits).';
+    const trimmedUtr = utrNumber.trim();
+    if (trimmedUtr.length < 6 || trimmedUtr.length > 40) {
+      errors.utrNumber = 'UTR / reference number must be 6 to 40 characters.';
     }
     if (!paymentConfirmed) {
-      return 'Please confirm that you have made the UPI payment before submitting.';
+      errors.paymentConfirmed = 'Confirm that you have made the UPI payment before submitting.';
     }
 
-    return null;
+    return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    const error = validateForm();
-    if (error) {
-      setErrorMessage(error);
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      const firstInvalidField = Object.keys(errors)[0];
+      fieldRefs.current[firstInvalidField]?.focus();
+      setErrorMessage('Please correct the highlighted fields before submitting.');
       const scrollEl = document.querySelector('.modal-scrollable-body');
       if (scrollEl) scrollEl.scrollTop = 0;
       return;
     }
+
+    setFieldErrors({});
 
     setIsSubmitting(true);
 
@@ -186,7 +188,9 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || data.error || 'Failed to submit registration. Please try again.');
+        const serverErrors = data.error?.details && typeof data.error.details === 'object' ? data.error.details : {};
+        setFieldErrors(serverErrors);
+        throw new Error(data.error?.message || data.message || 'Failed to submit registration. Please try again.');
       }
 
       setSuccessData({
@@ -210,8 +214,15 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
   const resetAndClose = () => {
     setSuccessData(null);
     setErrorMessage(null);
+    setFieldErrors({});
     onClose();
   };
+
+  const setFieldRef = (field) => (element) => {
+    fieldRefs.current[field] = element;
+  };
+
+  const fieldError = (field) => fieldErrors[field] && <small className="field-error">{fieldErrors[field]}</small>;
 
   return (
     <div className="modal-overlay" onClick={resetAndClose}>
@@ -312,10 +323,13 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                   <input
                     type="text"
                     required
+                    ref={setFieldRef('teamName')}
+                    aria-invalid={Boolean(fieldErrors.teamName)}
                     placeholder="e.g. CyberPioneers"
                     value={teamName}
                     onChange={(e) => setTeamName(e.target.value)}
                   />
+                  {fieldError('teamName')}
                 </div>
 
                 {/* Team Size Selector (3, 4, 5) */}
@@ -381,20 +395,26 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                       <input
                         type="text"
                         required
+                        ref={setFieldRef('leader.name')}
+                        aria-invalid={Boolean(fieldErrors['leader.name'])}
                         placeholder="Leader's Full Name"
                         value={leader.name}
                         onChange={(e) => handleLeaderChange('name', e.target.value)}
                       />
+                      {fieldError('leader.name')}
                     </div>
                     <div className="form-field-group">
                       <label>Email Address *</label>
                       <input
                         type="email"
                         required
+                        ref={setFieldRef('leader.email')}
+                        aria-invalid={Boolean(fieldErrors['leader.email'])}
                         placeholder="leader@domain.com"
                         value={leader.email}
                         onChange={(e) => handleLeaderChange('email', e.target.value)}
                       />
+                      {fieldError('leader.email')}
                     </div>
                   </div>
 
@@ -404,20 +424,26 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                       <input
                         type="tel"
                         required
+                        ref={setFieldRef('leader.phone')}
+                        aria-invalid={Boolean(fieldErrors['leader.phone'])}
                         placeholder="9876543210"
                         value={leader.phone}
                         onChange={(e) => handleLeaderChange('phone', e.target.value)}
                       />
+                      {fieldError('leader.phone')}
                     </div>
                     <div className="form-field-group">
                       <label>College / Institute *</label>
                       <input
                         type="text"
                         required
+                        ref={setFieldRef('leader.college')}
+                        aria-invalid={Boolean(fieldErrors['leader.college'])}
                         placeholder="e.g. CBIT Hyderabad"
                         value={leader.college}
                         onChange={(e) => handleLeaderChange('college', e.target.value)}
                       />
+                      {fieldError('leader.college')}
                     </div>
                   </div>
                 </div>
@@ -445,20 +471,26 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                           <input
                             type="text"
                             required
+                            ref={setFieldRef(`member${idx}.name`)}
+                            aria-invalid={Boolean(fieldErrors[`member${idx}.name`])}
                             placeholder={`Member ${memberNum} Full Name`}
                             value={member.name}
                             onChange={(e) => handleMemberChange(idx, 'name', e.target.value)}
                           />
+                          {fieldError(`member${idx}.name`)}
                         </div>
                         <div className="form-field-group">
                           <label>Email Address *</label>
                           <input
                             type="email"
                             required
+                            ref={setFieldRef(`member${idx}.email`)}
+                            aria-invalid={Boolean(fieldErrors[`member${idx}.email`])}
                             placeholder={`member${memberNum}@domain.com`}
                             value={member.email}
                             onChange={(e) => handleMemberChange(idx, 'email', e.target.value)}
                           />
+                          {fieldError(`member${idx}.email`)}
                         </div>
                       </div>
 
@@ -468,20 +500,26 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                           <input
                             type="tel"
                             required
+                            ref={setFieldRef(`member${idx}.phone`)}
+                            aria-invalid={Boolean(fieldErrors[`member${idx}.phone`])}
                             placeholder="9876543210"
                             value={member.phone}
                             onChange={(e) => handleMemberChange(idx, 'phone', e.target.value)}
                           />
+                          {fieldError(`member${idx}.phone`)}
                         </div>
                         <div className="form-field-group">
                           <label>College / Institute *</label>
                           <input
                             type="text"
                             required
+                            ref={setFieldRef(`member${idx}.college`)}
+                            aria-invalid={Boolean(fieldErrors[`member${idx}.college`])}
                             placeholder="e.g. CBIT Hyderabad"
                             value={member.college}
                             onChange={(e) => handleMemberChange(idx, 'college', e.target.value)}
                           />
+                          {fieldError(`member${idx}.college`)}
                         </div>
                       </div>
                     </div>
@@ -600,12 +638,15 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                     <input
                       type="text"
                       required
+                      ref={setFieldRef('utrNumber')}
+                      aria-invalid={Boolean(fieldErrors.utrNumber)}
                       placeholder="e.g. 428901234567 (12-digit UTR)"
                       value={utrNumber}
                       onChange={(e) => setUtrNumber(e.target.value)}
                     />
+                    {fieldError('utrNumber')}
                     <small style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginTop: '0.25rem', display: 'block' }}>
-                      Found in your payment app under transaction details.
+                      Enter the 6–40 character UTR / reference number shown in your payment app's transaction details.
                     </small>
                   </div>
 
@@ -616,6 +657,8 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                       id="confirmPaymentCheck"
                       required
                       checked={paymentConfirmed}
+                      ref={setFieldRef('paymentConfirmed')}
+                      aria-invalid={Boolean(fieldErrors.paymentConfirmed)}
                       onChange={(e) => setPaymentConfirmed(e.target.checked)}
                       style={{ marginTop: '0.2rem', width: '16px', height: '16px', accentColor: 'var(--hf-yellow)', cursor: 'pointer' }}
                     />
@@ -623,6 +666,7 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                       I confirm that I have transferred ₹{totalAmount} to the official COSC UPI ID and provided the genuine transaction reference ID.
                     </label>
                   </div>
+                  {fieldError('paymentConfirmed')}
                 </div>
 
                 {/* Actions Row */}
