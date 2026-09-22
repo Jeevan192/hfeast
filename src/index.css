@@ -1950,6 +1950,170 @@ body {
   overflow-y: auto;
 }
 
+.registration-progress {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+  margin: 0 0 1.5rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.registration-progress-step {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.registration-progress-step > span:last-child {
+  overflow-wrap: anywhere;
+}
+
+.registration-progress-step.active,
+.registration-progress-step.complete {
+  color: var(--text-primary);
+}
+
+.registration-progress-number {
+  display: inline-flex;
+  flex: 0 0 1.55rem;
+  width: 1.55rem;
+  height: 1.55rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-medium);
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.registration-progress-step.active .registration-progress-number {
+  border-color: var(--hf-yellow);
+  background: rgba(245, 182, 42, 0.16);
+  color: var(--hf-yellow);
+}
+
+.registration-progress-step.complete .registration-progress-number {
+  border-color: var(--hf-green-mint);
+  background: rgba(68, 151, 118, 0.18);
+  color: #8be0b8;
+}
+
+.registration-step-panel {
+  min-height: 24rem;
+}
+
+.registration-step-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.registration-step-actions .btn-primary {
+  min-width: 5.5rem;
+}
+
+.registration-review-panel {
+  background: rgba(8, 20, 17, 0.35);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+}
+
+.review-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.review-kicker {
+  color: var(--hf-yellow);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.review-heading h4 {
+  margin-top: 0.25rem;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+
+.review-total {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.review-total span,
+.review-grid span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.review-total strong {
+  display: block;
+  color: var(--hf-yellow);
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.review-grid > div {
+  min-width: 0;
+  padding: 0.75rem;
+  border-left: 2px solid var(--hf-blue);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.review-grid strong {
+  display: block;
+  margin-top: 0.2rem;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+}
+
+.review-participants {
+  margin-top: 0.85rem;
+  padding: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.review-participants > span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.review-participants strong {
+  display: block;
+  margin-top: 0.2rem;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.review-note {
+  margin-top: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
 .form-field-group { margin-bottom: 1.1rem; }
 
 .form-field-group label {
@@ -1990,6 +2154,17 @@ body {
 
 @media (max-width: 500px) {
   .form-field-row { grid-template-columns: 1fr; }
+
+  .modal-overlay { padding: 0.65rem; align-items: flex-start; }
+  .modal-window { max-height: calc(100vh - 1.3rem); border-radius: var(--radius-md); }
+  .modal-header-bar, .modal-scrollable-body { padding: 1rem; }
+  .registration-progress { gap: 0.2rem; margin-bottom: 1rem; }
+  .registration-progress-step { align-items: flex-start; flex-direction: column; gap: 0.25rem; font-size: 0.65rem; }
+  .registration-step-panel { min-height: 0; }
+  .review-grid { grid-template-columns: 1fr; }
+  .review-heading { align-items: flex-start; }
+  .modal-actions-row { align-items: stretch; flex-wrap: wrap; justify-content: space-between; }
+  .registration-step-actions { margin-left: auto; }
 }
 
 .star-rating-block {

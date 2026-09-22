@@ -31,6 +31,9 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [successData, setSuccessData] = useState(null);
   const fieldRefs = useRef({});
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = ['Team Details', 'Participants', 'Payment', 'Review & Submit'];
 
   const UPI_ID = 'cosc@cbit.ac.in';
   const totalAmount = teamSize * 200;
@@ -73,7 +76,7 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
     setTimeout(() => setCopiedUpi(false), 2500);
   };
 
-  const validateForm = () => {
+  const validateForm = (step = null) => {
     const errors = {};
     const trimmedTeamName = teamName.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -131,18 +134,49 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
       errors.paymentConfirmed = 'Confirm that you have made the UPI payment before submitting.';
     }
 
-    return errors;
+    const stepFields = [
+      ['teamName'],
+      ['leader.name', 'leader.email', 'leader.phone', 'leader.college', ...members.slice(0, teamSize - 1).flatMap((_, index) => [
+        `member${index}.name`, `member${index}.email`, `member${index}.phone`, `member${index}.college`,
+      ])],
+      ['utrNumber', 'paymentConfirmed'],
+      Object.keys(errors),
+    ];
+    if (step === null) return errors;
+    return Object.fromEntries(stepFields[step].filter((field) => errors[field]).map((field) => [field, errors[field]]));
+  };
+
+  const focusFirstError = (errors) => {
+    setFieldErrors(errors);
+    const firstInvalidField = Object.keys(errors)[0];
+    if (firstInvalidField) fieldRefs.current[firstInvalidField]?.focus();
+  };
+
+  const handleNext = () => {
+    const errors = validateForm(currentStep);
+    setErrorMessage(null);
+    if (Object.keys(errors).length > 0) {
+      focusFirstError(errors);
+      setErrorMessage('Please correct the highlighted fields before continuing.');
+      return;
+    }
+    setFieldErrors({});
+    setCurrentStep((step) => Math.min(step + 1, steps.length - 1));
+  };
+
+  const handleBack = () => {
+    setErrorMessage(null);
+    setFieldErrors({});
+    setCurrentStep((step) => Math.max(step - 1, 0));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    const errors = validateForm();
+    const errors = validateForm(3);
     if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      const firstInvalidField = Object.keys(errors)[0];
-      fieldRefs.current[firstInvalidField]?.focus();
+      focusFirstError(errors);
       setErrorMessage('Please correct the highlighted fields before submitting.');
       const scrollEl = document.querySelector('.modal-scrollable-body');
       if (scrollEl) scrollEl.scrollTop = 0;
@@ -202,6 +236,7 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
       if (onSubmitSuccess) {
         onSubmitSuccess(`Registration successfully submitted for team "${payload.teamName}"!`);
       }
+      setCurrentStep(0);
     } catch (err) {
       setErrorMessage(err.message || 'Network error occurred. Please verify your connection.');
       const scrollEl = document.querySelector('.modal-scrollable-body');
@@ -215,6 +250,7 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
     setSuccessData(null);
     setErrorMessage(null);
     setFieldErrors({});
+    setCurrentStep(0);
     onClose();
   };
 
@@ -316,7 +352,18 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                 </div>
               )}
 
+              <div className="registration-progress" aria-label="Registration progress">
+                {steps.map((step, index) => (
+                  <div key={step} className={`registration-progress-step ${index === currentStep ? 'active' : ''} ${index < currentStep ? 'complete' : ''}`}>
+                    <span className="registration-progress-number">{index < currentStep ? '✓' : index + 1}</span>
+                    <span>{step}</span>
+                  </div>
+                ))}
+              </div>
+
               <form onSubmit={handleSubmit}>
+                {currentStep === 0 && (
+                  <div className="registration-step-panel">
                 {/* 1. Team Name & Team Size Selector */}
                 <div className="form-field-group">
                   <label>Team Name *</label>
@@ -375,7 +422,11 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                     All team members belong to the same college / institute
                   </label>
                 </div>
+                  </div>
+                )}
 
+                {currentStep === 1 && (
+                  <div className="registration-step-panel">
                 {/* Section 1: Team Leader Details */}
                 <div className="member-section-card">
                   <div className="member-section-header">
@@ -525,7 +576,11 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                     </div>
                   );
                 })}
+                  </div>
+                )}
 
+                {currentStep === 2 && (
+                  <div className="registration-step-panel">
                 {/* Payment & QR Code Section */}
                 <div className="qr-payment-panel">
                   <div className="qr-panel-title">
@@ -668,27 +723,66 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                   </div>
                   {fieldError('paymentConfirmed')}
                 </div>
+                  </div>
+                )}
+
+                {currentStep === 3 && (
+                  <div className="registration-step-panel registration-review-panel">
+                    <div className="review-heading">
+                      <div>
+                        <span className="review-kicker">FINAL CHECK</span>
+                        <h4>Review your registration</h4>
+                      </div>
+                      <div className="review-total">
+                        <span>Total fee</span>
+                        <strong>₹{totalAmount}</strong>
+                      </div>
+                    </div>
+                    <div className="review-grid">
+                      <div><span>Team</span><strong>{teamName.trim() || 'Not entered'}</strong></div>
+                      <div><span>Team size</span><strong>{teamSize} participants</strong></div>
+                      <div><span>Team leader</span><strong>{leader.name.trim() || 'Not entered'}</strong></div>
+                      <div><span>College</span><strong>{leader.college.trim() || 'Not entered'}</strong></div>
+                      <div><span>Payment reference</span><strong>{utrNumber.trim() || 'Not entered'}</strong></div>
+                      <div><span>Payment status</span><strong>{paymentConfirmed ? 'Confirmed' : 'Not confirmed'}</strong></div>
+                    </div>
+                    <div className="review-participants">
+                      <span>Participants</span>
+                      <strong>{[leader, ...members.slice(0, teamSize - 1)].map((participant) => participant.name.trim() || 'Unnamed participant').join(' · ')}</strong>
+                    </div>
+                    <p className="review-note">Submitting sends these details to the registration server for final validation. You can go back to edit any section.</p>
+                  </div>
+                )}
 
                 {/* Actions Row */}
                 <div className="modal-actions-row">
                   <button type="button" className="btn btn-ghost" onClick={resetAndClose} disabled={isSubmitting}>
                     Cancel
                   </button>
-                  <SpecularButton
-                    type="submit"
-                    size="md"
-                    radius={12}
-                    baseColor="var(--hf-red)"
-                    lineColor="#FFFFFF"
-                    intensity={1}
-                    followMouse={true}
-                    disabled={isSubmitting}
-                  >
-                    <span>{isSubmitting ? 'Registering Team...' : `Pay ₹${totalAmount} & Register`}</span>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  </SpecularButton>
+                  <div className="registration-step-actions">
+                    {currentStep > 0 && (
+                      <button type="button" className="btn btn-ghost" onClick={handleBack} disabled={isSubmitting}>Back</button>
+                    )}
+                    {currentStep < steps.length - 1 ? (
+                      <button type="button" className="btn btn-primary" onClick={handleNext}>Next</button>
+                    ) : (
+                      <SpecularButton
+                        type="submit"
+                        size="md"
+                        radius={12}
+                        baseColor="var(--hf-red)"
+                        lineColor="#FFFFFF"
+                        intensity={1}
+                        followMouse={true}
+                        disabled={isSubmitting}
+                      >
+                        <span>{isSubmitting ? 'Registering Team...' : `Pay ₹${totalAmount} & Register`}</span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </SpecularButton>
+                    )}
+                  </div>
                 </div>
               </form>
             </>
