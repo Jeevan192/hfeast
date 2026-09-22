@@ -14,7 +14,7 @@ import RegisterModal from './components/RegisterModal';
 import FeedbackModal from './components/FeedbackModal';
 import Toast from './components/Toast';
 
-import AtmosphericBackground from './components/AtmosphericBackground.jsx';
+import InteractiveBackground from './components/InteractiveBackground.jsx';
 
 // Toggle to true post-event to enable feedback modal
 const SHOW_FEEDBACK = false;
@@ -53,8 +53,8 @@ export default function App() {
 
   return (
     <div className="app-root">
-      {/* Rich atmospheric background with auroras, grid, and Hacktoberfest 2026 pixel art */}
-      <AtmosphericBackground />
+      {/* Rich interactive Hacktoberfest 2026 background with Aceternity-style spotlight grid & pixel art */}
+      <InteractiveBackground />
 
       {/* Navigation Header */}
       <Navbar

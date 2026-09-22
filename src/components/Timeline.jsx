@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import confetti from 'canvas-confetti';
 import GlareHover from './GlareHover.jsx';
 
 export default function Timeline() {
+  const trackRef = useRef(null);
+  const stageRef = useRef(null);
+  const treeRef = useRef(null);
+  const lineRef = useRef(null);
+  const rowRefs = useRef([]);
+  const hasCelebratedRef = useRef(false);
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [reachedSet, setReachedSet] = useState(new Set([0]));
+
   const events = [
     {
       side: 'left',
@@ -10,8 +21,8 @@ export default function Timeline() {
       title: 'Opening Ceremony',
       desc: 'Welcome address by COSC faculty and leads, kicking off the 8th edition of CBIT Hacktoberfest Hackathon.',
       colorClass: 'node-blue',
+      color: '#569AE0',
       icon: (
-        /* Scholar Hat / Graduation Cap */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
           <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"></path>
@@ -25,8 +36,8 @@ export default function Timeline() {
       title: 'Releasing Problem Statements',
       desc: 'Official release of problem statements across key application domains.',
       colorClass: 'node-yellow',
+      color: '#F5B62A',
       icon: (
-        /* Document / Code */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polyline points="16 18 22 12 16 6"></polyline>
           <polyline points="8 6 2 12 8 18"></polyline>
@@ -39,9 +50,9 @@ export default function Timeline() {
       time: '06:30 PM',
       title: 'Finalizing Problem Statement',
       desc: 'Teams lock in their chosen problem statement with domain mentors on the floor.',
-      colorClass: 'node-blue',
+      colorClass: 'node-green',
+      color: '#3C7E64',
       icon: (
-        /* User with checkmark / Person with tic */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
           <circle cx="8.5" cy="7" r="4"></circle>
@@ -56,8 +67,8 @@ export default function Timeline() {
       title: 'Coding Begins',
       desc: '24 hours of non-stop collaborative coding, software architecture and repository commits begin.',
       colorClass: 'node-red',
+      color: '#BA3627',
       icon: (
-        /* Lightning / Code Sprint */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
         </svg>
@@ -69,9 +80,9 @@ export default function Timeline() {
       time: '01:00 AM',
       title: 'Ice-Breaker Session-1',
       desc: 'Midnight games, developer humor, refreshments and team energizers.',
-      colorClass: 'node-pink',
+      colorClass: 'node-yellow',
+      color: '#F5B62A',
       icon: (
-        /* Gamepad / Fun */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <line x1="6" y1="12" x2="10" y2="12"></line>
           <line x1="8" y1="10" x2="8" y2="14"></line>
@@ -87,9 +98,9 @@ export default function Timeline() {
       time: '08:00 AM',
       title: 'Ice-Breaker Session-2',
       desc: 'Morning refresh, breakfast and check-in ahead of the final build sprint.',
-      colorClass: 'node-yellow',
+      colorClass: 'node-blue',
+      color: '#569AE0',
       icon: (
-        /* Coffee Cup */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
           <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
@@ -105,9 +116,9 @@ export default function Timeline() {
       time: '02:00 PM',
       title: 'Submissions Open',
       desc: 'Portal opens for submitting GitHub repository links, documentation and demo links.',
-      colorClass: 'node-blue',
+      colorClass: 'node-green',
+      color: '#3C7E64',
       icon: (
-        /* Upload / Submission */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
           <polyline points="17 8 12 3 7 8"></polyline>
@@ -122,8 +133,8 @@ export default function Timeline() {
       title: 'Coding & Submissions End • Presentations',
       desc: 'Strict code freeze. Teams deliver live prototype demonstrations to jury panels.',
       colorClass: 'node-red',
+      color: '#BA3627',
       icon: (
-        /* Presentation / Monitor */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
           <line x1="8" y1="21" x2="16" y2="21"></line>
@@ -138,8 +149,8 @@ export default function Timeline() {
       title: 'Evaluations',
       desc: 'Scoring across code quality, technical execution, innovation and open source practices.',
       colorClass: 'node-yellow',
+      color: '#F5B62A',
       icon: (
-        /* Check Clipboard */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
           <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
@@ -153,9 +164,9 @@ export default function Timeline() {
       time: '05:30 PM',
       title: 'Closing Ceremony & Awards',
       desc: 'Prize distribution, certificates, partner recognitions and grand finale.',
-      colorClass: 'node-pink',
+      colorClass: 'node-blue',
+      color: '#569AE0',
       icon: (
-        /* Trophy / Medal */
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
           <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
@@ -167,6 +178,144 @@ export default function Timeline() {
     },
   ];
 
+  const triggerCelebrationBlast = () => {
+    // Official Hacktoberfest 2026 Brand Colors for confetti papers
+    const brandColors = [
+      '#569AE0', // Blue
+      '#F5B62A', // Gold
+      '#BA3627', // Red
+      '#3C7E64', // Forest Green
+      '#449776', // Mint
+      '#8AB1DA', // Soft Blue
+      '#FFFFFF', // White
+    ];
+
+    // Left cannon blast
+    confetti({
+      particleCount: 75,
+      angle: 60,
+      spread: 65,
+      origin: { x: 0, y: 0.72 },
+      colors: brandColors,
+      shapes: ['square', 'circle'],
+      scalar: 1.2,
+      drift: 0.25,
+      ticks: 260,
+      zIndex: 99999,
+    });
+
+    // Right cannon blast
+    confetti({
+      particleCount: 75,
+      angle: 120,
+      spread: 65,
+      origin: { x: 1, y: 0.72 },
+      colors: brandColors,
+      shapes: ['square', 'circle'],
+      scalar: 1.2,
+      drift: -0.25,
+      ticks: 260,
+      zIndex: 99999,
+    });
+
+    // Follow-up richer wave of paper ribbons after 280ms
+    setTimeout(() => {
+      confetti({
+        particleCount: 50,
+        angle: 70,
+        spread: 85,
+        origin: { x: 0.05, y: 0.78 },
+        colors: brandColors,
+        shapes: ['square'],
+        scalar: 1.1,
+        ticks: 230,
+        zIndex: 99999,
+      });
+      confetti({
+        particleCount: 50,
+        angle: 110,
+        spread: 85,
+        origin: { x: 0.95, y: 0.78 },
+        colors: brandColors,
+        shapes: ['square'],
+        scalar: 1.1,
+        ticks: 230,
+        zIndex: 99999,
+      });
+    }, 280);
+  };
+
+  useEffect(() => {
+    let animId;
+
+    const onScroll = () => {
+      const tree = treeRef.current;
+      const line = lineRef.current;
+      if (!tree || !line) return;
+
+      const treeRect = tree.getBoundingClientRect();
+      const viewportFocus = window.innerHeight * 0.55;
+
+      // Distance scrolled through timeline
+      const scrollYInTree = viewportFocus - treeRect.top;
+      const treeHeight = tree.offsetHeight;
+
+      const clampedHeight = Math.max(0, Math.min(scrollYInTree, treeHeight));
+      line.style.height = `${clampedHeight}px`;
+
+      let closestIdx = -1;
+      let minDistance = Infinity;
+      const newReached = new Set();
+
+      rowRefs.current.forEach((row, idx) => {
+        if (!row) return;
+        const iconNode = row.querySelector('.timeline-icon-node');
+        const nodePos = iconNode
+          ? iconNode.getBoundingClientRect().top + iconNode.offsetHeight * 0.5 - treeRect.top
+          : row.offsetTop + row.offsetHeight * 0.5;
+
+        if (clampedHeight >= nodePos - 20) {
+          newReached.add(idx);
+        }
+
+        const dist = Math.abs(clampedHeight - nodePos);
+        if (dist < minDistance && dist < 120) {
+          minDistance = dist;
+          closestIdx = idx;
+        }
+      });
+
+      setActiveIdx((prev) => (prev !== closestIdx ? closestIdx : prev));
+      setReachedSet(newReached);
+
+      // Blast celebration confetti papers from left and right when reaching Closing Ceremony & Awards
+      const isClosingCeremony = newReached.has(events.length - 1);
+      if (isClosingCeremony) {
+        if (!hasCelebratedRef.current) {
+          hasCelebratedRef.current = true;
+          triggerCelebrationBlast();
+        }
+      } else if (!newReached.has(events.length - 2)) {
+        hasCelebratedRef.current = false;
+      }
+    };
+
+    const handleScroll = () => {
+      cancelAnimationFrame(animId);
+      animId = requestAnimationFrame(onScroll);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    onScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
+
   return (
     <section className="section-wrapper" id="timeline">
       <div className="section-header">
@@ -176,30 +325,78 @@ export default function Timeline() {
         </p>
       </div>
 
-      <div className="timeline-tree">
-        {events.map((evt, idx) => (
-          <div key={idx} className={`timeline-row ${evt.side} ${evt.colorClass}`}>
-            {/* Card with GlareHover */}
-            <GlareHover borderRadius={14} glareOpacity={0.22} glareSize={220} className="timeline-card-wrap">
-              <div className="timeline-card-box">
-                <h3 className="t-event-title">{evt.title}</h3>
-                <p className="t-event-desc">{evt.desc}</p>
+      <div className="timeline-tree" ref={treeRef}>
+        {/* Progress Beam Line */}
+        <div
+          className="timeline-progress-line"
+          ref={lineRef}
+          aria-hidden="true"
+        />
+
+        {events.map((evt, idx) => {
+          const isReached = reachedSet.has(idx);
+          const isCurrent = activeIdx === idx;
+
+          return (
+            <div
+              key={idx}
+              ref={(el) => (rowRefs.current[idx] = el)}
+              className={`timeline-row ${evt.side} ${evt.colorClass} ${
+                isReached ? 'is-reached' : ''
+              } ${isCurrent ? 'is-current' : ''}`}
+            >
+              {/* Card with GlareHover */}
+              <GlareHover
+                borderRadius={14}
+                glareOpacity={isCurrent ? 0.38 : isReached ? 0.25 : 0.15}
+                glareSize={240}
+                className="timeline-card-wrap"
+              >
+                <div className="timeline-card-box">
+                  <div className="t-card-header">
+                    <span
+                      className="t-card-badge"
+                      style={{
+                        color: evt.color,
+                        borderColor: `${evt.color}44`,
+                        backgroundColor: `${evt.color}14`,
+                      }}
+                    >
+                      Step {idx + 1}
+                    </span>
+                    {isCurrent && <span className="t-live-indicator">Active</span>}
+                  </div>
+                  <h3 className="t-event-title">{evt.title}</h3>
+                  <p className="t-event-desc">{evt.desc}</p>
+                </div>
+              </GlareHover>
+
+              {/* Center Circular Icon Node */}
+              <div
+                className="timeline-icon-node"
+                title={evt.title}
+                style={{
+                  borderColor: isReached ? evt.color : undefined,
+                  boxShadow: isCurrent
+                    ? `0 0 28px ${evt.color}, inset 0 0 14px ${evt.color}66`
+                    : isReached
+                    ? `0 0 20px ${evt.color}88, inset 0 0 10px ${evt.color}44`
+                    : undefined,
+                }}
+              >
+                {evt.icon}
               </div>
-            </GlareHover>
 
-            {/* Center Circular Icon Node */}
-            <div className="timeline-icon-node" title={evt.title}>
-              {evt.icon}
+              {/* Time Stamp on opposite side */}
+              <div className="timeline-time-display">
+                <span className="time-label-date">{evt.date}</span>
+                <span className="time-label-clock">{evt.time}</span>
+              </div>
             </div>
-
-            {/* Time Stamp on opposite side */}
-            <div className="timeline-time-display">
-              <span className="time-label-date">{evt.date}</span>
-              <span>{evt.time}</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
 }
+
