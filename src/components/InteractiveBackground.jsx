@@ -59,16 +59,16 @@ export default function InteractiveBackground() {
 
     // Pointer state and trailing wake history for smooth color reveals
     const pointer = {
-      x: width * 0.5,
-      y: height * 0.35,
-      targetX: width * 0.5,
-      targetY: height * 0.35,
+      x: -9999,
+      y: -9999,
+      targetX: -9999,
+      targetY: -9999,
       isHovering: false,
-      lastMoveTime: Date.now(),
+      lastMoveTime: 0,
     };
 
     const trail = [];
-    const MAX_TRAIL_AGE = 1100; // ms
+    const MAX_TRAIL_AGE = 700; // ms
 
     const handleResize = () => {
       width = window.innerWidth;
@@ -82,6 +82,8 @@ export default function InteractiveBackground() {
     window.addEventListener('resize', handleResize);
 
     const recordPointer = (x, y) => {
+      pointer.x = x;
+      pointer.y = y;
       pointer.targetX = x;
       pointer.targetY = y;
       pointer.isHovering = true;
@@ -89,7 +91,7 @@ export default function InteractiveBackground() {
 
       // Add to trailing wake
       trail.push({ x, y, time: Date.now() });
-      if (trail.length > 30) trail.shift();
+      if (trail.length > 20) trail.shift();
     };
 
     const handlePointerMove = (e) => {
@@ -104,6 +106,11 @@ export default function InteractiveBackground() {
 
     const handlePointerLeave = () => {
       pointer.isHovering = false;
+      pointer.x = -9999;
+      pointer.y = -9999;
+      pointer.targetX = -9999;
+      pointer.targetY = -9999;
+      trail.length = 0;
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
@@ -112,31 +119,35 @@ export default function InteractiveBackground() {
 
     // Calculate hover color intensity (0.0 = resting light tone, 1.0 = full brand color)
     const getHoverIntensity = (cx, cy) => {
-      const now = Date.now();
       let intensity = 0;
 
-      // 1. Direct cursor proximity
-      const dx0 = cx - pointer.x;
-      const dy0 = cy - pointer.y;
-      const dist0 = Math.sqrt(dx0 * dx0 + dy0 * dy0);
-      const cursorRadius = width < 768 ? 170 : 250;
-      if (dist0 < cursorRadius) {
-        intensity = Math.pow(1 - dist0 / cursorRadius, 1.4);
+      // 1. Direct cursor proximity (strictly when hovering)
+      if (pointer.isHovering && pointer.x > -9000) {
+        const dx0 = cx - pointer.x;
+        const dy0 = cy - pointer.y;
+        const dist0 = Math.sqrt(dx0 * dx0 + dy0 * dy0);
+        const cursorRadius = width < 768 ? 140 : 190;
+        if (dist0 < cursorRadius) {
+          intensity = Math.pow(1 - dist0 / cursorRadius, 1.4);
+        }
       }
 
       // 2. Trailing wake from recent mouse movement
-      for (let i = trail.length - 1; i >= 0; i--) {
-        const pt = trail[i];
-        const age = now - pt.time;
-        if (age > MAX_TRAIL_AGE) continue;
-        const life = 1 - age / MAX_TRAIL_AGE;
-        const dx = cx - pt.x;
-        const dy = cy - pt.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const trailRadius = 160;
-        if (dist < trailRadius) {
-          const factor = Math.pow(1 - dist / trailRadius, 1.5) * life;
-          if (factor > intensity) intensity = factor;
+      if (trail.length > 0) {
+        const now = Date.now();
+        for (let i = trail.length - 1; i >= 0; i--) {
+          const pt = trail[i];
+          const age = now - pt.time;
+          if (age > MAX_TRAIL_AGE) continue;
+          const life = 1 - age / MAX_TRAIL_AGE;
+          const dx = cx - pt.x;
+          const dy = cy - pt.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const trailRadius = 130;
+          if (dist < trailRadius) {
+            const factor = Math.pow(1 - dist / trailRadius, 1.5) * life;
+            if (factor > intensity) intensity = factor;
+          }
         }
       }
 
@@ -337,8 +348,40 @@ export default function InteractiveBackground() {
       }
       strokeSeam(cx, cy, intensity);
 
-      // Piece B: Slotted 2U x 2U Split Square
-      renderSplitSquare(u, 0, u * 2, u * 2, cT1, cT2);
+      // Piece B: Slotted 2U x 2U Split Square (rendered directly with block intensity)
+      // Triangle 1
+      ctx.fillStyle = RESTING.tile2;
+      ctx.beginPath();
+      ctx.moveTo(u, 0);
+      ctx.lineTo(w, 0);
+      ctx.lineTo(u, u * 2);
+      ctx.closePath();
+      ctx.fill();
+      if (intensity > 0.01) {
+        ctx.save();
+        ctx.globalAlpha = intensity;
+        ctx.fillStyle = cT1;
+        ctx.fill();
+        ctx.restore();
+      }
+      strokeSeam(cx, cy, intensity);
+
+      // Triangle 2
+      ctx.fillStyle = RESTING.tile1;
+      ctx.beginPath();
+      ctx.moveTo(w, u * 2);
+      ctx.lineTo(w, 0);
+      ctx.lineTo(u, u * 2);
+      ctx.closePath();
+      ctx.fill();
+      if (intensity > 0.01) {
+        ctx.save();
+        ctx.globalAlpha = intensity;
+        ctx.fillStyle = cT2;
+        ctx.fill();
+        ctx.restore();
+      }
+      strokeSeam(cx, cy, intensity);
 
       ctx.restore();
     };
@@ -729,15 +772,13 @@ export default function InteractiveBackground() {
     const draw = (time) => {
       const elapsed = time - startTime;
 
-      // Pointer smooth lerp
-      pointer.x += (pointer.targetX - pointer.x) * 0.12;
-      pointer.y += (pointer.targetY - pointer.y) * 0.12;
-
-      // Gentle autonomous motion when idle
-      if (Date.now() - pointer.lastMoveTime > 3000) {
-        const t = elapsed * 0.0006;
-        pointer.targetX = width * 0.5 + Math.cos(t * 1.3) * (width * 0.36);
-        pointer.targetY = height * 0.45 + Math.sin(t * 1.7) * (height * 0.28);
+      // Pointer smooth tracking (only when actively hovering)
+      if (pointer.isHovering && pointer.targetX > -9000) {
+        pointer.x += (pointer.targetX - pointer.x) * 0.25;
+        pointer.y += (pointer.targetY - pointer.y) * 0.25;
+      } else {
+        pointer.x = -9999;
+        pointer.y = -9999;
       }
 
       // 1. Lighter base background fill with soft ambient gradient
@@ -770,20 +811,22 @@ export default function InteractiveBackground() {
         }
       }
 
-      // 3. Subtle luminous cursor aura (accentuates the hover illumination)
-      const spotGrad = ctx.createRadialGradient(
-        pointer.x,
-        pointer.y,
-        0,
-        pointer.x,
-        pointer.y,
-        width < 768 ? 200 : 300
-      );
-      spotGrad.addColorStop(0, 'rgba(86, 154, 224, 0.14)');
-      spotGrad.addColorStop(0.4, 'rgba(245, 182, 42, 0.06)');
-      spotGrad.addColorStop(1, 'rgba(32, 79, 83, 0)');
-      ctx.fillStyle = spotGrad;
-      ctx.fillRect(0, 0, width, height);
+      // 3. Subtle luminous cursor aura (strictly where cursor actually is)
+      if (pointer.isHovering && pointer.x > -9000) {
+        const spotGrad = ctx.createRadialGradient(
+          pointer.x,
+          pointer.y,
+          0,
+          pointer.x,
+          pointer.y,
+          width < 768 ? 160 : 220
+        );
+        spotGrad.addColorStop(0, 'rgba(86, 154, 224, 0.12)');
+        spotGrad.addColorStop(0.4, 'rgba(245, 182, 42, 0.05)');
+        spotGrad.addColorStop(1, 'rgba(32, 79, 83, 0)');
+        ctx.fillStyle = spotGrad;
+        ctx.fillRect(0, 0, width, height);
+      }
 
       animId = requestAnimationFrame(draw);
     };

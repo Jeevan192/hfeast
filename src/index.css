@@ -2622,3 +2622,203 @@ body {
   line-height: 1.35;
 }
 
+/* =========================================================
+   DEDICATED REGISTRATION PAGE STYLES
+   ========================================================= */
+.register-page-view {
+  min-height: 85vh;
+  padding: 3rem 1.25rem 6rem 1.25rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.register-page-container {
+  width: 100%;
+  max-width: 820px;
+}
+
+.register-page-nav-bar {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.register-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  padding: 0.55rem 1.15rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.register-back-link:hover {
+  background: rgba(139, 178, 222, 0.12);
+  border-color: var(--hf-blue);
+  color: #FFFFFF;
+  transform: translateX(-3px);
+}
+
+.register-card {
+  background: rgba(12, 28, 26, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(139, 178, 222, 0.28);
+  border-radius: var(--radius-lg);
+  padding: 2.75rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), 0 0 35px rgba(22, 53, 55, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.register-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--hf-red) 0%, var(--hf-yellow) 50%, var(--hf-blue) 100%);
+}
+
+.register-header {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.register-kicker-badge {
+  display: inline-block;
+  background: rgba(245, 183, 38, 0.12);
+  border: 1px solid rgba(245, 183, 38, 0.35);
+  border-radius: 9999px;
+  padding: 0.3rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--hf-yellow);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.85rem;
+}
+
+.register-main-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.register-main-subtitle {
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.register-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.register-actions-forward {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Success View */
+.register-success-box {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.register-success-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(245, 183, 38, 0.18);
+  border: 2px solid var(--hf-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+  color: var(--hf-yellow);
+  box-shadow: 0 0 25px rgba(245, 183, 38, 0.3);
+}
+
+.register-success-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 0.75rem;
+}
+
+.register-success-desc {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 520px;
+  margin: 0 auto 1.75rem auto;
+  line-height: 1.6;
+}
+
+.register-id-badge {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.5rem;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+}
+
+.register-id-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.register-id-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--hf-yellow);
+}
+
+@media (max-width: 768px) {
+  .register-card {
+    padding: 1.75rem 1.25rem;
+  }
+  .register-main-title {
+    font-size: 1.85rem;
+  }
+  .register-actions-row {
+    flex-direction: column-reverse;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  .register-actions-forward {
+    width: 100%;
+    justify-content: center;
+  }
+  .register-actions-forward > * {
+    width: 100%;
+  }
+}
+
+
