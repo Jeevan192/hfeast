@@ -14,9 +14,6 @@ export default function Contact() {
     <section className="section-wrapper" id="contact">
       <div className="section-header">
         <h2 className="section-title">CONTACT</h2>
-        <p className="section-subtitle">
-          Have queries regarding registration, mentoring, sponsorships or logistics? We are eager to assist.
-        </p>
       </div>
 
       <div className="contact-grid">
@@ -31,8 +28,7 @@ export default function Contact() {
             </div>
             <h3 className="contact-card-title">Event Venue</h3>
             <p className="contact-card-desc">
-              Chaitanya Bharathi Institute of Technology (CBIT)<br />
-              Kokapet, Gandipet, Hyderabad, Telangana 500075
+              CBIT Hyderabad
             </p>
             <SpecularButton
               as="a"

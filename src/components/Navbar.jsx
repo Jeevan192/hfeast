@@ -13,6 +13,10 @@ export default function Navbar({ onOpenRegister, onOpenFeedback, onNavigateHome 
   const handleLinkClick = (hash) => {
     closeMobileMenu();
     if (onNavigateHome) onNavigateHome();
+    if (hash === '#hero') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     setTimeout(() => {
       const el = document.querySelector(hash);
       if (el) el.scrollIntoView({ behavior: 'smooth' });

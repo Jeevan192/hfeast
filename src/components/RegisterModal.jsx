@@ -336,7 +336,7 @@ export default function RegisterModal({ isOpen, onClose, onSubmitSuccess }) {
                   Register for CBIT Hacktoberfest '26
                 </h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-                  17–18 October 2026 • In-Person at CBIT Campus, Hyderabad • Teams of 3–5
+                  10–11 October 2026 • CBIT Hyderabad • Teams of 3–5
                 </p>
               </div>
 

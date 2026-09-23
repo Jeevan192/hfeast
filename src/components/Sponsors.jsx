@@ -23,7 +23,6 @@ export default function Sponsors() {
     <section className="section-wrapper" id="sponsors">
       <div className="section-header">
         <h2 className="section-title">OUR SPONSORS</h2>
-        <p className="section-subtitle">Proudly supported by industry leaders who believe in open source</p>
       </div>
 
       <div className="sponsors-grid">

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import confetti from 'canvas-confetti';
 import GlareHover from './GlareHover.jsx';
 
 export default function Timeline() {
@@ -8,7 +7,6 @@ export default function Timeline() {
   const treeRef = useRef(null);
   const lineRef = useRef(null);
   const rowRefs = useRef([]);
-  const hasCelebratedRef = useRef(false);
 
   const [activeIdx, setActiveIdx] = useState(0);
   const [reachedSet, setReachedSet] = useState(new Set([0]));
@@ -16,7 +14,7 @@ export default function Timeline() {
   const events = [
     {
       side: 'left',
-      date: '17th October 2026',
+      date: '10th October 2026',
       time: '05:00 PM',
       title: 'Opening Ceremony',
       desc: 'Welcome address by COSC faculty and leads, kicking off the 8th edition of CBIT Hacktoberfest Hackathon.',
@@ -31,7 +29,7 @@ export default function Timeline() {
     },
     {
       side: 'right',
-      date: '17th October 2026',
+      date: '10th October 2026',
       time: '06:00 PM',
       title: 'Releasing Problem Statements',
       desc: 'Official release of problem statements across key application domains.',
@@ -46,7 +44,7 @@ export default function Timeline() {
     },
     {
       side: 'left',
-      date: '17th October 2026',
+      date: '10th October 2026',
       time: '06:30 PM',
       title: 'Finalizing Problem Statement',
       desc: 'Teams lock in their chosen problem statement with domain mentors on the floor.',
@@ -62,7 +60,7 @@ export default function Timeline() {
     },
     {
       side: 'right',
-      date: '17th October 2026',
+      date: '10th October 2026',
       time: '07:00 PM',
       title: 'Coding Begins',
       desc: '24 hours of non-stop collaborative coding, software architecture and repository commits begin.',
@@ -76,7 +74,7 @@ export default function Timeline() {
     },
     {
       side: 'left',
-      date: '18th October 2026',
+      date: '11th October 2026',
       time: '01:00 AM',
       title: 'Ice-Breaker Session-1',
       desc: 'Midnight games, developer humor, refreshments and team energizers.',
@@ -94,7 +92,7 @@ export default function Timeline() {
     },
     {
       side: 'right',
-      date: '18th October 2026',
+      date: '11th October 2026',
       time: '08:00 AM',
       title: 'Ice-Breaker Session-2',
       desc: 'Morning refresh, breakfast and check-in ahead of the final build sprint.',
@@ -112,7 +110,7 @@ export default function Timeline() {
     },
     {
       side: 'left',
-      date: '18th October 2026',
+      date: '11th October 2026',
       time: '02:00 PM',
       title: 'Submissions Open',
       desc: 'Portal opens for submitting GitHub repository links, documentation and demo links.',
@@ -128,7 +126,7 @@ export default function Timeline() {
     },
     {
       side: 'right',
-      date: '18th October 2026',
+      date: '11th October 2026',
       time: '03:00 PM',
       title: 'Coding & Submissions End • Presentations',
       desc: 'Strict code freeze. Teams deliver live prototype demonstrations to jury panels.',
@@ -144,7 +142,7 @@ export default function Timeline() {
     },
     {
       side: 'left',
-      date: '18th October 2026',
+      date: '11th October 2026',
       time: '04:30 PM',
       title: 'Evaluations',
       desc: 'Scoring across code quality, technical execution, innovation and open source practices.',
@@ -160,7 +158,7 @@ export default function Timeline() {
     },
     {
       side: 'right',
-      date: '18th October 2026',
+      date: '11th October 2026',
       time: '05:30 PM',
       title: 'Closing Ceremony & Awards',
       desc: 'Prize distribution, certificates, partner recognitions and grand finale.',
@@ -177,73 +175,6 @@ export default function Timeline() {
       ),
     },
   ];
-
-  const triggerCelebrationBlast = () => {
-    // Official Hacktoberfest 2026 Brand Colors for confetti papers
-    const brandColors = [
-      '#569AE0', // Blue
-      '#F5B62A', // Gold
-      '#BA3627', // Red
-      '#3C7E64', // Forest Green
-      '#449776', // Mint
-      '#8AB1DA', // Soft Blue
-      '#FFFFFF', // White
-    ];
-
-    // Left cannon blast
-    confetti({
-      particleCount: 75,
-      angle: 60,
-      spread: 65,
-      origin: { x: 0, y: 0.72 },
-      colors: brandColors,
-      shapes: ['square', 'circle'],
-      scalar: 1.2,
-      drift: 0.25,
-      ticks: 260,
-      zIndex: 99999,
-    });
-
-    // Right cannon blast
-    confetti({
-      particleCount: 75,
-      angle: 120,
-      spread: 65,
-      origin: { x: 1, y: 0.72 },
-      colors: brandColors,
-      shapes: ['square', 'circle'],
-      scalar: 1.2,
-      drift: -0.25,
-      ticks: 260,
-      zIndex: 99999,
-    });
-
-    // Follow-up richer wave of paper ribbons after 280ms
-    setTimeout(() => {
-      confetti({
-        particleCount: 50,
-        angle: 70,
-        spread: 85,
-        origin: { x: 0.05, y: 0.78 },
-        colors: brandColors,
-        shapes: ['square'],
-        scalar: 1.1,
-        ticks: 230,
-        zIndex: 99999,
-      });
-      confetti({
-        particleCount: 50,
-        angle: 110,
-        spread: 85,
-        origin: { x: 0.95, y: 0.78 },
-        colors: brandColors,
-        shapes: ['square'],
-        scalar: 1.1,
-        ticks: 230,
-        zIndex: 99999,
-      });
-    }, 280);
-  };
 
   useEffect(() => {
     let animId;
@@ -288,16 +219,6 @@ export default function Timeline() {
       setActiveIdx((prev) => (prev !== closestIdx ? closestIdx : prev));
       setReachedSet(newReached);
 
-      // Blast celebration confetti papers from left and right when reaching Closing Ceremony & Awards
-      const isClosingCeremony = newReached.has(events.length - 1);
-      if (isClosingCeremony) {
-        if (!hasCelebratedRef.current) {
-          hasCelebratedRef.current = true;
-          triggerCelebrationBlast();
-        }
-      } else if (!newReached.has(events.length - 2)) {
-        hasCelebratedRef.current = false;
-      }
     };
 
     const handleScroll = () => {
@@ -320,9 +241,6 @@ export default function Timeline() {
     <section className="section-wrapper" id="timeline">
       <div className="section-header">
         <h2 className="section-title">TIMELINE</h2>
-        <p className="section-subtitle">
-          17th – 18th October 2026 • 24-Hour Non-stop Sprint
-        </p>
       </div>
 
       <div className="timeline-tree" ref={treeRef}>

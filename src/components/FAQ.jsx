@@ -34,9 +34,6 @@ export default function FAQ() {
     <section className="section-wrapper" id="faq">
       <div className="section-header">
         <h2 className="section-title">FAQ</h2>
-        <p className="section-subtitle">
-          Everything you need to know before you join us for the hackathon.
-        </p>
       </div>
 
       <div className="faq-accordion">

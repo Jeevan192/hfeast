@@ -85,6 +85,16 @@ export default function App() {
     }, 4500);
   };
 
+  const navigateToHome = () => {
+    setCurrentView('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openPreptember = () => {
+    setCurrentView('preptember');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="app-root">
       {/* Rich interactive Hacktoberfest 2026 background with Aceternity-style spotlight grid & pixel art */}

@@ -117,37 +117,31 @@ export default function InteractiveBackground() {
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('pointerleave', handlePointerLeave);
 
-    // Calculate hover color intensity (0.0 = resting light tone, 1.0 = full brand color)
     const getHoverIntensity = (cx, cy) => {
+      if (!pointer.isHovering) return 0;
+      const now = Date.now();
       let intensity = 0;
 
-      // 1. Direct cursor proximity (strictly when hovering)
-      if (pointer.isHovering && pointer.x > -9000) {
-        const dx0 = cx - pointer.x;
-        const dy0 = cy - pointer.y;
-        const dist0 = Math.sqrt(dx0 * dx0 + dy0 * dy0);
-        const cursorRadius = width < 768 ? 140 : 190;
-        if (dist0 < cursorRadius) {
-          intensity = Math.pow(1 - dist0 / cursorRadius, 1.4);
-        }
+      const dx0 = cx - pointer.x;
+      const dy0 = cy - pointer.y;
+      const dist0 = Math.sqrt(dx0 * dx0 + dy0 * dy0);
+      const cursorRadius = width < 768 ? 90 : 125;
+      if (dist0 < cursorRadius) {
+        intensity = Math.pow(1 - dist0 / cursorRadius, 1.4);
       }
 
-      // 2. Trailing wake from recent mouse movement
-      if (trail.length > 0) {
-        const now = Date.now();
-        for (let i = trail.length - 1; i >= 0; i--) {
-          const pt = trail[i];
-          const age = now - pt.time;
-          if (age > MAX_TRAIL_AGE) continue;
-          const life = 1 - age / MAX_TRAIL_AGE;
-          const dx = cx - pt.x;
-          const dy = cy - pt.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const trailRadius = 130;
-          if (dist < trailRadius) {
-            const factor = Math.pow(1 - dist / trailRadius, 1.5) * life;
-            if (factor > intensity) intensity = factor;
-          }
+      for (let i = trail.length - 1; i >= 0; i--) {
+        const pt = trail[i];
+        const age = now - pt.time;
+        if (age > MAX_TRAIL_AGE) continue;
+        const life = 1 - age / MAX_TRAIL_AGE;
+        const dx = cx - pt.x;
+        const dy = cy - pt.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const trailRadius = 75;
+        if (dist < trailRadius) {
+          const factor = Math.pow(1 - dist / trailRadius, 1.5) * life;
+          if (factor > intensity) intensity = factor;
         }
       }
 

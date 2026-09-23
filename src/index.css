@@ -100,6 +100,7 @@ body {
   pointer-events: none;
   overflow: hidden;
   background-color: var(--hf-bg);
+  opacity: 0.62;
 }
 
 .app-background::after {
@@ -405,6 +406,7 @@ body {
    ========================================================= */
 .hero {
   padding: 1.25rem 0 2.25rem 0;
+  scroll-margin-top: 0;
 }
 
 .hero .section-wrapper {
@@ -973,6 +975,7 @@ body {
   -webkit-backdrop-filter: blur(14px);
   box-shadow: var(--card-shadow);
   transition: all var(--transition-fast);
+  min-height: 100%;
 }
 
 .mentor-profile-card:hover {
@@ -993,6 +996,81 @@ body {
   font-size: 1.35rem;
   margin-bottom: 1.1rem;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.mentor-top-socials {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.mentor-top-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.62rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(139, 178, 222, 0.25);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.mentor-top-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(139, 178, 222, 0.7);
+  background: rgba(139, 178, 222, 0.22);
+  transform: translateY(-2px);
+}
+
+.mentor-avatar-wrap { margin-bottom: 0.85rem; }
+
+.mentor-role-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  margin: 0.3rem auto 0.45rem;
+  border: 1px solid currentColor;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.mentor-role-pill .pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.mentor-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mentor-skill-chip {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
 }
 
 .mentor-avatar.av-red    { background: rgba(229, 57, 39, 0.2); color: var(--hf-red); border: 1.5px solid rgba(229, 57, 39, 0.45); }

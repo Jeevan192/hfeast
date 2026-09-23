@@ -4,8 +4,8 @@ import SpecularButton from './SpecularButton.jsx';
 import BorderGlow from './BorderGlow.jsx';
 
 export default function Hero({ onOpenRegister }) {
-  // Target: October 17, 2026 17:00:00 IST
-  const targetDate = new Date('2026-10-17T17:00:00+05:30').getTime();
+  // Target: October 10, 2026 17:00:00 IST
+  const targetDate = new Date('2026-10-10T17:00:00+05:30').getTime();
 
   const [timeLeft, setTimeLeft] = useState({
     days: '00',
@@ -73,7 +73,7 @@ export default function Hero({ onOpenRegister }) {
                 </div>
                 <div className="chip-info">
                   <span className="chip-label">Dates</span>
-                  <span className="chip-value">17–18 Oct 2026</span>
+                  <span className="chip-value">10–11 Oct 2026</span>
                 </div>
               </div>
             </GlareHover>
@@ -88,7 +88,7 @@ export default function Hero({ onOpenRegister }) {
                 </div>
                 <div className="chip-info">
                   <span className="chip-label">Venue</span>
-                  <span className="chip-value">CBIT Hyderabad (In-Person)</span>
+                  <span className="chip-value">CBIT Hyderabad</span>
                 </div>
               </div>
             </GlareHover>

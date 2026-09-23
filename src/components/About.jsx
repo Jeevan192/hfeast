@@ -5,14 +5,7 @@ export default function About() {
   return (
     <section className="section-wrapper" id="about">
       <div className="section-header">
-        <div className="pill-badge yellow" style={{ marginBottom: '1rem' }}>
-          <span className="badge-dot"></span>
-          <span>Why Participate</span>
-        </div>
         <h2 className="section-title">ABOUT</h2>
-        <p className="section-subtitle">
-          An intensive 24-hour celebration of open-source innovation, mentorship, and community at CBIT Hyderabad.
-        </p>
       </div>
 
       {/* High-Impact Bento Grid with High Contrast & Streamlined Copy */}
@@ -48,7 +41,7 @@ export default function About() {
         <BorderGlow borderRadius={22} colors={['#8BB2DE', '#FFFFFF']} edgeSensitivity={35} glowRadius={75}>
           <div className="bento-card">
             <span className="bento-badge-tag" style={{ background: 'rgba(139, 178, 222, 0.2)', color: '#8BB2DE', border: '1px solid rgba(139, 178, 222, 0.4)' }}>
-              In-Person Sprint • 17–18 Oct
+              In-Person Sprint • 10–11 Oct
             </span>
             <h3 className="bento-title">First Time In-Person on Campus</h3>
             <p className="bento-desc">
