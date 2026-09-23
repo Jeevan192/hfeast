@@ -18,9 +18,15 @@ export function isValidIndianPhone(phone: string): boolean {
  * Extracts the last 10 digits and formats as +91XXXXXXXXXX
  */
 export function normalizePhone(phone: string): string {
-  const digitsOnly = phone.replace(/\D/g, '');
-  const last10 = digitsOnly.slice(-10);
-  return `+91${last10}`;
+  const cleaned = phone.trim().replace(/[\s\-()]/g, '');
+  const localNumber = cleaned.startsWith('+91')
+    ? cleaned.slice(3)
+    : cleaned.startsWith('91')
+      ? cleaned.slice(2)
+      : cleaned.startsWith('0')
+        ? cleaned.slice(1)
+        : cleaned;
+  return `+91${localNumber}`;
 }
 
 /**

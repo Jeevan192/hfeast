@@ -2005,7 +2005,7 @@ body {
 }
 
 .registration-step-panel {
-  min-height: auto;
+  min-height: 24rem;
 }
 
 .registration-step-actions {
@@ -2154,6 +2154,17 @@ body {
 
 @media (max-width: 500px) {
   .form-field-row { grid-template-columns: 1fr; }
+
+  .modal-overlay { padding: 0.65rem; align-items: flex-start; }
+  .modal-window { max-height: calc(100vh - 1.3rem); border-radius: var(--radius-md); }
+  .modal-header-bar, .modal-scrollable-body { padding: 1rem; }
+  .registration-progress { gap: 0.2rem; margin-bottom: 1rem; }
+  .registration-progress-step { align-items: flex-start; flex-direction: column; gap: 0.25rem; font-size: 0.65rem; }
+  .registration-step-panel { min-height: 0; }
+  .review-grid { grid-template-columns: 1fr; }
+  .review-heading { align-items: flex-start; }
+  .modal-actions-row { align-items: stretch; flex-wrap: wrap; justify-content: space-between; }
+  .registration-step-actions { margin-left: auto; }
 }
 
 .star-rating-block {

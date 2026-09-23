@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { escapeCsvField } from '../src/utils/csvExporter.js';
 import { isValidIndianPhone, normalizePhone, normalizeEmail } from '../src/utils/validators.js';
-import { registerRequestSchema, updateRegistrationSchema } from '../src/models/registration.js';
+import { hasDuplicateParticipants, registerRequestSchema, updateRegistrationSchema } from '../src/models/registration.js';
 import { createProblemStatementSchema } from '../src/models/problemStatement.js';
 import { createAdminSchema } from '../src/models/admin.js';
 
@@ -58,6 +58,12 @@ runTest('Phone Normalization: Normalizes to +91XXXXXXXXXX', () => {
   assert.strictEqual(normalizePhone('09876543210'), '+919876543210');
 });
 
+runTest('Phone Validation: Rejects invalid prefixes instead of using trailing digits', () => {
+  assert.strictEqual(isValidIndianPhone('1234567890'), false);
+  assert.strictEqual(isValidIndianPhone('+99 9876543210'), false);
+  assert.strictEqual(isValidIndianPhone('001234567890'), false);
+});
+
 // 3. Email Normalization Test
 runTest('Email Normalization: Trims and lowercases', () => {
   assert.strictEqual(normalizeEmail('  Leader@CBIT.ac.in '), 'leader@cbit.ac.in');
@@ -68,7 +74,7 @@ runTest('Email Normalization: Trims and lowercases', () => {
 runTest('Registration Schema: Normalizes leader and member emails automatically', () => {
   const payload = {
     teamName: 'InnovateX',
-    teamSize: 2,
+    teamSize: 3,
     leader: {
       name: 'Leader One',
       email: '  LeaderOne@Domain.COM ',
@@ -82,6 +88,12 @@ runTest('Registration Schema: Normalizes leader and member emails automatically'
         phone: '9876543211',
         college: 'CBIT',
       },
+      {
+        name: 'Member Three',
+        email: 'member.three@domain.com',
+        phone: '9876543212',
+        college: 'CBIT',
+      },
     ],
     trackId: 'track-123',
     githubUrl: 'https://github.com/team-repo',
@@ -90,8 +102,27 @@ runTest('Registration Schema: Normalizes leader and member emails automatically'
   const parsed = registerRequestSchema.parse(payload);
   assert.strictEqual(parsed.leader.email, 'leaderone@domain.com');
   assert.strictEqual(parsed.members[0].email, 'member.two@domain.com');
-  assert.strictEqual(parsed.teamSize, 2);
+  assert.strictEqual(parsed.teamSize, 3);
   assert.strictEqual(parsed.githubUrl, 'https://github.com/team-repo');
+});
+
+runTest('Registration Schema: Trims before applying length rules', () => {
+  assert.throws(() => registerRequestSchema.parse({
+    teamName: '   ',
+    teamSize: 3,
+    leader: { name: 'Leader', email: 'leader@example.com', phone: '9876543210', college: 'CBIT' },
+    members: [
+      { name: 'Member Two', email: 'two@example.com', phone: '9876543211', college: 'CBIT' },
+      { name: 'Member Three', email: 'three@example.com', phone: '9876543212', college: 'CBIT' },
+    ],
+    payment: { utrNumber: '      ' },
+  }));
+});
+
+runTest('Registration Validation: Rejects duplicate participant email or phone', () => {
+  const leader = { name: 'Leader', email: 'same@example.com', phone: '9876543210', college: 'CBIT' };
+  const member = { name: 'Member', email: 'same@example.com', phone: '+91 9876543210', college: 'CBIT' };
+  assert.strictEqual(hasDuplicateParticipants(leader, [member]), true);
 });
 
 runTest('Registration Schema: Rejects invalid team size or missing trackId', () => {

@@ -5,7 +5,9 @@ import {
   RegistrationDoc,
   RegistrationWithTrackDoc,
   UpdateRegistrationInput,
+  hasDuplicateParticipants,
 } from '../models/registration.js';
+import { normalizeEmail, normalizePhone } from '../utils/validators.js';
 import { BadRequestError, ConflictError, NotFoundError } from '../utils/errors.js';
 
 const REGISTRATIONS_COLLECTION = 'registrations';
@@ -37,24 +39,20 @@ export class RegistrationService {
     const normalizedTeamName = input.teamName.trim();
     const teamLockKey = `team_${normalizedTeamName.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
 
-    const normalizedLeaderEmail = leader.email.trim().toLowerCase();
-    const normalizedMemberEmails = members.map((m) => m.email.trim().toLowerCase());
+    const normalizedLeaderEmail = normalizeEmail(leader.email);
+    const normalizedMemberEmails = members.map((m) => normalizeEmail(m.email));
     const allEmails = [normalizedLeaderEmail, ...normalizedMemberEmails];
 
-    // Check duplicate emails within the form
+    const normalizedLeaderPhone = normalizePhone(leader.phone);
+    const normalizedMemberPhones = members.map((m) => normalizePhone(m.phone));
+    const allPhones = [normalizedLeaderPhone, ...normalizedMemberPhones];
+
     const uniqueEmails = new Set(allEmails);
     if (uniqueEmails.size !== allEmails.length) {
       throw new BadRequestError('Each team member and leader must have a distinct, unique email address.');
     }
 
-    const cleanPhone = (p: string) => p.replace(/\D/g, '').slice(-10);
-    const normalizedLeaderPhone = cleanPhone(leader.phone);
-    const normalizedMemberPhones = members.map((m) => cleanPhone(m.phone));
-    const allPhones = [normalizedLeaderPhone, ...normalizedMemberPhones];
-
-    // Check duplicate phones within the form
-    const uniquePhones = new Set(allPhones);
-    if (uniquePhones.size !== allPhones.length) {
+    if (hasDuplicateParticipants(leader, members)) {
       throw new BadRequestError('Each team member and leader must have a distinct, unique phone number.');
     }
 
@@ -79,7 +77,7 @@ export class RegistrationService {
         }
       }
       // Check phone collision
-      const existingPhones = [cleanPhone(data.leader.phone), ...(data.members || []).map((m) => cleanPhone(m.phone))];
+      const existingPhones = [normalizePhone(data.leader.phone), ...(data.members || []).map((m) => normalizePhone(m.phone))];
       for (const phone of allPhones) {
         if (phone && existingPhones.includes(phone)) {
           throw new ConflictError(
@@ -162,7 +160,7 @@ export class RegistrationService {
         },
         members: input.members.map((m) => ({
           name: m.name,
-          email: m.email.trim().toLowerCase(),
+          email: normalizeEmail(m.email),
           phone: m.phone,
           college: m.college,
         })),
