@@ -4,13 +4,13 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Preptember from './components/Preptember';
 import PreptemberPage from './components/PreptemberPage';
+import RegisterPage from './components/RegisterPage';
 import Mentors from './components/Mentors.jsx';
 import Timeline from './components/Timeline';
 import Sponsors from './components/Sponsors';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import RegisterModal from './components/RegisterModal';
 import FeedbackModal from './components/FeedbackModal';
 import Toast from './components/Toast';
 
@@ -20,10 +20,44 @@ import InteractiveBackground from './components/InteractiveBackground.jsx';
 const SHOW_FEEDBACK = false;
 
 export default function App() {
-  const [currentView, setCurrentView] = useState('home'); // 'home' or 'preptember'
-  const [registerModalOpen, setRegisterModalOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('home'); // 'home' | 'preptember' | 'register'
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+
+  // Sync view with URL hash
+  useEffect(() => {
+    const handleHashSync = () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash === '#register') {
+        setCurrentView('register');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (hash === '#preptember') {
+        setCurrentView('preptember');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setCurrentView('home');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashSync);
+    handleHashSync();
+
+    return () => window.removeEventListener('hashchange', handleHashSync);
+  }, []);
+
+  const navigateTo = (view) => {
+    setCurrentView(view);
+    if (view === 'register') {
+      window.location.hash = '#register';
+    } else if (view === 'preptember') {
+      window.location.hash = '#preptember';
+    } else {
+      if (window.location.hash === '#register' || window.location.hash === '#preptember') {
+        history.pushState(null, '', window.location.pathname);
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     const revealItems = document.querySelectorAll('.section-wrapper:not(.hero) > *');
@@ -58,24 +92,29 @@ export default function App() {
 
       {/* Navigation Header */}
       <Navbar
-        onOpenRegister={() => setRegisterModalOpen(true)}
+        onOpenRegister={() => navigateTo('register')}
         onOpenFeedback={() => setFeedbackModalOpen(true)}
-        onNavigateHome={() => setCurrentView('home')}
+        onNavigateHome={() => navigateTo('home')}
       />
 
       <main>
-        {currentView === 'preptember' ? (
-          <PreptemberPage onBackToHome={() => setCurrentView('home')} />
+        {currentView === 'register' ? (
+          <RegisterPage
+            onBackToHome={() => navigateTo('home')}
+            onSubmitSuccess={(msg) => showToast(msg)}
+          />
+        ) : currentView === 'preptember' ? (
+          <PreptemberPage onBackToHome={() => navigateTo('home')} />
         ) : (
           <>
             {/* Hero Section */}
-            <Hero onOpenRegister={() => setRegisterModalOpen(true)} />
+            <Hero onOpenRegister={() => navigateTo('register')} />
 
             {/* About Section */}
             <About />
 
             {/* Preptember Section */}
-            <Preptember onOpenPreptemberPage={() => setCurrentView('preptember')} />
+            <Preptember onOpenPreptemberPage={() => navigateTo('preptember')} />
 
             {/* Mentors Section */}
             <Mentors />
@@ -98,13 +137,6 @@ export default function App() {
       {/* Clean Footer */}
       <Footer />
 
-      {/* Interactive Modals */}
-      <RegisterModal
-        isOpen={registerModalOpen}
-        onClose={() => setRegisterModalOpen(false)}
-        onSubmitSuccess={(msg) => showToast(msg)}
-      />
-
       {SHOW_FEEDBACK && (
         <FeedbackModal
           isOpen={feedbackModalOpen}
@@ -118,3 +150,4 @@ export default function App() {
     </div>
   );
 }
+
