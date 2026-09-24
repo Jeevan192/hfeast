@@ -1577,7 +1577,8 @@ body {
   height: auto;
   object-fit: contain;
   background: transparent;
-  filter: grayscale(100%) opacity(0.55);
+  filter: none;
+  opacity: 1;
   transition: filter 0.35s ease, transform 0.35s ease;
 }
 
