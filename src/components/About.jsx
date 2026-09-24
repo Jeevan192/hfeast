@@ -1,112 +1,78 @@
 import React from 'react';
-import BorderGlow from './BorderGlow.jsx';
 
 export default function About() {
   return (
-    <section className="section-wrapper" id="about">
+    <section className="section-wrapper about-wrap" id="about">
       <div className="section-header">
         <h2 className="section-title">ABOUT</h2>
       </div>
 
-      {/* High-Impact Bento Grid with High Contrast & Streamlined Copy */}
-      <div className="bento-grid">
-        {/* Card 1: All-Inclusive Fee & Pass (Featured Card) */}
-        <BorderGlow borderRadius={22} colors={['#F5B726', '#E53927']} edgeSensitivity={35} glowRadius={75}>
-          <div className="bento-card">
-            <span className="bento-badge-tag" style={{ background: 'rgba(245, 183, 38, 0.2)', color: '#F5B726', border: '1px solid rgba(245, 183, 38, 0.45)' }}>
-              ₹200 / Head • Complete Access
-            </span>
-            <h3 className="bento-title">All-Inclusive Hackathon Experience</h3>
-            <p className="bento-desc">
-              Your registration of ₹200 per participant covers everything you need for 24 hours of non-stop creation: full catering, midnight energy snacks, official Hacktoberfest swag kit, Wi-Fi, workspace, and live mentor support.
-            </p>
-            <div className="bento-features-row">
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#F5B726' }}>Meals & Snacks</span>
-                <span className="bento-feature-lbl">All food included</span>
-              </div>
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#E53927' }}>Swag & Badges</span>
-                <span className="bento-feature-lbl">Exclusive kit</span>
-              </div>
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#8BB2DE' }}>24/7 Floor</span>
-                <span className="bento-feature-lbl">CBIT Campus</span>
-              </div>
-            </div>
-          </div>
-        </BorderGlow>
+      {/* Event overview */}
+      <div className="about-stats">
+        <div className="about-stat c-yellow">
+          <span className="about-stat-num">24</span>
+          <span className="about-stat-lbl">Hours</span>
+        </div>
+        <div className="about-stat c-mint">
+          <span className="about-stat-num">3-5</span>
+          <span className="about-stat-lbl">Team size</span>
+        </div>
+        <div className="about-stat c-pink">
+          <span className="about-stat-num about-stat-num--dates">Oct 10-11</span>
+          <span className="about-stat-lbl">Event dates</span>
+        </div>
+      </div>
 
-        {/* Card 2: 24-Hour Non-stop Sprint */}
-        <BorderGlow borderRadius={22} colors={['#8BB2DE', '#FFFFFF']} edgeSensitivity={35} glowRadius={75}>
-          <div className="bento-card">
-            <span className="bento-badge-tag" style={{ background: 'rgba(139, 178, 222, 0.2)', color: '#8BB2DE', border: '1px solid rgba(139, 178, 222, 0.4)' }}>
-              In-Person Sprint • 10–11 Oct
-            </span>
-            <h3 className="bento-title">First Time In-Person on Campus</h3>
-            <p className="bento-desc">
-              Experience the unmatched electricity of 500+ student developers coding together. Teams of 3 to 5 builders collaborate overnight in a high-octane atmosphere packed with ice-breakers, music, and lightning demos.
-            </p>
-            <div className="bento-features-row">
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#8BB2DE' }}>3–5</span>
-                <span className="bento-feature-lbl">Members / Team</span>
-              </div>
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#FFFFFF' }}>24 Hrs</span>
-                <span className="bento-feature-lbl">Non-Stop Sprint</span>
-              </div>
-            </div>
-          </div>
-        </BorderGlow>
+      {/* About cards */}
+      <div className="about-qa">
+        <article className="about-qa-card qa-blue">
+          <h3 className="about-qa-q">What is Hacktoberfest?</h3>
+          <p className="about-qa-a">
+            Hacktoberfest is a month-long global celebration of all things open source,
+            presented by DigitalOcean, Cloudflare, and Quira. Hacktoberfest celebrates
+            giving back to these projects, honing skills, and recognizing the people who
+            make open source exceptional.
+          </p>
+        </article>
 
-        {/* Card 3: 1-on-1 Mentorship */}
-        <BorderGlow borderRadius={22} colors={['#3D5F58', '#8BB2DE']} edgeSensitivity={35} glowRadius={75}>
-          <div className="bento-card">
-            <span className="bento-badge-tag" style={{ background: 'rgba(61, 95, 88, 0.35)', color: '#81C7B7', border: '1px solid rgba(88, 166, 148, 0.45)' }}>
-              Expert Guidance
-            </span>
-            <h3 className="bento-title">Mentorship Throughout the Night</h3>
-            <p className="bento-desc">
-              Get unblocked fast. Domain mentors, alumni architects, and open-source contributors will be with you on the floor to review technical design, optimize code, and refine project pitches.
-            </p>
-            <div className="bento-features-row">
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#81C7B7' }}>1-on-1</span>
-                <span className="bento-feature-lbl">Code Reviews</span>
-              </div>
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#F5B726' }}>Checkpoints</span>
-                <span className="bento-feature-lbl">Stage guidance</span>
-              </div>
-            </div>
-          </div>
-        </BorderGlow>
+        <article className="about-qa-card qa-yellow">
+          <h3 className="about-qa-q">Why We're Thrilled?</h3>
+          <p className="about-qa-a">
+            The CBIT Hacktoberfest '26 is a thrilling 24-hour hackathon that inspires
+            students and enthusiasts through community, collaboration and skill-building.
+            Participants will embrace the spirit of open source while diving into
+            innovation and teamwork.
+          </p>
+        </article>
 
-        {/* Card 4: Prizes & Recognition */}
-        <BorderGlow borderRadius={22} colors={['#E97B77', '#E53927']} edgeSensitivity={35} glowRadius={75}>
-          <div className="bento-card">
-            <span className="bento-badge-tag" style={{ background: 'rgba(233, 123, 119, 0.2)', color: '#E97B77', border: '1px solid rgba(233, 123, 119, 0.45)' }}>
-              Prizes & Certificates
-            </span>
-            <h3 className="bento-title">Win Prizes & Launch Your Career</h3>
-            <p className="bento-desc">
-              Compete for generous track prize pools, special partner awards, and verified certificates of participation. Build a standout open-source project for your GitHub portfolio.
-            </p>
-            <div className="bento-features-row">
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#E97B77' }}>Cash & Swag</span>
-                <span className="bento-feature-lbl">Podium prizes</span>
-              </div>
-              <div className="bento-feature-item">
-                <span className="bento-feature-val" style={{ color: '#FFFFFF' }}>Certificates</span>
-                <span className="bento-feature-lbl">All participants</span>
-              </div>
-            </div>
-          </div>
-        </BorderGlow>
+        <article className="about-qa-card qa-mint">
+          <h3 className="about-qa-q">Who Are We?</h3>
+          <p className="about-qa-a">
+            We are the Chaitanya Bharathi Institute of Technology Open Source Community
+            (COSC) in Hyderabad. Our mission is to promote open source values, provide a
+            platform for students to explore and contribute to tech, and craft experiences
+            that nurture a lifelong love for open source.
+          </p>
+        </article>
+      </div>
+
+      {/* Registration and outcomes */}
+      <div className="about-reg">
+        <div className="about-reg-col">
+          <span className="about-reg-kicker">Registration</span>
+          <p className="about-reg-summary"><strong>₹200</strong> per participant</p>
+          <p className="about-reg-note">
+            Covers meals, event swag, Wi-Fi, workspace, mentor support, and a certificate.
+          </p>
+        </div>
+        <div className="about-reg-col">
+          <span className="about-reg-kicker">Outcomes</span>
+          <p className="about-reg-note">
+            Track prizes and partner awards are decided by judges. Every participant
+            receives a certificate.
+          </p>
+        </div>
       </div>
     </section>
   );
 }
-

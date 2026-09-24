@@ -73,8 +73,14 @@
   padding: 0;
 }
 
+img,
+canvas {
+  max-width: 100%;
+}
+
 html {
   scroll-behavior: auto; /* Natural, hardware-accelerated momentum scrolling without wheel stutters */
+  overflow-x: hidden;
   color-scheme: dark;
 }
 
