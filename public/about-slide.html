@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>About · CBIT Hacktoberfest Hackathon'26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@700;800&family=Inter:wght@400;500;600;700;800&family=Martian+Mono:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --hf-blue:      #569AE0;
+        --hf-blue-soft: #8AB1DA;
+        --hf-mint:      #449776;
+        --hf-red:       #BA3627;
+        --hf-yellow:    #F5B62A;
+        --hf-pink:      #E97B77;
+        --t2:            #E2E8F0;
+        --tm:            #94A3B8;
+        --card:          rgba(28, 66, 69, 0.72);
+        --edge:          rgba(139, 178, 222, 0.22);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body { height: 100%; overflow: hidden; }
+
+      body {
+        font-family: 'Inter', system-ui, sans-serif;
+        color: #FFFFFF;
+        background:
+          radial-gradient(58% 50% at 18% 0%, rgba(86, 154, 224, 0.16), transparent 60%),
+          radial-gradient(48% 44% at 86% 12%, rgba(68, 151, 118, 0.14), transparent 65%),
+          radial-gradient(44% 42% at 84% 94%, rgba(245, 182, 42, 0.09), transparent 60%),
+          radial-gradient(40% 42% at 6% 96%, rgba(233, 123, 119, 0.09), transparent 60%),
+          linear-gradient(160deg, #1f4d50 0%, #1a4346 55%, #153639 100%);
+        position: relative;
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(139, 178, 222, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(139, 178, 222, 0.045) 1px, transparent 1px);
+        background-size: 46px 46px;
+        -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 20%, transparent 82%);
+        mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 20%, transparent 82%);
+        pointer-events: none;
+      }
+
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(36% 30% at 12% 22%, rgba(245, 182, 42, 0.05), transparent 70%),
+          radial-gradient(34% 30% at 92% 30%, rgba(233, 123, 119, 0.05), transparent 70%),
+          radial-gradient(38% 32% at 70% 88%, rgba(86, 154, 224, 0.06), transparent 70%),
+          radial-gradient(30% 26% at 25% 90%, rgba(68, 151, 118, 0.06), transparent 70%);
+        pointer-events: none;
+      }
+
+      .slide {
+        position: relative;
+        z-index: 1;
+        height: 100vh;
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: clamp(0.9rem, 2.2vh, 1.6rem) clamp(1.4rem, 3.5vw, 3rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: clamp(0.7rem, 1.8vh, 1.2rem);
+      }
+
+      /* ---------- Header ---------- */
+      .head { text-align: center; }
+
+      .kicker {
+        font-family: 'Martian Mono', monospace;
+        font-size: clamp(0.55rem, 1vh + 0.2vw, 0.72rem);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--hf-blue-soft);
+        margin-bottom: 0.4rem;
+      }
+
+      .kicker-dot { color: var(--hf-yellow); }
+
+      .title {
+        font-family: 'Barlow Semi Condensed', sans-serif;
+        font-size: clamp(1.4rem, 1.9vw + 1.6vh, 2.3rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.02;
+        text-transform: uppercase;
+        text-shadow: 0 4px 24px rgba(10, 30, 32, 0.9);
+      }
+
+      .title-grad {
+        background: linear-gradient(90deg, #FFFFFF 0%, var(--hf-yellow) 45%, var(--hf-red) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.7));
+      }
+
+      .lead {
+        max-width: 820px;
+        margin: 0.5rem auto 0 auto;
+        font-size: clamp(0.78rem, 1vh + 0.4vw, 0.95rem);
+        color: var(--t2);
+        line-height: 1.5;
+      }
+
+      /* ---------- Stats ---------- */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: clamp(0.6rem, 1.2vw, 0.9rem);
+      }
+
+      .stat {
+        background: var(--card);
+        border: 1px solid var(--edge);
+        border-top: 3px solid var(--c, var(--hf-blue));
+        border-radius: 14px;
+        padding: clamp(0.55rem, 1.4vh, 0.9rem) 0.9rem;
+        text-align: center;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.32);
+      }
+      .stat.s-yellow { --c: var(--hf-yellow); }
+      .stat.s-mint   { --c: var(--hf-mint); }
+      .stat.s-pink   { --c: var(--hf-pink); }
+
+      .stat-num {
+        display: block;
+        font-family: 'Barlow Semi Condensed', sans-serif;
+        font-size: clamp(1.2rem, 2.2vw + 1vh, 1.9rem);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        color: #FFFFFF;
+      }
+
+      .stat-num.small {
+        font-size: clamp(0.85rem, 1.1vw + 0.6vh, 1.2rem);
+      }
+
+      .stat-lbl {
+        display: block;
+        margin-top: 0.3rem;
+        font-family: 'Martian Mono', monospace;
+        font-size: clamp(0.48rem, 0.65vw + 0.3vh, 0.62rem);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--tm);
+      }
+
+      /* ---------- Body ---------- */
+      .main {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: clamp(0.7rem, 1.6vw, 1.1rem);
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--edge);
+        border-radius: 16px;
+        padding: clamp(0.8rem, 2vh, 1.3rem) clamp(1rem, 1.8vw, 1.5rem);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 5px 5px 0 rgba(8, 24, 26, 0.5), 0 14px 34px rgba(0, 0, 0, 0.28);
+      }
+
+      .card-idx {
+        font-family: 'Martian Mono', monospace;
+        font-size: clamp(0.5rem, 0.6vw + 0.3vh, 0.66rem);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: var(--accent, var(--hf-blue));
+        margin-bottom: 0.35rem;
+      }
+      .card.yellow { --accent: var(--hf-yellow); }
+
+      .card-title {
+        font-family: 'Barlow Semi Condensed', sans-serif;
+        font-size: clamp(0.95rem, 1.2vw + 0.8vh, 1.35rem);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
+        margin-bottom: 0.45rem;
+        color: #FFFFFF;
+      }
+
+      .card-text {
+        font-size: clamp(0.72rem, 0.8vw + 0.5vh, 0.88rem);
+        color: var(--t2);
+        line-height: 1.5;
+        max-width: 60ch;
+      }
+
+      .markers {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.7rem;
+      }
+
+      .marker {
+        font-family: 'Martian Mono', monospace;
+        font-size: clamp(0.45rem, 0.5vw + 0.25vh, 0.58rem);
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--t2);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 999px;
+        padding: 0.22rem 0.6rem;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .marker::before {
+        content: '✓';
+        color: var(--hf-blue);
+        font-weight: 700;
+        margin-right: 0.3rem;
+      }
+
+      .lines {
+        display: grid;
+        gap: 0.35rem;
+        margin-top: 0.6rem;
+      }
+
+      .line {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: clamp(0.72rem, 0.8vw + 0.5vh, 0.86rem);
+        color: var(--t2);
+      }
+
+      .line::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--d, var(--hf-blue));
+        flex-shrink: 0;
+      }
+      .line.d-mint   { --d: var(--hf-mint); }
+      .line.d-yellow { --d: var(--hf-yellow); }
+      .line.d-pink   { --d: var(--hf-pink); }
+
+      /* ---------- Footer ---------- */
+      .bottom {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr;
+        gap: clamp(0.6rem, 1.4vw, 1rem);
+      }
+
+      .cell {
+        border-top: 3px solid var(--c2, var(--hf-blue));
+        padding-top: 0.5rem;
+      }
+      .cell.c-yellow { --c2: var(--hf-yellow); }
+      .cell.c-mint   { --c2: var(--hf-mint); }
+
+      .cell-title {
+        font-family: 'Martian Mono', monospace;
+        font-size: clamp(0.5rem, 0.6vw + 0.3vh, 0.64rem);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--hf-blue-soft);
+        margin-bottom: 0.25rem;
+      }
+      .cell.c-yellow .cell-title { color: #FFFFFF; }
+
+      .cell-title b { color: var(--hf-yellow); font-weight: 800; }
+
+      .cell-text {
+        font-size: clamp(0.66rem, 0.7vw + 0.4vh, 0.8rem);
+        color: var(--t2);
+        line-height: 1.45;
+      }
+
+      /* Entrance */
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .stat, .card, .cell, .head { animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+      .stat:nth-child(2), .card:nth-child(1) { animation-delay: 0.06s; }
+      .stat:nth-child(3)                     { animation-delay: 0.12s; }
+      .stat:nth-child(4), .card:nth-child(2) { animation-delay: 0.18s; }
+      .cell:nth-child(2)                     { animation-delay: 0.24s; }
+      .cell:nth-child(3)                     { animation-delay: 0.3s; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .stat, .card, .cell, .head { animation: none; }
+      }
+
+      /* Very short screens: compress */
+      @media (max-height: 640px) {
+        .slide { gap: 0.55rem; padding: 0.7rem 1.4rem; }
+        .markers { margin-top: 0.45rem; }
+        .card-text { display: none; }
+        .lead { margin-top: 0.3rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide">
+
+      <!-- Header -->
+      <header class="head">
+        <p class="kicker">Hacktoberfest&nbsp;· CBIT Open Source Community &nbsp;<span class="kicker-dot">●</span></p>
+        <h1 class="title">CBIT Hacktoberfest <span class="title-grad">Hackathon'26</span></h1>
+        <p class="lead">
+          First in-person Hacktoberfest at CBIT · Oct 10-11, 2026 · 24-hour open source
+          build sprint, Hyderabad.
+        </p>
+      </header>
+
+      <!-- Stats -->
+      <section class="stats" aria-label="Event overview">
+        <div class="stat">
+          <span class="stat-num">500+</span>
+          <span class="stat-lbl">Participants</span>
+        </div>
+        <div class="stat s-yellow">
+          <span class="stat-num">24</span>
+          <span class="stat-lbl">Hours</span>
+        </div>
+        <div class="stat s-mint">
+          <span class="stat-num">3-5</span>
+          <span class="stat-lbl">Team size</span>
+        </div>
+        <div class="stat s-pink">
+          <span class="stat-num small">Oct 10-11</span>
+          <span class="stat-lbl">Event dates</span>
+        </div>
+      </section>
+
+      <!-- Body -->
+      <section class="main" aria-label="Event format and support">
+        <div class="card yellow">
+          <p class="card-idx">01 / FORMAT</p>
+          <h3 class="card-title">24-hour build sprint</h3>
+          <p class="card-text">
+            Teams of 3-5 build open source through the night and demo on Oct 11, with
+            workshops and mentoring alongside.
+          </p>
+          <div class="markers">
+            <span class="marker">Sprint</span>
+            <span class="marker">Open source</span>
+            <span class="marker">Workshops</span>
+            <span class="marker">Demos</span>
+            <span class="marker">Judging</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="card-idx">02 / SUPPORT</p>
+          <h3 class="card-title">Mentors &amp; outcomes</h3>
+          <div class="lines">
+            <span class="line d-mint">Mentors for design, architecture, debugging</span>
+            <span class="line d-yellow">Track prizes &amp; partner awards</span>
+            <span class="line d-pink">Certificates for all participants</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bottom" aria-label="Registration and venue">
+        <div class="cell c-yellow">
+          <p class="cell-title">Registration · <b>₹200</b> / participant</p>
+          <p class="cell-text">Meals, swag, Wi-Fi, workspace, mentor support, certificate.</p>
+        </div>
+        <div class="cell">
+          <p class="cell-title">Venue</p>
+          <p class="cell-text">CBIT campus, Hyderabad · Oct 10-11, 2026.</p>
+        </div>
+        <div class="cell c-mint">
+          <p class="cell-title">Certificate</p>
+          <p class="cell-text">Given to every participant.</p>
+        </div>
+      </footer>
+
+    </div>
+  </body>
+</html>
