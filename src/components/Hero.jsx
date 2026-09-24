@@ -47,13 +47,11 @@ export default function Hero({ onOpenRegister }) {
       <div className="section-wrapper">
         <div className="hero-layout">
 
-          {/* Main Title */}
           <h1 className="hero-main-title">
             CBIT HACKTOBERFEST <br />
             <span className="gradient-text">HACKATHON'26</span>
           </h1>
 
-          {/* Concise Lead Text */}
           <p className="hero-lead-text">
             The premier 24-hour celebration of open source is now live in-person on campus.
             500+ student builders, 1-on-1 industry mentors, all-inclusive catering & swag, and an electrifying weekend of community innovation.
@@ -126,7 +124,7 @@ export default function Hero({ onOpenRegister }) {
           {/* Real-time Countdown Timer with BorderGlow */}
           <BorderGlow 
             borderRadius={20} 
-            colors={['#8BB2DE', '#FFFFFF']} 
+            colors={['#F5B62A', '#E97B77']}
             showInnerSpotlight={false}
             edgeSensitivity={40} 
             glowRadius={65}

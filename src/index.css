@@ -1,10 +1,9 @@
 /* =========================================================
-   CBIT HACKTOBERFEST HACKATHON'26 - OFFICIAL 2026 DESIGN SYSTEM
-   EXCLUSIVE Palette: Pine Teal · Cornflower Blue · Marigold · Coral Red · Burgundy · Off-White
+   CBIT HACKTOBERFEST HACKATHON'26 â€” EDITORIAL EVENT SYSTEM
    ========================================================= */
 
 :root {
-  /* ── Official Hacktoberfest 2026 Brand Colors (colour_palette.png) ── */
+  /* â”€â”€ Official Hacktoberfest 2026 Brand Colors (colour_palette.png) â”€â”€ */
   --hf-bg:        #1f4d50;   /* Lighter Base Pine Teal Background */
   --hf-blue:      #569AE0;   /* Vibrant Sky Blue */
   --hf-blue-soft: #8AB1DA;   /* Soft Pastel Blue */
@@ -18,14 +17,14 @@
   --hf-pink:      #E97B77;   /* Rose Pink */
   --hf-burgundy:  #671912;   /* Burgundy */
 
-  /* ── Deep Cyber-Obsidian & High-Contrast Backgrounds ── */
-  --bg-deep:            #1a4346;   /* Lighter teal base */
-  --bg-main:            #1f4d50;   /* Lighter contrast canvas */
-  --bg-surface:         rgba(28, 66, 69, 0.72);   /* Translucent card surface */
-  --bg-surface-elevated:rgba(35, 82, 86, 0.78);   /* Translucent elevated surface */
+  /* â”€â”€ Deep Cyber-Obsidian & High-Contrast Backgrounds â”€â”€ */
+  --bg-deep:            #1a4346;
+  --bg-main:            #1f4d50;
+  --bg-surface:         rgba(28, 66, 69, 0.72);
+  --bg-surface-elevated:rgba(35, 82, 86, 0.78);
   --bg-glass:           rgba(28, 66, 69, 0.52);
 
-  /* ── High-Contrast Borders ── */
+  /* â”€â”€ High-Contrast Borders â”€â”€ */
   --border-subtle: rgba(255, 255, 255, 0.14);
   --border-medium: rgba(255, 255, 255, 0.25);
   --border-hover:  rgba(86, 154, 224, 0.75);
@@ -35,7 +34,7 @@
   --card-highlight: rgba(255, 255, 255, 0.06);
   --card-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
 
-  /* ── Semantic aliases ── */
+  /* â”€â”€ Semantic aliases â”€â”€ */
   --color-red:      var(--hf-red);
   --color-blue:     var(--hf-blue);
   --color-yellow:   var(--hf-yellow);
@@ -45,24 +44,24 @@
   --color-white:    var(--hf-offwhite);
   --color-pine:     var(--hf-green);
 
-  /* ── High-Contrast Typography colors ── */
-  --text-primary:   #FFFFFF;                     /* Pure white for headings & primary text */
-  --text-secondary: #E2E8F0;                     /* Crisp platinum silver (exceeds WCAG AAA) */
-  --text-muted:     #94A3B8;                     /* Clean, readable slate for secondary labels */
+  /* â”€â”€ High-Contrast Typography colors â”€â”€ */
+  --text-primary:   #FFFFFF;
+  --text-secondary: #E2E8F0;
+  --text-muted:     #94A3B8;
   --text-bright:    #F8FAFC;
 
-  /* ── Fonts ── */
-  --font-main:    'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Barlow Semi Condensed', 'Space Grotesk', sans-serif;
-  --font-mono:    'Martian Mono', 'JetBrains Mono', monospace;
+  /* â”€â”€ Fonts â”€â”€ */
+  --font-main:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Barlow Semi Condensed', 'Inter', sans-serif;
+  --font-mono:    'Martian Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Code', 'Roboto Mono', Menlo, Consolas, monospace;
 
-  /* ── Geometry ── */
+  /* â”€â”€ Geometry â”€â”€ */
   --radius-sm:   8px;
   --radius-md:   14px;
   --radius-lg:   22px;
   --radius-full: 9999px;
 
-  /* ── Motion ── */
+  /* â”€â”€ Motion â”€â”€ */
   --transition-fast:   0.2s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -89,11 +88,19 @@ body {
   font-family: var(--font-main);
   background-color: var(--bg-deep);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.55;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hacktoberfest 2026 signature selection */
+::selection {
+  background: var(--hf-pink);
+  color: var(--bg-deep);
+  text-shadow: none;
 }
 
 /* =========================================================
@@ -157,13 +164,14 @@ body {
 
 .section-title {
   font-family: var(--font-display);
-  font-size: 2.3rem;
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   color: var(--text-primary);
   text-transform: uppercase;
   margin-bottom: 0.75rem;
-  line-height: 1.2;
+  line-height: 1;
+  text-wrap: balance;
   text-shadow: 0 4px 20px rgba(16, 40, 42, 0.95), 0 2px 6px rgba(0, 0, 0, 0.85);
 }
 
@@ -177,6 +185,7 @@ body {
   font-size: 1.05rem;
   color: var(--text-secondary);
   line-height: 1.6;
+  text-wrap: pretty;
   text-shadow: 0 2px 12px rgba(16, 40, 42, 0.9);
 }
 
@@ -265,15 +274,17 @@ body {
 .nav-item-link {
   color: #FFFFFF;
   text-decoration: none;
-  font-size: 0.94rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
   position: relative;
   padding: 0.4rem 0;
   transition: all var(--transition-fast);
   display: inline-block;
 }
 
-/* Expanding gradient underline — official palette */
+/* Expanding gradient underline â€” official palette */
 .nav-item-link::after {
   content: '';
   position: absolute;
@@ -330,8 +341,10 @@ body {
 .mobile-nav-link {
   color: var(--text-primary);
   text-decoration: none;
-  font-size: 1.05rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
   padding: 0.4rem 0;
 }
 
@@ -344,9 +357,11 @@ body {
   justify-content: center;
   gap: 0.6rem;
   padding: 0.75rem 1.5rem;
-  font-family: var(--font-main);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   cursor: pointer;
@@ -398,12 +413,12 @@ body {
 
 .btn-sm {
   padding: 0.45rem 1rem;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
 }
 
 .btn-lg {
   padding: 0.9rem 2rem;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
@@ -490,9 +505,9 @@ body {
 
 .hacktoberfest-banner-text {
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: -0.02em;
   color: var(--color-white);
   padding: 0.2rem 1rem;
 }
@@ -508,12 +523,13 @@ body {
 
 .hero-main-title {
   font-family: var(--font-display);
-  font-size: 3.8rem;
-  font-weight: 900;
+  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  font-weight: 800;
   letter-spacing: -0.04em;
-  line-height: 1.08;
+  line-height: 0.96;
   color: var(--text-primary);
   margin-bottom: 1rem;
+  text-wrap: balance;
   text-shadow: 0 4px 28px rgba(16, 40, 42, 0.98), 0 2px 8px rgba(0, 0, 0, 0.92);
 }
 
@@ -535,11 +551,12 @@ body {
 
 /* Concise Lead Text Without Serial Commas */
 .hero-lead-text {
-  font-size: 1.15rem;
+  font-size: clamp(1.02rem, 1.6vw, 1.2rem);
   color: var(--text-secondary);
   max-width: 720px;
   margin-bottom: 1.5rem;
-  line-height: 1.65;
+  line-height: 1.58;
+  text-wrap: pretty;
   text-shadow: 0 2px 14px rgba(16, 40, 42, 0.95), 0 1px 4px rgba(0, 0, 0, 0.85);
 }
 
@@ -607,7 +624,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Chip icon colors — official HF 2026 palette */
+/* Chip icon colors â€” official HF 2026 palette */
 .chip-icon.red    { background: rgba(229, 57, 39,  0.15); color: var(--hf-red); }
 .chip-icon.blue   { background: rgba(139, 178, 222, 0.15); color: var(--hf-blue); }
 .chip-icon.yellow { background: rgba(245, 183, 38,  0.15); color: var(--hf-yellow); }
@@ -621,14 +638,18 @@ body {
 .chip-label {
   font-size: 0.72rem;
   font-family: var(--font-mono);
+  font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .chip-value {
-  font-size: 0.95rem;
+  font-size: 1rem;
+  font-family: var(--font-display);
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--text-primary);
 }
 
@@ -724,10 +745,11 @@ body {
 
 .unit-number {
   font-family: var(--font-display);
-  font-size: 2.4rem;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
   font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
   color: var(--hf-offwhite);
-  line-height: 1;
   text-shadow: 0 0 16px rgba(139, 178, 222, 0.35);
 }
 
@@ -736,13 +758,15 @@ body {
   font-size: 0.68rem;
   font-weight: 700;
   color: var(--hf-blue);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   margin-top: 0.4rem;
 }
 
 .timer-separator {
+  font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: 800;
+  letter-spacing: -0.03em;
   color: var(--hf-blue);
   opacity: 0.85;
   margin-bottom: 0.4rem;
@@ -851,8 +875,11 @@ body {
 
 .card-title {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
   color: var(--text-primary);
   margin-bottom: 0.85rem;
 }
@@ -860,7 +887,8 @@ body {
 .card-desc {
   font-size: 0.98rem;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.6;
+  text-wrap: pretty;
   margin-bottom: 1.5rem;
   flex-grow: 1;
 }
@@ -873,7 +901,11 @@ body {
 }
 
 .mini-tag {
-  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.05);
@@ -912,9 +944,10 @@ body {
 }
 
 .preptember-lead {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   color: var(--text-primary);
-  line-height: 1.7;
+  line-height: 1.6;
+  text-wrap: pretty;
   max-width: 700px;
   margin-bottom: 2rem;
 }
@@ -936,18 +969,22 @@ body {
 
 .preptember-page-title {
   font-family: var(--font-display);
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 6.5vw, 4.5rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-wrap: balance;
   color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .preptember-page-sub {
-  font-size: 1.3rem;
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
   color: var(--color-blue);
   margin-bottom: 2.5rem;
   font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 /* =========================================================
@@ -1048,7 +1085,9 @@ body {
   border-radius: 9999px;
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .mentor-role-pill .pill-dot {
@@ -1070,8 +1109,10 @@ body {
 
 .mentor-skill-chip {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-muted);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1086,8 +1127,10 @@ body {
 
 .mentor-name {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
@@ -1095,9 +1138,9 @@ body {
 .mentor-tag {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--hf-blue);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 0.85rem;
 }
@@ -1106,6 +1149,7 @@ body {
   font-size: 0.88rem;
   color: var(--text-secondary);
   line-height: 1.55;
+  text-wrap: pretty;
   margin-bottom: 1.25rem;
   flex-grow: 1;
 }
@@ -1365,6 +1409,7 @@ body {
 .t-card-badge {
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--hf-yellow);
@@ -1378,6 +1423,7 @@ body {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
   color: #FFFFFF;
   background: var(--hf-red);
   border-radius: 9999px;
@@ -1404,6 +1450,7 @@ body {
 .time-label-date {
   font-family: var(--font-mono);
   font-size: 0.78rem;
+  font-weight: 600;
   color: var(--text-muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1412,8 +1459,10 @@ body {
 
 .time-label-clock {
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.45rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
   color: var(--text-primary);
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
@@ -1498,8 +1547,11 @@ body {
 
 .t-event-title {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
   color: var(--text-primary);
   margin-bottom: 0.35rem;
 }
@@ -1507,7 +1559,8 @@ body {
 .t-event-desc {
   font-size: 0.92rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 /* =========================================================
@@ -1563,7 +1616,7 @@ body {
 
 
 
-/* Transparent Logo container — NO WHITE BACKGROUND */
+/* Transparent Logo container â€” NO WHITE BACKGROUND */
 .sponsor-logo-box {
   width: 100%;
   max-width: 240px;
@@ -1591,19 +1644,20 @@ body {
 .sponsor-role-tag {
   font-family: var(--font-mono);
   font-size: 0.8rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   transition: all var(--transition-smooth);
 }
 
-/* ─── Hover States: Bring back full original brand colors & glow ─── */
+/* â”€â”€â”€ Hover States: Bring back full original brand colors & glow â”€â”€â”€ */
 .sponsor-glass-card:hover .sponsor-logo-img {
   filter: grayscale(0%) opacity(1);
   transform: scale(1.08);
 }
 
-/* ─── Dr. Cita – Pure Green Border Highlight ─── */
+/* â”€â”€â”€ Dr. Cita â€“ Pure Green Border Highlight â”€â”€â”€ */
 .sponsor-glass-card.sponsor-drcita:hover {
   border-color: #2BB673;
   box-shadow:
@@ -1614,7 +1668,7 @@ body {
   color: #2BB673;
 }
 
-/* ─── GitHub – Pure White/Blue Border Highlight ─── */
+/* â”€â”€â”€ GitHub â€“ Pure White/Blue Border Highlight â”€â”€â”€ */
 .sponsor-glass-card.sponsor-github:hover {
   border-color: #FFFFFF;
   box-shadow:
@@ -1661,8 +1715,10 @@ body {
   border: none;
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
   text-align: left;
   cursor: pointer;
 }
@@ -1671,6 +1727,8 @@ body {
   transition: transform var(--transition-fast);
   color: var(--text-muted);
   flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
 }
 
 .faq-row.open .faq-chevron {
@@ -1683,6 +1741,7 @@ body {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.6;
+  text-wrap: pretty;
 }
 
 /* =========================================================
@@ -1744,8 +1803,11 @@ body {
 
 .contact-card-title {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
@@ -1753,7 +1815,8 @@ body {
 .contact-card-desc {
   font-size: 0.92rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
   margin-bottom: 1.25rem;
 }
 
@@ -1776,6 +1839,7 @@ body {
 .org-name {
   font-weight: 600;
   font-size: 0.9rem;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 
@@ -1867,6 +1931,7 @@ body {
 .footer-social-heading {
   font-family: var(--font-mono);
   font-size: 0.78rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -1918,8 +1983,10 @@ body {
 
 .footer-block-heading {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   color: var(--text-primary);
   margin-bottom: 0.85rem;
   display: flex;
@@ -1936,7 +2003,8 @@ body {
 .footer-block-text {
   font-size: 0.9rem;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .footer-block-text strong {
@@ -2016,6 +2084,8 @@ body {
   font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--text-primary);
 }
 
@@ -2130,6 +2200,8 @@ body {
   color: var(--text-primary);
   font-family: var(--font-display);
   font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
 }
 
 .review-total {
@@ -2149,6 +2221,8 @@ body {
   color: var(--hf-yellow);
   font-family: var(--font-display);
   font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
 .review-grid {
@@ -2203,8 +2277,10 @@ body {
 
 .form-field-group label {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--text-secondary);
   margin-bottom: 0.35rem;
 }
@@ -2369,7 +2445,7 @@ body {
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   padding: 0.3rem 0.75rem;
   border-radius: 9999px;
   margin-bottom: 1rem;
@@ -2378,17 +2454,20 @@ body {
 
 .bento-title {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
   color: #FFFFFF;
   margin-bottom: 0.75rem;
-  line-height: 1.3;
 }
 
 .bento-desc {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.6;
+  text-wrap: pretty;
   margin-bottom: 1.25rem;
 }
 
@@ -2409,15 +2488,21 @@ body {
 
 .bento-feature-val {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.35rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
   color: var(--text-primary);
   display: block;
   margin-bottom: 0.2rem;
 }
 
 .bento-feature-lbl {
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-muted);
 }
 
@@ -2495,6 +2580,8 @@ body {
   font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: #FFFFFF;
   margin-bottom: 0.2rem;
 }
@@ -2502,6 +2589,7 @@ body {
 .fee-banner-text p {
   font-size: 0.84rem;
   color: var(--text-secondary);
+  text-wrap: pretty;
 }
 
 .fee-banner-price {
@@ -2512,8 +2600,9 @@ body {
   font-family: var(--font-display);
   font-size: 1.6rem;
   font-weight: 800;
-  color: var(--hf-yellow);
+  letter-spacing: -0.02em;
   line-height: 1;
+  color: var(--hf-yellow);
 }
 
 .fee-banner-rate {
@@ -2549,6 +2638,8 @@ body {
   font-family: var(--font-display);
   font-size: 0.98rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -2556,12 +2647,13 @@ body {
 }
 
 .member-tag-badge {
+  font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.2rem 0.55rem;
   border-radius: 9999px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .member-tag-badge.leader {
@@ -2591,6 +2683,8 @@ body {
   font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: #FFFFFF;
   margin-bottom: 0.4rem;
   display: flex;
@@ -2602,7 +2696,8 @@ body {
   font-size: 0.88rem;
   color: var(--text-secondary);
   margin-bottom: 1.25rem;
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .qr-box-center {
@@ -2797,18 +2892,20 @@ body {
 
 .register-main-title {
   font-family: var(--font-display);
-  font-size: 2.4rem;
+  font-size: clamp(2.2rem, 4.5vw, 3rem);
   font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-wrap: balance;
   color: #FFFFFF;
-  line-height: 1.15;
   margin-bottom: 0.5rem;
-  letter-spacing: -0.02em;
 }
 
 .register-main-subtitle {
   font-size: 0.98rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .register-actions-row {
@@ -2850,6 +2947,8 @@ body {
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
   color: #FFFFFF;
   margin-bottom: 0.75rem;
 }
@@ -2860,6 +2959,7 @@ body {
   max-width: 520px;
   margin: 0 auto 1.75rem auto;
   line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .register-id-badge {
@@ -2905,493 +3005,3 @@ body {
     width: 100%;
   }
 }
-
-/* =========================================================
-   ABOUT - EDITORIAL STATS + DETAIL CARDS
-   ========================================================= */
-.about-lede {
-  max-width: 640px;
-  margin-inline: auto;
-}
-
-.about-wrap {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-
-.about-wrap .section-header {
-  margin-bottom: 2rem;
-}
-
-/* Key facts strip */
-.about-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.9rem;
-  margin: 0.6rem 0 1.1rem 0;
-}
-
-@media (max-width: 640px) {
-  .about-stats { grid-template-columns: repeat(2, 1fr); }
-}
-
-.about-stat {
-  background: var(--bg-glass);
-  border: 2px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-md);
-  padding: 0.8rem 0.9rem;
-  text-align: center;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 6px 6px 0 rgba(8, 24, 26, 0.5);
-  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.about-stat:hover {
-  transform: translateY(-3px);
-  border-color: var(--stat-accent);
-  box-shadow: 9px 9px 0 rgba(8, 24, 26, 0.5);
-}
-
-.about-stat-num {
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 2.8vw, 2.25rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: #FFFFFF;
-}
-
-.about-stat-num--dates {
-  font-size: clamp(1.42rem, 2.5vw, 1.9rem);
-  letter-spacing: -0.03em;
-}
-
-.about-stat-lbl {
-  display: block;
-  margin-top: 0.35rem;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-/* Stat color accents */
-.about-stat.c-yellow { --stat-accent: var(--hf-yellow); }
-.about-stat.c-mint   { --stat-accent: var(--hf-green-mint); }
-.about-stat.c-pink   { --stat-accent: var(--hf-pink); }
-
-.about-stat.c-yellow .about-stat-num { color: var(--hf-yellow); }
-.about-stat.c-mint   .about-stat-num { color: var(--hf-green-mint); }
-.about-stat.c-pink   .about-stat-num { color: var(--hf-pink); }
-
-/* Q&A cards */
-.about-qa {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin: 0 0 1.1rem 0;
-}
-
-@media (max-width: 880px) {
-  .about-qa { grid-template-columns: 1fr; }
-}
-
-.about-qa-card {
-  position: relative;
-  background: var(--bg-glass);
-  border: 2px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-lg);
-  padding: 1.3rem 1.4rem 1.4rem;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 7px 7px 0 rgba(8, 24, 26, 0.5);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.about-qa-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 10px 10px 0 rgba(8, 24, 26, 0.5);
-}
-
-.about-qa-card.qa-blue   { border-top: 3px solid var(--hf-blue); }
-.about-qa-card.qa-yellow { border-top: 3px solid var(--hf-yellow); }
-.about-qa-card.qa-mint   { border-top: 3px solid var(--hf-green-mint); }
-
-.about-qa-q {
-  font-family: var(--font-display);
-  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: #FFFFFF;
-  margin-bottom: 0.6rem;
-}
-
-.about-qa-card.qa-blue   .about-qa-q { color: var(--hf-blue); }
-.about-qa-card.qa-yellow .about-qa-q { color: var(--hf-yellow); }
-.about-qa-card.qa-mint   .about-qa-q { color: var(--hf-green-mint); }
-
-.about-qa-a {
-  font-size: 0.88rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-}
-
-/* Registration details */
-.about-ticket {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, rgba(24, 64, 67, 0.92), rgba(21, 53, 55, 0.94));
-  border: 2px solid rgba(139, 178, 222, 0.45);
-  border-radius: var(--radius-lg);
-  padding: 2rem 2rem 1.75rem;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 10px 10px 0 rgba(8, 24, 26, 0.55);
-  margin: 1.5rem 0;
-}
-
-.about-ticket::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 6px;
-  background: linear-gradient(180deg, var(--hf-blue), var(--hf-blue-soft));
-}
-
-.about-ticket::after {
-  content: '//';
-  position: absolute;
-  top: 1.1rem;
-  right: 1.4rem;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: rgba(139, 178, 222, 0.4);
-}
-
-.about-ticket-kicker {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #81C7B7;
-  margin-bottom: 0.5rem;
-}
-
-.about-ticket-head {
-  display: flex;
-  align-items: baseline;
-  gap: 0.7rem;
-  margin-bottom: 0.6rem;
-}
-
-.about-ticket-price {
-  font-family: var(--font-display);
-  font-size: clamp(2.4rem, 5vw, 3.4rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: #FFFFFF;
-}
-
-.about-ticket-price-note {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-
-.about-ticket-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.55rem, 3vw, 2.1rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  color: #FFFFFF;
-  margin-bottom: 0.75rem;
-}
-
-.about-ticket-desc {
-  font-size: 0.98rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  max-width: 62ch;
-  margin-bottom: 1.25rem;
-}
-
-.about-ticket-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0.6rem;
-}
-
-.about-tick {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  padding: 0.55rem 0.7rem;
-}
-
-.about-tick::before {
-  content: '✓';
-  color: var(--hf-blue);
-  font-weight: 700;
-}
-
-/* Detail panels */
-.about-duo {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin: 0 0 1.1rem 0;
-}
-
-@media (max-width: 840px) {
-  .about-duo { grid-template-columns: 1fr; }
-}
-
-.about-panel {
-  background: var(--bg-glass);
-  border: 2px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem 1.5rem 1.3rem;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 7px 7px 0 rgba(8, 24, 26, 0.5);
-  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.about-panel:hover {
-  transform: translateY(-3px);
-  border-color: var(--hf-blue);
-  box-shadow: 10px 10px 0 rgba(8, 24, 26, 0.5);
-}
-
-.about-panel-idx {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--hf-blue);
-  margin-bottom: 0.6rem;
-}
-
-.about-panel.t-yellow { border-top: 3px solid var(--hf-yellow); }
-.about-panel.t-mint   { border-top: 3px solid var(--hf-green-mint); }
-.about-panel.t-yellow .about-panel-idx { color: var(--hf-yellow); }
-.about-panel.t-mint   .about-panel-idx { color: var(--hf-green-mint); }
-
-.about-panel-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 2.6vw, 1.8rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  color: #FFFFFF;
-  margin-bottom: 0.7rem;
-}
-
-.about-panel-desc {
-  font-size: 0.92rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-  margin-bottom: 0.8rem;
-}
-
-.about-panel-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.about-tag {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 6px;
-  padding: 0.25rem 0.5rem;
-}
-
-/* Sub section heading */
-.about-subhead {
-  margin: 2.5rem 0 1.25rem 0;
-  border-top: 3px solid rgba(139, 178, 222, 0.45);
-  padding-top: 1rem;
-}
-
-.about-subhead-kicker {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--hf-blue);
-  margin-bottom: 0.4rem;
-}
-
-.about-subhead-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.8vw, 2rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-  line-height: 1.1;
-  color: #FFFFFF;
-}
-
-/* What participants can expect */
-.about-expect {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.about-expect-card {
-  background: var(--bg-glass);
-  border: 2px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-md);
-  padding: 1.1rem 1.1rem 1.25rem;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 5px 5px 0 rgba(8, 24, 26, 0.5);
-  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.about-expect-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(139, 178, 222, 0.5);
-  box-shadow: 8px 8px 0 rgba(8, 24, 26, 0.5);
-}
-
-.about-expect-kicker {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--hf-blue);
-  margin-bottom: 0.5rem;
-}
-
-.about-expect-desc {
-  font-size: 0.88rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-}
-
-/* Registration and outcomes */
-.about-reg {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 1.75rem;
-  background: var(--bg-glass);
-  border: 2px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-lg);
-  padding: 1.2rem 1.5rem;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 6px 6px 0 rgba(8, 24, 26, 0.5);
-}
-
-@media (max-width: 700px) {
-  .about-reg { grid-template-columns: 1fr; gap: 1rem; }
-}
-
-.about-reg-col {
-  min-width: 0;
-}
-
-.about-reg-kicker {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--hf-blue);
-  margin-bottom: 0.4rem;
-}
-
-.about-reg-summary {
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: #FFFFFF;
-  margin-bottom: 0.35rem;
-}
-
-.about-reg-summary strong {
-  color: var(--hf-yellow);
-  font-weight: 800;
-}
-
-.about-reg-col:nth-child(2) .about-reg-kicker {
-  color: var(--hf-green-mint);
-}
-
-.about-reg-note {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  max-width: 46ch;
-}
-
-/* Outcomes */
-.about-prizes {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-}
-
-@media (max-width: 720px) {
-  .about-prizes { grid-template-columns: 1fr; }
-}
-
-.about-prize {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  border-top: 3px solid rgba(139, 178, 222, 0.55);
-  padding-top: 0.9rem;
-}
-
-.about-prize-name {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--hf-blue);
-}
-
-.about-prize-info {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-}
-
-

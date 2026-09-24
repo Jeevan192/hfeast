@@ -13,8 +13,8 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FeedbackModal from './components/FeedbackModal';
 import Toast from './components/Toast';
-
 import InteractiveBackground from './components/InteractiveBackground.jsx';
+
 
 // Toggle to true post-event to enable feedback modal
 const SHOW_FEEDBACK = false;
@@ -97,7 +97,6 @@ export default function App() {
 
   return (
     <div className="app-root">
-      {/* Rich interactive Hacktoberfest 2026 background with Aceternity-style spotlight grid & pixel art */}
       <InteractiveBackground />
 
       {/* Navigation Header */}
