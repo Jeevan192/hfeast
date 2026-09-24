@@ -1,10 +1,9 @@
 /* =========================================================
-   CBIT HACKTOBERFEST HACKATHON'26 - OFFICIAL 2026 DESIGN SYSTEM
-   EXCLUSIVE Palette: Pine Teal · Cornflower Blue · Marigold · Coral Red · Burgundy · Off-White
+   CBIT HACKTOBERFEST HACKATHON'26 â€” EDITORIAL EVENT SYSTEM
    ========================================================= */
 
 :root {
-  /* ── Official Hacktoberfest 2026 Brand Colors (colour_palette.png) ── */
+  /* â”€â”€ Official Hacktoberfest 2026 Brand Colors (colour_palette.png) â”€â”€ */
   --hf-bg:        #1f4d50;   /* Lighter Base Pine Teal Background */
   --hf-blue:      #569AE0;   /* Vibrant Sky Blue */
   --hf-blue-soft: #8AB1DA;   /* Soft Pastel Blue */
@@ -18,14 +17,14 @@
   --hf-pink:      #E97B77;   /* Rose Pink */
   --hf-burgundy:  #671912;   /* Burgundy */
 
-  /* ── Deep Cyber-Obsidian & High-Contrast Backgrounds ── */
-  --bg-deep:            #1a4346;   /* Lighter teal base */
-  --bg-main:            #1f4d50;   /* Lighter contrast canvas */
-  --bg-surface:         rgba(28, 66, 69, 0.72);   /* Translucent card surface */
-  --bg-surface-elevated:rgba(35, 82, 86, 0.78);   /* Translucent elevated surface */
+  /* â”€â”€ Deep Cyber-Obsidian & High-Contrast Backgrounds â”€â”€ */
+  --bg-deep:            #1a4346;
+  --bg-main:            #1f4d50;
+  --bg-surface:         rgba(28, 66, 69, 0.72);
+  --bg-surface-elevated:rgba(35, 82, 86, 0.78);
   --bg-glass:           rgba(28, 66, 69, 0.52);
 
-  /* ── High-Contrast Borders ── */
+  /* â”€â”€ High-Contrast Borders â”€â”€ */
   --border-subtle: rgba(255, 255, 255, 0.14);
   --border-medium: rgba(255, 255, 255, 0.25);
   --border-hover:  rgba(86, 154, 224, 0.75);
@@ -35,7 +34,7 @@
   --card-highlight: rgba(255, 255, 255, 0.06);
   --card-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
 
-  /* ── Semantic aliases ── */
+  /* â”€â”€ Semantic aliases â”€â”€ */
   --color-red:      var(--hf-red);
   --color-blue:     var(--hf-blue);
   --color-yellow:   var(--hf-yellow);
@@ -45,24 +44,24 @@
   --color-white:    var(--hf-offwhite);
   --color-pine:     var(--hf-green);
 
-  /* ── High-Contrast Typography colors ── */
-  --text-primary:   #FFFFFF;                     /* Pure white for headings & primary text */
-  --text-secondary: #E2E8F0;                     /* Crisp platinum silver (exceeds WCAG AAA) */
-  --text-muted:     #94A3B8;                     /* Clean, readable slate for secondary labels */
+  /* â”€â”€ High-Contrast Typography colors â”€â”€ */
+  --text-primary:   #FFFFFF;
+  --text-secondary: #E2E8F0;
+  --text-muted:     #94A3B8;
   --text-bright:    #F8FAFC;
 
-  /* ── Fonts ── */
-  --font-main:    'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-mono:    'JetBrains Mono', monospace;
+  /* â”€â”€ Fonts â”€â”€ */
+  --font-main:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Barlow Semi Condensed', 'Inter', sans-serif;
+  --font-mono:    'Martian Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Code', 'Roboto Mono', Menlo, Consolas, monospace;
 
-  /* ── Geometry ── */
+  /* â”€â”€ Geometry â”€â”€ */
   --radius-sm:   8px;
   --radius-md:   14px;
   --radius-lg:   22px;
   --radius-full: 9999px;
 
-  /* ── Motion ── */
+  /* â”€â”€ Motion â”€â”€ */
   --transition-fast:   0.2s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -83,11 +82,19 @@ body {
   font-family: var(--font-main);
   background-color: var(--bg-deep);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.55;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hacktoberfest 2026 signature selection */
+::selection {
+  background: var(--hf-pink);
+  color: var(--bg-deep);
+  text-shadow: none;
 }
 
 /* =========================================================
@@ -151,13 +158,14 @@ body {
 
 .section-title {
   font-family: var(--font-display);
-  font-size: 2.3rem;
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   color: var(--text-primary);
   text-transform: uppercase;
   margin-bottom: 0.75rem;
-  line-height: 1.2;
+  line-height: 1;
+  text-wrap: balance;
   text-shadow: 0 4px 20px rgba(16, 40, 42, 0.95), 0 2px 6px rgba(0, 0, 0, 0.85);
 }
 
@@ -171,6 +179,7 @@ body {
   font-size: 1.05rem;
   color: var(--text-secondary);
   line-height: 1.6;
+  text-wrap: pretty;
   text-shadow: 0 2px 12px rgba(16, 40, 42, 0.9);
 }
 
@@ -259,15 +268,17 @@ body {
 .nav-item-link {
   color: #FFFFFF;
   text-decoration: none;
-  font-size: 0.94rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
   position: relative;
   padding: 0.4rem 0;
   transition: all var(--transition-fast);
   display: inline-block;
 }
 
-/* Expanding gradient underline — official palette */
+/* Expanding gradient underline â€” official palette */
 .nav-item-link::after {
   content: '';
   position: absolute;
@@ -324,8 +335,10 @@ body {
 .mobile-nav-link {
   color: var(--text-primary);
   text-decoration: none;
-  font-size: 1.05rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
   padding: 0.4rem 0;
 }
 
@@ -338,9 +351,11 @@ body {
   justify-content: center;
   gap: 0.6rem;
   padding: 0.75rem 1.5rem;
-  font-family: var(--font-main);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   cursor: pointer;
@@ -392,12 +407,12 @@ body {
 
 .btn-sm {
   padding: 0.45rem 1rem;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
 }
 
 .btn-lg {
   padding: 0.9rem 2rem;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
@@ -484,9 +499,9 @@ body {
 
 .hacktoberfest-banner-text {
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: -0.02em;
   color: var(--color-white);
   padding: 0.2rem 1rem;
 }
@@ -502,12 +517,13 @@ body {
 
 .hero-main-title {
   font-family: var(--font-display);
-  font-size: 3.8rem;
-  font-weight: 900;
+  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  font-weight: 800;
   letter-spacing: -0.04em;
-  line-height: 1.08;
+  line-height: 0.96;
   color: var(--text-primary);
   margin-bottom: 1rem;
+  text-wrap: balance;
   text-shadow: 0 4px 28px rgba(16, 40, 42, 0.98), 0 2px 8px rgba(0, 0, 0, 0.92);
 }
 
@@ -529,11 +545,12 @@ body {
 
 /* Concise Lead Text Without Serial Commas */
 .hero-lead-text {
-  font-size: 1.15rem;
+  font-size: clamp(1.02rem, 1.6vw, 1.2rem);
   color: var(--text-secondary);
   max-width: 720px;
   margin-bottom: 1.5rem;
-  line-height: 1.65;
+  line-height: 1.58;
+  text-wrap: pretty;
   text-shadow: 0 2px 14px rgba(16, 40, 42, 0.95), 0 1px 4px rgba(0, 0, 0, 0.85);
 }
 
@@ -601,7 +618,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Chip icon colors — official HF 2026 palette */
+/* Chip icon colors â€” official HF 2026 palette */
 .chip-icon.red    { background: rgba(229, 57, 39,  0.15); color: var(--hf-red); }
 .chip-icon.blue   { background: rgba(139, 178, 222, 0.15); color: var(--hf-blue); }
 .chip-icon.yellow { background: rgba(245, 183, 38,  0.15); color: var(--hf-yellow); }
@@ -615,14 +632,18 @@ body {
 .chip-label {
   font-size: 0.72rem;
   font-family: var(--font-mono);
+  font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .chip-value {
-  font-size: 0.95rem;
+  font-size: 1rem;
+  font-family: var(--font-display);
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--text-primary);
 }
 
@@ -718,10 +739,11 @@ body {
 
 .unit-number {
   font-family: var(--font-display);
-  font-size: 2.4rem;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
   font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
   color: var(--hf-offwhite);
-  line-height: 1;
   text-shadow: 0 0 16px rgba(139, 178, 222, 0.35);
 }
 
@@ -730,13 +752,15 @@ body {
   font-size: 0.68rem;
   font-weight: 700;
   color: var(--hf-blue);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   margin-top: 0.4rem;
 }
 
 .timer-separator {
+  font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: 800;
+  letter-spacing: -0.03em;
   color: var(--hf-blue);
   opacity: 0.85;
   margin-bottom: 0.4rem;
@@ -845,8 +869,11 @@ body {
 
 .card-title {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
   color: var(--text-primary);
   margin-bottom: 0.85rem;
 }
@@ -854,7 +881,8 @@ body {
 .card-desc {
   font-size: 0.98rem;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.6;
+  text-wrap: pretty;
   margin-bottom: 1.5rem;
   flex-grow: 1;
 }
@@ -867,7 +895,11 @@ body {
 }
 
 .mini-tag {
-  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.05);
@@ -906,9 +938,10 @@ body {
 }
 
 .preptember-lead {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   color: var(--text-primary);
-  line-height: 1.7;
+  line-height: 1.6;
+  text-wrap: pretty;
   max-width: 700px;
   margin-bottom: 2rem;
 }
@@ -930,18 +963,22 @@ body {
 
 .preptember-page-title {
   font-family: var(--font-display);
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 6.5vw, 4.5rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-wrap: balance;
   color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .preptember-page-sub {
-  font-size: 1.3rem;
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
   color: var(--color-blue);
   margin-bottom: 2.5rem;
   font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 /* =========================================================
@@ -1042,7 +1079,9 @@ body {
   border-radius: 9999px;
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .mentor-role-pill .pill-dot {
@@ -1064,8 +1103,10 @@ body {
 
 .mentor-skill-chip {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-muted);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1080,8 +1121,10 @@ body {
 
 .mentor-name {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
@@ -1089,9 +1132,9 @@ body {
 .mentor-tag {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--hf-blue);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 0.85rem;
 }
@@ -1100,6 +1143,7 @@ body {
   font-size: 0.88rem;
   color: var(--text-secondary);
   line-height: 1.55;
+  text-wrap: pretty;
   margin-bottom: 1.25rem;
   flex-grow: 1;
 }
@@ -1359,6 +1403,7 @@ body {
 .t-card-badge {
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--hf-yellow);
@@ -1372,6 +1417,7 @@ body {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
   color: #FFFFFF;
   background: var(--hf-red);
   border-radius: 9999px;
@@ -1398,6 +1444,7 @@ body {
 .time-label-date {
   font-family: var(--font-mono);
   font-size: 0.78rem;
+  font-weight: 600;
   color: var(--text-muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1406,8 +1453,10 @@ body {
 
 .time-label-clock {
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.45rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
   color: var(--text-primary);
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
@@ -1492,8 +1541,11 @@ body {
 
 .t-event-title {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
   color: var(--text-primary);
   margin-bottom: 0.35rem;
 }
@@ -1501,7 +1553,8 @@ body {
 .t-event-desc {
   font-size: 0.92rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 /* =========================================================
@@ -1557,7 +1610,7 @@ body {
 
 
 
-/* Transparent Logo container — NO WHITE BACKGROUND */
+/* Transparent Logo container â€” NO WHITE BACKGROUND */
 .sponsor-logo-box {
   width: 100%;
   max-width: 240px;
@@ -1585,19 +1638,20 @@ body {
 .sponsor-role-tag {
   font-family: var(--font-mono);
   font-size: 0.8rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   transition: all var(--transition-smooth);
 }
 
-/* ─── Hover States: Bring back full original brand colors & glow ─── */
+/* â”€â”€â”€ Hover States: Bring back full original brand colors & glow â”€â”€â”€ */
 .sponsor-glass-card:hover .sponsor-logo-img {
   filter: grayscale(0%) opacity(1);
   transform: scale(1.08);
 }
 
-/* ─── Dr. Cita – Pure Green Border Highlight ─── */
+/* â”€â”€â”€ Dr. Cita â€“ Pure Green Border Highlight â”€â”€â”€ */
 .sponsor-glass-card.sponsor-drcita:hover {
   border-color: #2BB673;
   box-shadow:
@@ -1608,7 +1662,7 @@ body {
   color: #2BB673;
 }
 
-/* ─── GitHub – Pure White/Blue Border Highlight ─── */
+/* â”€â”€â”€ GitHub â€“ Pure White/Blue Border Highlight â”€â”€â”€ */
 .sponsor-glass-card.sponsor-github:hover {
   border-color: #FFFFFF;
   box-shadow:
@@ -1655,8 +1709,10 @@ body {
   border: none;
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
   text-align: left;
   cursor: pointer;
 }
@@ -1665,6 +1721,8 @@ body {
   transition: transform var(--transition-fast);
   color: var(--text-muted);
   flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
 }
 
 .faq-row.open .faq-chevron {
@@ -1677,6 +1735,7 @@ body {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.6;
+  text-wrap: pretty;
 }
 
 /* =========================================================
@@ -1738,8 +1797,11 @@ body {
 
 .contact-card-title {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
@@ -1747,7 +1809,8 @@ body {
 .contact-card-desc {
   font-size: 0.92rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
   margin-bottom: 1.25rem;
 }
 
@@ -1770,6 +1833,7 @@ body {
 .org-name {
   font-weight: 600;
   font-size: 0.9rem;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 
@@ -1861,6 +1925,7 @@ body {
 .footer-social-heading {
   font-family: var(--font-mono);
   font-size: 0.78rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -1912,8 +1977,10 @@ body {
 
 .footer-block-heading {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   color: var(--text-primary);
   margin-bottom: 0.85rem;
   display: flex;
@@ -1930,7 +1997,8 @@ body {
 .footer-block-text {
   font-size: 0.9rem;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .footer-block-text strong {
@@ -2010,6 +2078,8 @@ body {
   font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--text-primary);
 }
 
@@ -2124,6 +2194,8 @@ body {
   color: var(--text-primary);
   font-family: var(--font-display);
   font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
 }
 
 .review-total {
@@ -2143,6 +2215,8 @@ body {
   color: var(--hf-yellow);
   font-family: var(--font-display);
   font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
 .review-grid {
@@ -2197,8 +2271,10 @@ body {
 
 .form-field-group label {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--text-secondary);
   margin-bottom: 0.35rem;
 }
@@ -2363,7 +2439,7 @@ body {
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   padding: 0.3rem 0.75rem;
   border-radius: 9999px;
   margin-bottom: 1rem;
@@ -2372,17 +2448,20 @@ body {
 
 .bento-title {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
   color: #FFFFFF;
   margin-bottom: 0.75rem;
-  line-height: 1.3;
 }
 
 .bento-desc {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.6;
+  text-wrap: pretty;
   margin-bottom: 1.25rem;
 }
 
@@ -2403,15 +2482,21 @@ body {
 
 .bento-feature-val {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.35rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
   color: var(--text-primary);
   display: block;
   margin-bottom: 0.2rem;
 }
 
 .bento-feature-lbl {
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-muted);
 }
 
@@ -2489,6 +2574,8 @@ body {
   font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: #FFFFFF;
   margin-bottom: 0.2rem;
 }
@@ -2496,6 +2583,7 @@ body {
 .fee-banner-text p {
   font-size: 0.84rem;
   color: var(--text-secondary);
+  text-wrap: pretty;
 }
 
 .fee-banner-price {
@@ -2506,8 +2594,9 @@ body {
   font-family: var(--font-display);
   font-size: 1.6rem;
   font-weight: 800;
-  color: var(--hf-yellow);
+  letter-spacing: -0.02em;
   line-height: 1;
+  color: var(--hf-yellow);
 }
 
 .fee-banner-rate {
@@ -2543,6 +2632,8 @@ body {
   font-family: var(--font-display);
   font-size: 0.98rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -2550,12 +2641,13 @@ body {
 }
 
 .member-tag-badge {
+  font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.2rem 0.55rem;
   border-radius: 9999px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .member-tag-badge.leader {
@@ -2585,6 +2677,8 @@ body {
   font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: #FFFFFF;
   margin-bottom: 0.4rem;
   display: flex;
@@ -2596,7 +2690,8 @@ body {
   font-size: 0.88rem;
   color: var(--text-secondary);
   margin-bottom: 1.25rem;
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .qr-box-center {
@@ -2791,18 +2886,20 @@ body {
 
 .register-main-title {
   font-family: var(--font-display);
-  font-size: 2.4rem;
+  font-size: clamp(2.2rem, 4.5vw, 3rem);
   font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-wrap: balance;
   color: #FFFFFF;
-  line-height: 1.15;
   margin-bottom: 0.5rem;
-  letter-spacing: -0.02em;
 }
 
 .register-main-subtitle {
   font-size: 0.98rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .register-actions-row {
@@ -2844,6 +2941,8 @@ body {
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
   color: #FFFFFF;
   margin-bottom: 0.75rem;
 }
@@ -2854,6 +2953,7 @@ body {
   max-width: 520px;
   margin: 0 auto 1.75rem auto;
   line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .register-id-badge {
@@ -2899,5 +2999,3 @@ body {
     width: 100%;
   }
 }
-
-
