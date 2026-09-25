@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import GlareHover from './GlareHover.jsx';
 import SpecularButton from './SpecularButton.jsx';
 import BorderGlow from './BorderGlow.jsx';
 
@@ -61,7 +60,7 @@ export default function Hero({ onOpenRegister }) {
 
           {/* Event Quick Metadata Grid */}
           <div className="meta-chips-grid">
-            <GlareHover borderRadius={14} glareOpacity={0.25} glareSize={180}>
+            <div className="meta-chip-shell">
               <div className="meta-chip">
                 <div className="chip-icon red">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -76,9 +75,9 @@ export default function Hero({ onOpenRegister }) {
                   <span className="chip-value">10–11 Oct 2026</span>
                 </div>
               </div>
-            </GlareHover>
+            </div>
 
-            <GlareHover borderRadius={14} glareOpacity={0.25} glareSize={180}>
+            <div className="meta-chip-shell">
               <div className="meta-chip">
                 <div className="chip-icon blue">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -91,9 +90,9 @@ export default function Hero({ onOpenRegister }) {
                   <span className="chip-value">CBIT Hyderabad</span>
                 </div>
               </div>
-            </GlareHover>
+            </div>
 
-            <GlareHover borderRadius={14} glareOpacity={0.25} glareSize={180}>
+            <div className="meta-chip-shell">
               <div className="meta-chip">
                 <div className="chip-icon yellow">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -106,9 +105,9 @@ export default function Hero({ onOpenRegister }) {
                   <span className="chip-value">24-Hour Sprint</span>
                 </div>
               </div>
-            </GlareHover>
+            </div>
 
-            <GlareHover borderRadius={14} glareOpacity={0.25} glareSize={180}>
+            <div className="meta-chip-shell">
               <div className="meta-chip">
                 <div className="chip-icon pink">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -120,7 +119,7 @@ export default function Hero({ onOpenRegister }) {
                   <span className="chip-value" style={{ color: 'var(--hf-yellow)', fontWeight: 700 }}>₹200 / Head</span>
                 </div>
               </div>
-            </GlareHover>
+            </div>
           </div>
 
           {/* Real-time Countdown Timer with BorderGlow */}

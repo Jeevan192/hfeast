@@ -8,7 +8,6 @@ export default function Timeline() {
   const lineRef = useRef(null);
   const rowRefs = useRef([]);
 
-  const [activeIdx, setActiveIdx] = useState(0);
   const [reachedSet, setReachedSet] = useState(new Set([0]));
 
   const events = [
@@ -194,8 +193,6 @@ export default function Timeline() {
       const clampedHeight = Math.max(0, Math.min(scrollYInTree, treeHeight));
       line.style.height = `${clampedHeight}px`;
 
-      let closestIdx = -1;
-      let minDistance = Infinity;
       const newReached = new Set();
 
       rowRefs.current.forEach((row, idx) => {
@@ -209,14 +206,8 @@ export default function Timeline() {
           newReached.add(idx);
         }
 
-        const dist = Math.abs(clampedHeight - nodePos);
-        if (dist < minDistance && dist < 120) {
-          minDistance = dist;
-          closestIdx = idx;
-        }
       });
 
-      setActiveIdx((prev) => (prev !== closestIdx ? closestIdx : prev));
       setReachedSet(newReached);
 
     };
@@ -253,7 +244,6 @@ export default function Timeline() {
 
         {events.map((evt, idx) => {
           const isReached = reachedSet.has(idx);
-          const isCurrent = activeIdx === idx;
 
           return (
             <div
@@ -261,12 +251,11 @@ export default function Timeline() {
               ref={(el) => (rowRefs.current[idx] = el)}
               className={`timeline-row ${evt.side} ${evt.colorClass} ${
                 isReached ? 'is-reached' : ''
-              } ${isCurrent ? 'is-current' : ''}`}
+              }`}
             >
-              {/* Card with GlareHover */}
               <GlareHover
                 borderRadius={14}
-                glareOpacity={isCurrent ? 0.38 : isReached ? 0.25 : 0.15}
+                glareOpacity={isReached ? 0.25 : 0.15}
                 glareSize={240}
                 className="timeline-card-wrap"
               >
@@ -282,7 +271,6 @@ export default function Timeline() {
                     >
                       Step {idx + 1}
                     </span>
-                    {isCurrent && <span className="t-live-indicator">Active</span>}
                   </div>
                   <h3 className="t-event-title">{evt.title}</h3>
                   <p className="t-event-desc">{evt.desc}</p>
@@ -294,12 +282,8 @@ export default function Timeline() {
                 className="timeline-icon-node"
                 title={evt.title}
                 style={{
-                  borderColor: isReached ? evt.color : undefined,
-                  boxShadow: isCurrent
-                    ? `0 0 28px ${evt.color}, inset 0 0 14px ${evt.color}66`
-                    : isReached
-                    ? `0 0 20px ${evt.color}88, inset 0 0 10px ${evt.color}44`
-                    : undefined,
+                  borderColor: evt.color,
+                  boxShadow: `0 0 20px ${evt.color}88, inset 0 0 10px ${evt.color}44`,
                 }}
               >
                 {evt.icon}

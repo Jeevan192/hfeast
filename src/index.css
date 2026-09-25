@@ -795,6 +795,170 @@ body {
 /* =========================================================
    ABOUT SECTION
    ========================================================= */
+.about-lede {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.about-wrap {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.about-wrap .section-header {
+  margin-bottom: 2rem;
+}
+
+/* Key facts strip */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .about-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+.about-stat {
+  background: var(--bg-glass);
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.about-stat:hover {
+  transform: translateY(-3px);
+  border-color: var(--stat-accent);
+  box-shadow: 9px 9px 0 rgba(8, 24, 26, 0.5);
+}
+
+.about-stat-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.25rem);
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.1;
+}
+
+.about-stat-num--dates {
+  font-size: clamp(1.42rem, 2.5vw, 1.9rem);
+  letter-spacing: -0.03em;
+}
+
+.about-stat-lbl {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Stat color accents */
+.about-stat.c-yellow { --stat-accent: var(--hf-yellow); }
+.about-stat.c-mint   { --stat-accent: var(--hf-green-mint); }
+.about-stat.c-pink   { --stat-accent: var(--hf-pink); }
+
+.about-stat.c-yellow .about-stat-num { color: var(--hf-yellow); }
+.about-stat.c-mint   .about-stat-num { color: var(--hf-green-mint); }
+.about-stat.c-pink   .about-stat-num { color: var(--hf-pink); }
+
+/* Q&A cards */
+.about-qa {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 880px) {
+  .about-qa { grid-template-columns: 1fr; }
+}
+
+.about-qa-card {
+  position: relative;
+  background: var(--bg-glass);
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.about-qa-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 10px 10px 0 rgba(8, 24, 26, 0.5);
+}
+
+.about-qa-card.qa-blue   { border-top: 3px solid var(--hf-blue); }
+.about-qa-card.qa-yellow { border-top: 3px solid var(--hf-yellow); }
+.about-qa-card.qa-mint   { border-top: 3px solid var(--hf-green-mint); }
+
+.about-qa-q {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+}
+
+.about-qa-card.qa-blue   .about-qa-q { color: var(--hf-blue); }
+.about-qa-card.qa-yellow .about-qa-q { color: var(--hf-yellow); }
+.about-qa-card.qa-mint   .about-qa-q { color: var(--hf-green-mint); }
+
+.about-qa-a {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Registration details */
+.about-reg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .about-reg { grid-template-columns: 1fr; }
+}
+
+.about-reg-col {
+  background: var(--bg-glass);
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+}
+
+.about-reg-kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hf-blue);
+  margin-bottom: 0.5rem;
+}
+
+.about-reg-summary {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 0.5rem;
+}
+
+.about-reg-note {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
 .cards-grid-2x2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -2906,4 +3070,6 @@ body {
   }
 }
 
-
+.meta-chip-shell {
+  height: 100%;
+}
