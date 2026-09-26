@@ -26,10 +26,23 @@ export default function InteractiveBackground() {
     const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return undefined;
 
+    // The puzzle art is completely static. Only the hover bloom and the cursor aura
+    // animate. So the resting state is painted ONCE into this offscreen canvas and
+    // blitted each frame, and only the few tiles under the pointer are re-rendered.
+    // Previously every frame re-drew all ~36 macro tiles (~2000 ctx.stroke() calls).
+    const bgCanvas = document.createElement('canvas');
+    const bgCtx = bgCanvas.getContext('2d', { alpha: false });
+    if (!bgCtx) return undefined;
+
+    // This is a soft 0.62-opacity backdrop; 2x DPR meant rasterising every stroke
+    // across 8.3M pixels for no visible gain.
+    const DPR_CAP = 1;
+
     let animId;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+    let needsStaticRepaint = true;
 
     // Official Hacktoberfest 2026 Brand Colors
     const BRAND = {
@@ -70,13 +83,21 @@ export default function InteractiveBackground() {
     const trail = [];
     const MAX_TRAIL_AGE = 700; // ms
 
+    const prefersReducedMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
       canvas.width = width * dpr;
       canvas.height = height * dpr;
-      ctx.scale(dpr, dpr);
+      // setTransform, not scale(): scale() accumulated on every resize event.
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      bgCanvas.width = width * dpr;
+      bgCanvas.height = height * dpr;
+      needsStaticRepaint = true;
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -763,19 +784,23 @@ export default function InteractiveBackground() {
 
     let startTime = performance.now();
 
-    const draw = (time) => {
-      const elapsed = time - startTime;
+    // Dynamic unit U for responsive scaling
+    const unit = () => (width < 768 ? 16 : width < 1280 ? 22 : 26);
 
-      // Pointer smooth tracking (only when actively hovering)
-      if (pointer.isHovering && pointer.targetX > -9000) {
-        pointer.x += (pointer.targetX - pointer.x) * 0.25;
-        pointer.y += (pointer.targetY - pointer.y) * 0.25;
-      } else {
-        pointer.x = -9999;
-        pointer.y = -9999;
-      }
+    // Paint the resting mosaic into the main canvas, then snapshot it offscreen.
+    // The pointer is parked and the trail emptied so no hover bloom bakes into
+    // the cache; both are restored exactly as they were afterwards.
+    const paintStatic = () => {
+      const u = unit();
+      const tileW = u * 16;
+      const tileH = u * 10;
 
-      // 1. Lighter base background fill with soft ambient gradient
+      const savedPointer = { ...pointer };
+      const savedTrail = trail.splice(0, trail.length);
+      pointer.isHovering = false;
+      pointer.x = -9999;
+      pointer.y = -9999;
+
       const bgGrad = ctx.createLinearGradient(0, 0, width, height);
       bgGrad.addColorStop(0, RESTING.bgGrad1);
       bgGrad.addColorStop(0.5, RESTING.bg);
@@ -783,16 +808,8 @@ export default function InteractiveBackground() {
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, width, height);
 
-      // Dynamic unit U for responsive scaling
-      const u = width < 768 ? 16 : width < 1280 ? 22 : 26;
-
-      const tileW = u * 16;
-      const tileH = u * 10;
-
       const cols = Math.ceil(width / tileW) + 1;
       const rows = Math.ceil(height / tileH) + 1;
-
-      // 2. Render 100% dense interlocking puzzle pieces
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const ox = c * tileW;
@@ -805,8 +822,83 @@ export default function InteractiveBackground() {
         }
       }
 
-      // 3. Subtle luminous cursor aura (strictly where cursor actually is)
+      // Snapshot at device resolution.
+      bgCtx.setTransform(1, 0, 0, 1, 0, 0);
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+      bgCtx.drawImage(canvas, 0, 0);
+
+      Object.assign(pointer, savedPointer);
+      trail.push(...savedTrail);
+    };
+
+    const draw = (time) => {
+      const elapsed = time - startTime;
+
+      // Pointer smooth tracking (only when actively hovering).
+      // prefers-reduced-motion drops the trailing wake and the lerp smoothing,
+      // because the wake keeps animating after the cursor has stopped. The
+      // cursor bloom itself is direct manipulation, so it always runs - it must
+      // never be switched off wholesale, which is what previously made the
+      // whole background look dead for reduced-motion users.
+      const follow = prefersReducedMotion ? 1 : 0.25;
+      if (pointer.isHovering && pointer.targetX > -9000) {
+        pointer.x += (pointer.targetX - pointer.x) * follow;
+        pointer.y += (pointer.targetY - pointer.y) * follow;
+      } else {
+        pointer.x = -9999;
+        pointer.y = -9999;
+      }
+
+      if (needsStaticRepaint) {
+        paintStatic();
+        needsStaticRepaint = false;
+      }
+
+      // 1. Blit the cached resting state — 1 drawImage instead of ~2000 strokes.
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(bgCanvas, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // 2. Re-render only the tiles the bloom can actually reach: the cursor
+      //    neighbourhood, plus the recent motion trail. Usually 1-4 of 36 tiles.
       if (pointer.isHovering && pointer.x > -9000) {
+        const u = unit();
+        const tileW = u * 16;
+        const tileH = u * 10;
+
+        const pad = width < 768 ? 90 : 125;
+        let minX = pointer.x - pad;
+        let maxX = pointer.x + pad;
+        let minY = pointer.y - pad;
+        let maxY = pointer.y + pad;
+        if (!prefersReducedMotion) {
+          for (let i = 0; i < trail.length; i++) {
+            const pt = trail[i];
+            minX = Math.min(minX, pt.x - 75);
+            maxX = Math.max(maxX, pt.x + 75);
+            minY = Math.min(minY, pt.y - 75);
+            maxY = Math.max(maxY, pt.y + 75);
+          }
+        }
+
+        const c0 = Math.max(0, Math.floor(minX / tileW));
+        const r0 = Math.max(0, Math.floor(minY / tileH));
+        const c1 = Math.floor(maxX / tileW);
+        const r1 = Math.floor(maxY / tileH);
+
+        for (let r = r0; r <= r1; r++) {
+          for (let c = c0; c <= c1; c++) {
+            const ox = c * tileW;
+            const oy = r * tileH;
+            if ((c + r) % 2 === 0) {
+              renderDenseTileA(ox, oy, u);
+            } else {
+              renderDenseTileB(ox, oy, u);
+            }
+          }
+        }
+
+        // 3. Subtle luminous cursor aura (strictly where cursor actually is)
         const spotGrad = ctx.createRadialGradient(
           pointer.x,
           pointer.y,

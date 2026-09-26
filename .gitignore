@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# AI agent scratchpad (local only, never commit)
+AI_CONTEXT.md
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# DESIGN_BRIEF - the user's drop folder for reference images and written rules.
+# AGENT-ONLY. Must never appear on the GitHub page. Entire folder is local:
+# the images are large, and the rules are private working notes.
+DESIGN_BRIEF/

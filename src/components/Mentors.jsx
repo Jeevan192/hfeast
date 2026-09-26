@@ -1,50 +1,20 @@
 import React from 'react';
 import TiltedCard from './TiltedCard.jsx';
+import { mentors } from '../data/mentors.js';
+
+const GitHubIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+  </svg>
+);
+
+const LinkedInIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+  </svg>
+);
 
 export default function Mentors() {
-  const mentors = [
-    {
-      name: 'Tejas',
-      role: 'Tech Lead & Cloud Systems',
-      roleBadge: 'Cloud Lead',
-      bio: 'Expert in distributed architecture, Kubernetes, cloud deployments, and open-source infrastructure.',
-      initials: 'TJ',
-      colorClass: 'av-red',
-      accentColor: '#BA3627',
-      tags: ['Kubernetes', 'Cloud', 'Go'],
-    },
-    {
-      name: 'Ananya',
-      role: 'Open Source Strategist',
-      roleBadge: 'Community',
-      bio: 'Advocating for student developer communities and guiding first-time open-source contributors on GitHub.',
-      initials: 'AN',
-      colorClass: 'av-blue',
-      accentColor: '#569AE0',
-      tags: ['Open Source', 'Git', 'Linux'],
-    },
-    {
-      name: 'Rahul',
-      role: 'AI & Backend Engineer',
-      roleBadge: 'AI / Backend',
-      bio: 'Specializing in machine learning models, Python web frameworks, NLP pipelines, and accessible APIs.',
-      initials: 'RL',
-      colorClass: 'av-yellow',
-      accentColor: '#F5B62A',
-      tags: ['PyTorch', 'Python', 'FastAPI'],
-    },
-    {
-      name: 'Sneha',
-      role: 'Frontend & UI/UX Specialist',
-      roleBadge: 'UI / UX',
-      bio: 'Passionate about crafting fast, accessible web interfaces, modern CSS systems, and React design patterns.',
-      initials: 'SK',
-      colorClass: 'av-pink',
-      accentColor: '#449776',
-      tags: ['React 19', 'UI/UX', 'CSS'],
-    },
-  ];
-
   return (
     <section className="section-wrapper" id="mentors">
       <div className="section-header">
@@ -52,37 +22,64 @@ export default function Mentors() {
       </div>
 
       <div className="mentors-grid">
-        {mentors.map((m, idx) => (
-          <TiltedCard key={idx} captionText={`${m.name} • ${m.role}`} rotateAmplitude={12} scaleOnHover={1.03}>
-            <div className="mentor-profile-card" style={{ '--card-accent': m.accentColor }}>
-              <div className="mentor-top-socials">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="mentor-top-btn github" aria-label={`${m.name} GitHub`}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                </svg>
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="mentor-top-btn linkedin" aria-label={`${m.name} LinkedIn`}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                </svg>
-              </a>
+        {mentors.map((m) => {
+          const githubUrl = m.github ? `https://github.com/${m.github}` : null;
+
+          return (
+            <TiltedCard
+              key={m.name}
+              captionText={m.github ? `@${m.github}` : m.name}
+              rotateAmplitude={10}
+              scaleOnHover={1.04}
+            >
+              <div className="mentor-card">
+                <div className="mentor-photo-wrap">
+                  {m.photo ? (
+                    <img
+                      className="mentor-photo"
+                      src={m.photo}
+                      alt={m.name}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <div className="mentor-photo mentor-photo--initials" aria-hidden="true">
+                      {m.initials}
+                    </div>
+                  )}
+
+                  <div className="mentor-socials">
+                    {m.linkedin && (
+                      <a
+                        href={m.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mentor-social-btn mentor-social-btn--linkedin"
+                        aria-label={`${m.name} on LinkedIn`}
+                        rel="noopener"
+                      >
+                        <LinkedInIcon />
+                      </a>
+                    )}
+                    {githubUrl && (
+                      <a
+                        href={githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mentor-social-btn mentor-social-btn--github"
+                        aria-label={`${m.name} on GitHub`}
+                      >
+                        <GitHubIcon />
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                <h3 className="mentor-name">{m.name}</h3>
               </div>
-              <div className="mentor-avatar-wrap">
-                <div className={`mentor-avatar ${m.colorClass}`}>{m.initials}</div>
-              </div>
-              <h3 className="mentor-name">{m.name}</h3>
-              <span className="mentor-role-pill" style={{ color: m.accentColor }}>
-                <span className="pill-dot" style={{ background: m.accentColor }} />
-                {m.roleBadge}
-              </span>
-              <span className="mentor-tag" style={{ color: m.accentColor }}>{m.role}</span>
-              <p className="mentor-bio">{m.bio}</p>
-              <div className="mentor-skills-list">
-                {m.tags.map((tag) => <span key={tag} className="mentor-skill-chip">{tag}</span>)}
-              </div>
-            </div>
-          </TiltedCard>
-        ))}
+            </TiltedCard>
+          );
+        })}
       </div>
     </section>
   );

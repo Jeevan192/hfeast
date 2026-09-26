@@ -320,7 +320,7 @@ export default function RegisterPage({ onBackToHome, onSubmitSuccess }) {
                   Register Your Team
                 </h1>
                 <p className="register-main-subtitle">
-                  17–18 October 2026 • In-Person 24h Hackathon at CBIT Campus, Hyderabad • Teams of 3–5 Members
+                  10–11 October 2026 • In-Person 24h Hackathon at CBIT Campus, Hyderabad • Teams of 3–5 Members
                 </p>
               </div>
 

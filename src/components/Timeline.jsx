@@ -283,7 +283,9 @@ export default function Timeline() {
                 title={evt.title}
                 style={{
                   borderColor: evt.color,
-                  boxShadow: `0 0 20px ${evt.color}88, inset 0 0 10px ${evt.color}44`,
+                  boxShadow: isReached
+                    ? `0 0 30px ${evt.color}DD, 0 0 64px ${evt.color}66, inset 0 0 14px ${evt.color}55`
+                    : `0 0 20px ${evt.color}88, inset 0 0 10px ${evt.color}44`,
                 }}
               >
                 {evt.icon}
