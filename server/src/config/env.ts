@@ -15,11 +15,13 @@ if (fs.existsSync(cwdEnv)) {
   dotenv.config();
 }
 
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NOW_REGION);
+
 const envSchema = z.object({
-  PORT: z.string().default('8080').transform((val) => parseInt(val, 10)),
+  PORT: z.union([z.string(), z.number()]).default('8080').transform((val) => (typeof val === 'number' ? val : parseInt(val, 10))),
   ALLOWED_ORIGINS: z
     .string()
-    .default('http://localhost:5173,http://localhost:3000,https://samay-raina-opal.vercel.app')
+    .default('http://localhost:5173,http://localhost:3000,https://samay-raina-opal.vercel.app,https://hfeast-ochre.vercel.app')
     .transform((val) =>
       val
         .split(',')
@@ -60,15 +62,37 @@ const envSchema = z.object({
   }
 });
 
+export let envValidationErrors: Record<string, string[]> | null = null;
+
 const parseEnv = () => {
   const result = envSchema.safeParse(process.env);
   if (!result.success) {
-    console.error('❌ Environment validation failed:');
     const fieldErrors = result.error.flatten().fieldErrors;
-    for (const [field, errors] of Object.entries(fieldErrors)) {
-      console.error(`  - ${field}: ${errors?.join(', ')}`);
+    envValidationErrors = fieldErrors as Record<string, string[]>;
+    console.error('❌ Environment validation issues:', fieldErrors);
+
+    // In local non-serverless CLI / server, fail fast with exit code
+    if (!isServerless) {
+      process.exit(1);
     }
-    process.exit(1);
+
+    // In serverless environments (Vercel), DO NOT crash process.exit(1).
+    // Return safe fallbacks so the app boots and returns actionable diagnostic messages.
+    return {
+      PORT: 8080,
+      ALLOWED_ORIGINS: [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'https://samay-raina-opal.vercel.app',
+        'https://hfeast-ochre.vercel.app',
+      ],
+      FIRESTORE_EMULATOR_HOST: process.env.FIRESTORE_EMULATOR_HOST,
+      FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST,
+      FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID || '',
+      FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL || '',
+      FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY || '',
+      NODE_ENV: (process.env.NODE_ENV as any) || 'production',
+    };
   }
   return result.data;
 };
