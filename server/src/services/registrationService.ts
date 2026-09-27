@@ -97,16 +97,34 @@ export class RegistrationService {
       }
     }
 
-    // Step 4: Run Atomic Firestore Transaction with Locks
-    const newRegRef = db.collection(REGISTRATIONS_COLLECTION).doc();
+    // Step 4: Run Atomic Firestore Transaction with Locks and Sequential ID Counter
+    const counterRef = db.collection('counters').doc('registrations');
+    let initialCount = 0;
+    const existingCounterSnap = await counterRef.get();
+    if (!existingCounterSnap.exists) {
+      const allExisting = await db.collection(REGISTRATIONS_COLLECTION).get();
+      let maxNum = allExisting.size;
+      allExisting.forEach((d) => {
+        const match = d.id.match(/^HFEST26-(\d+)$/i);
+        if (match) {
+          const n = parseInt(match[1], 10);
+          if (n > maxNum) maxNum = n;
+        }
+      });
+      initialCount = maxNum;
+    }
+
     const teamLockRef = db.collection(LOCKS_COLLECTION).doc(teamLockKey);
     const emailLockRefs = allEmails.map((em) => db.collection(LOCKS_COLLECTION).doc(`email_${em}`));
     const phoneLockRefs = allPhones.map((ph) => db.collection(LOCKS_COLLECTION).doc(`phone_${ph}`));
 
+    let assignedRegistrationId = '';
+
     await db.runTransaction(async (transaction) => {
-      // 4.1 Read all locks
-      const [teamLockSnap, ...otherLockSnaps] = await Promise.all([
+      // 4.1 Read all locks and counter atomically
+      const [teamLockSnap, counterSnap, ...otherLockSnaps] = await Promise.all([
         transaction.get(teamLockRef),
+        transaction.get(counterRef),
         ...emailLockRefs.map((ref) => transaction.get(ref)),
         ...phoneLockRefs.map((ref) => transaction.get(ref)),
       ]);
@@ -146,10 +164,21 @@ export class RegistrationService {
         }
       }
 
+      // 4.3 Compute next sequential registration number (HFEST26-001, HFEST26-002, ...)
+      let currentNumber = initialCount;
+      if (counterSnap.exists) {
+        currentNumber = counterSnap.data()?.currentNumber || 0;
+      }
+      const nextNumber = currentNumber + 1;
+      const formattedDocId = `HFEST26-${String(nextNumber).padStart(3, '0')}`;
+      assignedRegistrationId = formattedDocId;
+
+      const newRegRef = db.collection(REGISTRATIONS_COLLECTION).doc(formattedDocId);
       const now = FieldValue.serverTimestamp();
 
-      // 4.3 Write registration document
+      // 4.4 Write registration document
       transaction.set(newRegRef, {
+        id: formattedDocId,
         teamName: normalizedTeamName,
         teamSize: input.teamSize,
         leader: {
@@ -179,11 +208,22 @@ export class RegistrationService {
         updatedAt: now,
       });
 
-      // 4.4 Set atomic lock documents
+      // 4.5 Update counter in transaction
+      transaction.set(
+        counterRef,
+        {
+          currentNumber: nextNumber,
+          lastAssignedId: formattedDocId,
+          updatedAt: now,
+        },
+        { merge: true }
+      );
+
+      // 4.6 Set atomic lock documents
       transaction.set(teamLockRef, {
         type: 'team',
         teamName: normalizedTeamName,
-        registrationId: newRegRef.id,
+        registrationId: formattedDocId,
         createdAt: now,
       });
 
@@ -192,7 +232,7 @@ export class RegistrationService {
           type: 'email',
           email: allEmails[i],
           teamName: normalizedTeamName,
-          registrationId: newRegRef.id,
+          registrationId: formattedDocId,
           createdAt: now,
         });
       }
@@ -202,7 +242,7 @@ export class RegistrationService {
           type: 'phone',
           phone: allPhones[i],
           teamName: normalizedTeamName,
-          registrationId: newRegRef.id,
+          registrationId: formattedDocId,
           createdAt: now,
         });
       }
@@ -210,7 +250,7 @@ export class RegistrationService {
 
     return {
       success: true,
-      registrationId: newRegRef.id,
+      registrationId: assignedRegistrationId,
     };
   }
 
