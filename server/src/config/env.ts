@@ -28,12 +28,16 @@ const envSchema = z.object({
         .map((origin) => origin.trim())
         .filter(Boolean)
     ),
-  FIRESTORE_EMULATOR_HOST: z.string().optional(),
-  FIREBASE_AUTH_EMULATOR_HOST: z.string().optional(),
-  FIREBASE_PROJECT_ID: z.string().optional(),
-  FIREBASE_CLIENT_EMAIL: z.string().optional(),
-  FIREBASE_PRIVATE_KEY: z.string().optional(),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  FIRESTORE_EMULATOR_HOST: z.string().optional().transform((v) => v?.trim()),
+  FIREBASE_AUTH_EMULATOR_HOST: z.string().optional().transform((v) => v?.trim()),
+  FIREBASE_PROJECT_ID: z.string().optional().transform((v) => v?.trim()),
+  FIREBASE_CLIENT_EMAIL: z.string().optional().transform((v) => v?.trim()),
+  FIREBASE_PRIVATE_KEY: z.string().optional().transform((v) => v?.trim()),
+  NODE_ENV: z
+    .string()
+    .default('production')
+    .transform((val) => val.trim().toLowerCase())
+    .pipe(z.enum(['development', 'production', 'test'])),
 }).superRefine((data, ctx) => {
   // If not running against an emulator, Firebase service account credentials must be provided
   const isEmulator = Boolean(data.FIRESTORE_EMULATOR_HOST);
