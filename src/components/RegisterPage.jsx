@@ -211,7 +211,11 @@ export default function RegisterPage({ onBackToHome, onSubmitSuccess }) {
     };
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const rawApiUrl = (import.meta.env.VITE_API_URL || '').trim();
+      const isLocalhostHost = typeof window !== 'undefined' && 
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      // If deployed on live domains (e.g. Vercel), ignore any accidental localhost API URL
+      const apiUrl = !isLocalhostHost && (rawApiUrl.includes('localhost') || rawApiUrl.includes('127.0.0.1')) ? '' : rawApiUrl;
       const response = await fetch(`${apiUrl}/api/register`, {
         method: 'POST',
         headers: {

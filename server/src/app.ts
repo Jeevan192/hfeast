@@ -21,7 +21,7 @@ export function createApp(): Express {
   // Security HTTP headers
   app.use(helmet());
 
-  // Strict CORS configuration: Whitelist only, never '*'
+  // Strict CORS configuration with automated Vercel support
   app.use(
     cors({
       origin: (origin, callback) => {
@@ -30,7 +30,13 @@ export function createApp(): Express {
           return callback(null, true);
         }
 
-        if (env.ALLOWED_ORIGINS.includes(origin)) {
+        const isAllowed =
+          env.ALLOWED_ORIGINS.includes(origin) ||
+          origin.endsWith('.vercel.app') ||
+          origin.includes('localhost') ||
+          origin.includes('127.0.0.1');
+
+        if (isAllowed) {
           return callback(null, true);
         }
 
@@ -47,16 +53,27 @@ export function createApp(): Express {
 
   // Liveness check route
   app.use('/', healthRoute);
+  app.use('/api', healthRoute);
 
-  // Public API routes
+  // Public API routes (mount both on /api and / for standard & serverless rewrites)
   app.use('/api', tracksRoute);
+  app.use('/', tracksRoute);
+
   app.use('/api', registerRoute);
+  app.use('/', registerRoute);
 
   // Protected Admin API routes
   app.use('/api/admin/registrations', adminRegistrationsRoute);
+  app.use('/admin/registrations', adminRegistrationsRoute);
+
   app.use('/api/admin/problem-statements', adminProblemStatementsRoute);
+  app.use('/admin/problem-statements', adminProblemStatementsRoute);
+
   app.use('/api/admin/stats', adminStatsRoute);
+  app.use('/admin/stats', adminStatsRoute);
+
   app.use('/api/admin/admins', adminAdminsRoute);
+  app.use('/admin/admins', adminAdminsRoute);
 
   // Catch-all 404 handler
   app.use((req: Request, _res: Response, next: NextFunction) => {

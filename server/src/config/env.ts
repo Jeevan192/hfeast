@@ -19,7 +19,7 @@ const envSchema = z.object({
   PORT: z.string().default('8080').transform((val) => parseInt(val, 10)),
   ALLOWED_ORIGINS: z
     .string()
-    .default('http://localhost:5173,http://localhost:3000')
+    .default('http://localhost:5173,http://localhost:3000,https://samay-raina-opal.vercel.app')
     .transform((val) =>
       val
         .split(',')

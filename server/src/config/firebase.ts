@@ -13,12 +13,13 @@ if (!admin.apps.length) {
     console.log(`[Firebase Admin] Initialized in emulator mode for project: ${projectId}`);
   } else {
     // Running against live Firebase project
-    const privateKey = env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    const rawKey = env.FIREBASE_PRIVATE_KEY || '';
+    const cleanKey = rawKey.replace(/^["']|["']$/g, '').replace(/\\n/g, '\n');
     admin.initializeApp({
       credential: admin.credential.cert({
         projectId: env.FIREBASE_PROJECT_ID,
         clientEmail: env.FIREBASE_CLIENT_EMAIL,
-        privateKey,
+        privateKey: cleanKey,
       }),
     });
     console.log(`[Firebase Admin] Initialized for project: ${env.FIREBASE_PROJECT_ID}`);
