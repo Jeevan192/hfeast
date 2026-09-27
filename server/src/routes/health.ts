@@ -14,6 +14,7 @@ router.get(['/healthz', '/health', '/'], (_req: Request, res: Response) => {
 
   res.status(200).json({
     status: isFirebaseReady ? 'ok' : 'degraded',
+    version: 'v1.2-HFEST26',
     timestamp: new Date().toISOString(),
     firebase: {
       initialized: isFirebaseReady,
