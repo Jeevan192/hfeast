@@ -26,9 +26,13 @@ dist-ssr
 # AI agent scratchpad (local only, never commit)
 AI_CONTEXT.md
 
-# Environment / secrets
+# Environment / secrets (NEVER commit or push secrets)
 .env
 .env.*
+*.env
+*.env.*
+**/.env
+**/.env.*
 !.env.example
 
 # DESIGN_BRIEF - the user's drop folder for reference images and written rules.
